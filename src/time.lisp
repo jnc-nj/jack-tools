@@ -1,0 +1,22 @@
+(in-package #:jack.tools.time)
+
+(defun sec-now ()
+  (local-time:timestamp-to-universal (local-time:now)))
+
+(defun create-time ()
+  (local-time:format-timestring nil (local-time:now)))
+
+(defun time-difference (time-1 time-2)
+  (cond ((stringp time-1)
+	 (time-difference (local-time:parse-timestring time-1) time-2))
+	((stringp time-2)
+	 (time-difference time-1 (local-time:parse-timestring time-2)))
+	(t (- (local-time:timestamp-to-universal time-1)
+	      (local-time:timestamp-to-universal time-2)))))
+
+(defun timestamp> (time-1 time-2)
+  (cond ((stringp time-1)
+	 (timestamp> (local-time:parse-timestring time-1) time-2))
+	((stringp time-2)
+	 (timestamp> time-1 (local-time:parse-timestring time-2)))
+	(t (local-time:timestamp> time-1 time-2))))
