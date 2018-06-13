@@ -47,6 +47,18 @@
 	   "SLOTS-EQUAL?"
 	   "OBJECTP"))
 
+(defpackage #:jack.tools.cli
+  (:use #:cl
+	#:alexandria
+	#:jack.tools.lists
+	#:jack.tools.misc
+	#:jack.tools.objects)
+  (:export "MENU"
+	   "LOAD-MENU"
+	   "NAME-OF"
+	   "NEXT-LINK"
+	   "WITH-CLI"))
+
 (defpackage #:jack.tools.keys
   (:use #:cl
 	#:jack.tools.objects
