@@ -54,9 +54,20 @@
 	#:jack.tools.misc
 	#:jack.tools.objects)
   (:export "MENU"
+	   "NAME"
+	   "PROMPT"
+	   "FORM"
+	   "LINKS"
+	   "FUNCTIONS"
+	   "RUN"
+	   "EXIT"
 	   "LOAD-MENU"
 	   "NAME-OF"
 	   "NEXT-LINK"
+	   "GET-SUB-MENU"
+	   "ADD-SUB-MENU"
+	   "ADD-RUN"
+	   "ADD-FUNCTION"
 	   "WITH-CLI"))
 
 (defpackage #:jack.tools.keys

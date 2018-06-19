@@ -49,10 +49,10 @@
 	 (class (class-of instance)))
     (when class
       (dolist (slot-name (get-slot-names class))
-	(let ((value (agethash slot-name alist)))
+	(let ((value (agethash slot-name alist))) 
 	  (setf (slot-value instance slot-name)
 		(cond ((alistp value) (cast value class-map))
-		      ((not (listp value)) value)
+		      ((or (not (listp value)) (not (listp (car value)))) value)
 		      ((listp (caar value)) (mapcar #'(lambda (v) (cast v class-map)) value))
 		      (t value)))))
       (return-from cast instance))
