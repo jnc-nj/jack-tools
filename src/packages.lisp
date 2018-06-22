@@ -138,6 +138,7 @@
   (:export #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO
+	   #:WITH-TIMED-LOOP
 	   #:WITH-SECURE-API
 	   #:SECURE-CONTENT*))
 
