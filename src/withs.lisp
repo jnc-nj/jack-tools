@@ -15,10 +15,10 @@
      (format t "...Done. [~ds]~%"
 	     (- (sec-now) start-time))))
 
-(defmacro with-timed-loop (title threshold fn)
+(defmacro with-timed-loop (title threshold fn &key ,print?)
   `(with-bt-thread ,(format nil "[THREAD][~d]" title)
      (loop do (sleep ,threshold) ,fn
-	  (log:info ,(format nil "[UPDATE][~d]" title)))))
+	  (when ,print? (log:info ,(format nil "[UPDATE][~d]" title))))))
 
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key

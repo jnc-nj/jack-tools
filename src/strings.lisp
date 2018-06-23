@@ -1,5 +1,8 @@
 (in-package #:jack.tools.strings)
 
+(defun sexpp (string)
+  (handler-case (listp (read-from-string string)) (error () nil)))
+
 (defun substringp (needle haystack &key (test #'char=))
   "Check if needle is a substring of haystack."
   (search (string needle)
