@@ -37,7 +37,7 @@
 	   #:INTERFACES
 	   #:STACK
 	   #:COPY-INSTANCE
-	   #:OUTPUT
+	   #:TO-ADDRESS-BOOK
 	   #:CAST 
 	   #:CREATE-CLASS-MAP
 	   #:FIND-CLASS-MAP

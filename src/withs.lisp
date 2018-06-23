@@ -15,7 +15,7 @@
      (format t "...Done. [~ds]~%"
 	     (- (sec-now) start-time))))
 
-(defmacro with-timed-loop (title threshold fn &key ,print?)
+(defmacro with-timed-loop (title threshold fn &key print?)
   `(with-bt-thread ,(format nil "[THREAD][~d]" title)
      (loop do (sleep ,threshold) ,fn
 	  (when ,print? (log:info ,(format nil "[UPDATE][~d]" title))))))

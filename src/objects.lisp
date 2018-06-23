@@ -14,7 +14,7 @@
 	  (setf (slot-value copy slot-name) (slot-value object slot-name))))
       (apply #'reinitialize-instance copy initargs))))
 
-(defun output (object)
+(defun to-address-book (object)
   (let ((output-object (make-instance 'address-book)))
     (with-slots (interfaces stack) output-object
       (labels ((interpret (object) 
@@ -22,7 +22,7 @@
 		       ((listp object) (mapcar #'interpret object)) 
 		       ((objectp object)
 			(let* ((class (class-of object))
- 			       (class-id (get-class-id class))
+			       (class-id (get-class-id class))
 			       (object-id (get-object-id object))
 			       (slot-names (get-slot-names class))
 			       switch) 
