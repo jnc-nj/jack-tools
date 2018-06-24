@@ -1,5 +1,15 @@
 (in-package #:jack.tools.strings)
 
+(defun rreplace (regex string new)
+  (cl-ppcre:regex-replace-all
+   regex string (stringfy new)))
+
+(defun stringfy (new)
+  (cond ((stringp new) new)
+	((numberp new) (write-to-string new))
+	((or (characterp new) (symbolp new)) (string new))
+	(t (cl-json:encode-json-to-string new))))
+
 (defun sexpp (string)
   (handler-case (listp (read-from-string string)) (error () nil)))
 

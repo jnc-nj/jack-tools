@@ -114,7 +114,9 @@
 
 (defpackage #:jack.tools.strings
   (:use #:cl)
-  (:export #:SEXPP
+  (:export #:RREPLACE
+	   #:STRINGFY
+	   #:SEXPP
 	   #:SUBSTRINGP
 	   #:REGEXFY
 	   #:CONCATSTRING
