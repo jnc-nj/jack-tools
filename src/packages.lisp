@@ -1,12 +1,5 @@
 (in-package :cl-user)
 
-(defpackage #:jack.tools.time
-  (:use #:cl)
-  (:export #:SEC-NOW
-	   #:CREATE-TIME
-	   #:TIME-DIFFERENCE
-	   #:TIMESTAMP>))
-
 (defpackage #:jack.tools.lists
   (:use #:cl)
   (:export #:AGETHASH
@@ -111,6 +104,15 @@
 	   #:*MAX
 	   #:CLOSEST-2-BASE
 	   #:FY-SHUFFLE))
+
+(defpackage #:jack.tools.time
+  (:use #:cl
+	#:jack.tools.maths)
+  (:export #:SEC-NOW
+	   #:CREATE-TIME
+	   #:TIME-DIFFERENCE
+	   #:TIMESTAMP>
+	   #:TIMED-INDEX))
 
 (defpackage #:jack.tools.strings
   (:use #:cl)
