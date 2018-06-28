@@ -23,9 +23,9 @@
 	 (key-distance key-1 (decompress-key key-2 :class 'ironclad::rsa-public-key)))
 	(t (with-slots ((n-1 ironclad::n) (e-1 ironclad::e)) key-1
 	     (with-slots ((n-2 ironclad::n) (e-2 ironclad::e)) key-2
-	       (let ((delta-n (- n-1 n-2))
-		     (delta-e (- e-1 e-2)))
-		 (sqrt (coerce (+ (* delta-n delta-n) (* delta-e delta-e)) 'double-float))))))))
+	       (let ((delta-n (coerce (- n-1 n-2) 'double-float))
+		     (delta-e (coerce (- e-1 e-2) 'double-float)))
+		 (sqrt (+ (* delta-n delta-n) (* delta-e delta-e)))))))))
 
 (defun pad-key (target-key reference-key)
   (cond ((not (stringp target-key))
