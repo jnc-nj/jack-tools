@@ -39,7 +39,7 @@
 	((> end (length seq)) (subseq seq start))
 	(t (subseq seq start end))))
 
-(defun trim-sort (key seq limit direction &key (start 0) remove-neg?)
+(defun trim-sort (key seq limit direction &key (start 0))
   (trim-seq (sort seq direction :key key) start limit))
 
 (defun all-positions (object lst &key (test 'equal))
