@@ -139,7 +139,8 @@
   (:use #:cl
 	#:jack.tools.lists
 	#:jack.tools.misc
-	#:jack.tools.keys)
+	#:jack.tools.keys
+	#:jack.tools.time)
   (:export #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO
