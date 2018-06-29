@@ -37,6 +37,11 @@
 		  (length-difference (- reference-length target-length)))
 	     (concatenate 'string target-key (subseq reference-key 0 length-difference))))))
 
+(defun trim-key (key &key (start 0) (end 8))
+  (if (stringp key)
+      (trim-seq key start end)
+      (trim-key (decompress-key key) :start start :end end)))
+
 (defun compress-bignum (bignum)
   (base64:integer-to-base64-string bignum))
 
