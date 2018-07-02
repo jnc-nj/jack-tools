@@ -64,21 +64,17 @@
 	   #:WITH-CLI))
 
 (defpackage #:jack.tools.keys
-  (:use #:cl
+  (:use #:cl 
 	#:jack.tools.objects
 	#:jack.tools.lists)
-  (:export #:+EXPONENT+
-	   #:+BASE+
-	   #:+BIGN+
-	   #:BYTE-ARRAY?
+  (:export #:BYTE-ARRAY?
 	   #:CREATE-HASH
 	   #:CREATE-DIGEST
 	   #:KEY-DISTANCE
 	   #:PAD-KEY
 	   #:TRIM-KEY
 	   #:COMPRESS-BIGNUM
-	   #:DECOMPRESS-BIGNUM
-	   #:COMPRESS-KEY
+	   #:DECOMPRESS-BIGNUM 
 	   #:DECOMPRESS-KEY
 	   #:RSA-ENCRYPT-MESSAGE
 	   #:RSA-DECRYPT-MESSAGE
@@ -107,13 +103,16 @@
 	   #:FY-SHUFFLE))
 
 (defpackage #:jack.tools.time
-  (:use #:cl
+  (:use #:cl 
 	#:jack.tools.maths)
   (:export #:SEC-NOW
-	   #:CREATE-TIME
-	   #:TIME-DIFFERENCE
-	   #:TIMESTAMP>
-	   #:TIMED-INDEX))
+           #:CREATE-TIME
+           #:TIME-DIFFERENCE
+           #:TIMESTAMP>
+           #:TIMED-INDEX
+           #:TIMEOUT
+           #:WAIT
+           #:RELEASE))
 
 (defpackage #:jack.tools.strings
   (:use #:cl)
@@ -145,6 +144,7 @@
   (:export #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO
+           #:WITH-TIMER
 	   #:WITH-TIMED-LOOP
 	   #:WITH-SECURE-API
 	   #:SECURE-CONTENT*))

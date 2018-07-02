@@ -26,3 +26,14 @@
 			       interval)
 			   (length objects)))))
     (if return? (nth index objects) index)))
+
+(defun timeout (wheel timer interval)
+  (tw:schedule-timer wheel timer :milliseconds interval))
+
+(defun wait (lock condition-variable)
+  (bt:with-lock-held (lock)
+    (bt:condition-wait condition-variable lock)))
+
+(defun release (lock condition-variable)
+  (bt:with-lock-held (lock)
+    (bt:condition-notify condition-variable)))

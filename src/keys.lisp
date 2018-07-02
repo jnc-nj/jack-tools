@@ -1,8 +1,5 @@
 (in-package #:jack.tools.keys)
 
-(defvar +exponent+ 154)
-(defvar +bign+ (expt 10 +exponent+))
-
 (defun byte-array? (input)
   (typep input '(simple-array (unsigned-byte 8))))
 
@@ -18,24 +15,20 @@
 
 (defun key-distance (key-1 key-2)
   (cond ((stringp key-1)
-	 (key-distance (decompress-key key-1 :class 'ironclad::rsa-public-key) key-2))
+	 (key-distance (decompress-key key-1 :private? nil) key-2))
 	((stringp key-2)
-	 (key-distance key-1 (decompress-key key-2 :class 'ironclad::rsa-public-key)))
+	 (key-distance key-1 (decompress-key key-2 :private? nil)))
 	(t (with-slots ((n-1 ironclad::n) (e-1 ironclad::e)) key-1
 	     (with-slots ((n-2 ironclad::n) (e-2 ironclad::e)) key-2
-	       (let ((delta-n (coerce (- n-1 n-2) 'double-float))
-		     (delta-e (coerce (- e-1 e-2) 'double-float)))
+	       (let ((delta-n (- (coerce n-1 'double-float) (coerce n-2 'double-float)))
+		     (delta-e (- (coerce e-1 'double-float) (coerce e-2 'double-float))))
 		 (sqrt (+ (* delta-n delta-n) (* delta-e delta-e)))))))))
 
 (defun pad-key (target-key reference-key)
-  (cond ((not (stringp target-key))
-	 (pad-key (compress-key target-key) reference-key))
-	((not (stringp reference-key))
-	 (pad-key target-key (compress-key reference-key)))
-	(t (let* ((reference-length (length reference-key))
-		  (target-length (length target-key))
-		  (length-difference (- reference-length target-length)))
-	     (concatenate 'string target-key (subseq reference-key 0 length-difference))))))
+  (let* ((reference-length (length reference-key))
+         (target-length (length target-key))
+         (length-difference (- reference-length target-length)))
+    (concatenate 'string target-key (subseq reference-key 0 length-difference))))
 
 (defun trim-key (key &key (start 0) (end 8))
   (if (stringp key)
@@ -48,26 +41,14 @@
 (defun decompress-bignum (bignum)
   (base64:base64-string-to-integer bignum))
 
-(defun compress-key (key)
-  (destructuring-bind (left right) (get-slot-names (class-of key))
-    (base64:integer-to-base64-string
-     (+ (slot-value key left)
-	(* +bign+ (slot-value key right))))))
-
-(defun decompress-key (key &key (class 'ironclad::rsa-private-key))
-  (let* ((decimal (/ (base64:base64-string-to-integer key) +bign+))
-	 (left (floor decimal))
-	 (right (* (- decimal left) +bign+))
-	 (output (make-instance class)))
-    (destructuring-bind (_right _left)
-	(get-slot-names (class-of output))
-      (setf (slot-value output _right) right
-	    (slot-value output _left) left)
-      output)))
+(defun decompress-key (key &key (private? t))
+  (if private?
+      (pem/pkey::read-private-key key)
+      (pem/pkey::read-public-key key)))
 
 (defun rsa-encrypt-message (public-key message)
   (cond ((stringp public-key)
-	 (rsa-encrypt-message (decompress-key public-key :class 'ironclad::rsa-public-key) message))
+	 (rsa-encrypt-message (decompress-key public-key :private? nil) message))
 	((byte-array? message)
 	 (base64:usb8-array-to-base64-string (ironclad:encrypt-message public-key message)))
 	(t (rsa-encrypt-message public-key (ironclad:ascii-string-to-byte-array message)))))
@@ -112,7 +93,7 @@
   (cond ((stringp signature)
 	 (verify-signature public-key message (base64:base64-string-to-usb8-array signature)))
 	((stringp public-key)
-	 (verify-signature (decompress-key public-key :class 'ironclad::rsa-public-key) message signature))
+	 (verify-signature (decompress-key public-key :private? nil) message signature))
 	((byte-array? message)
 	 (ironclad:verify-signature public-key message signature))
 	(t (verify-signature public-key (create-digest message) signature))))

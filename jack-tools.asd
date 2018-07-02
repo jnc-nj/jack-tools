@@ -28,5 +28,8 @@
 	       :bordeaux-threads
 	       :cl-base64
 	       :log4cl
+               :pem
+               :asn1
+               :timer-wheel
 	       ;;:mgl-mat
 	       ))
