@@ -105,3 +105,7 @@
 	   (hash-table-p object)
 	   (eq t object)
 	   (eq nil object))))
+
+(defun object-to-alist (object)
+  (cl-json:decode-json-from-string
+   (cl-json:encode-json-to-string object)))

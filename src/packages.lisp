@@ -38,7 +38,8 @@
 	   #:GET-OBJECT-ID
 	   #:GET-SLOT-NAMES
 	   #:SLOTS-EQUAL?
-	   #:OBJECTP))
+	   #:OBJECTP
+           #:OBJECT-TO-ALIST))
 
 (defpackage #:jack.tools.cli
   (:use #:cl
