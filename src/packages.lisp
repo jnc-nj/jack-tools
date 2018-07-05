@@ -68,7 +68,9 @@
   (:use #:cl 
 	#:jack.tools.objects
 	#:jack.tools.lists)
-  (:export #:BYTE-ARRAY?
+  (:export #:PARSE-PEM-FILE
+	   #:TEST-KEYS
+	   #:BYTE-ARRAY?
 	   #:CREATE-HASH
 	   #:CREATE-DIGEST
 	   #:KEY-DISTANCE

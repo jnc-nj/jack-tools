@@ -1,3 +1,4 @@
+
 (in-package #:jack.tools.withs)
 
 (defmacro with-excepted-api (exception &body body)
@@ -35,14 +36,16 @@
   `(when ,threshold
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,(format nil "[THREAD][~d]" title)
-       (with-timer ,threshold nil
-         ,@body
-         (when ,print-condition
-           (log:info ,(format nil "[UPDATE][~d]" title)))))))
+       (handler-case
+	   (with-timer ,threshold nil
+		       ,@body
+		       (when ,print-condition
+			 (log:info ,(format nil "[UPDATE][~d]" title))))
+	 (sb-thread:join-thread-error () nil)))))
 
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
-                     (when ,content
-                       (pants-off ,aes-key ,public-key ,content))))
+                    (when ,content
+                      (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))

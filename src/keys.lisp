@@ -1,5 +1,16 @@
 (in-package #:jack.tools.keys)
 
+(defun parse-pem-file (path)
+  (cl-ppcre:regex-replace-all
+   "(\\n|\\s*$)" (cdar (pem:parse-file (pathname path))) ""))
+
+(defun test-keys (private-key public-key)
+  (let ((temp (create-id :integer? nil)))
+    (ignore-errors
+      (verify-signature
+       public-key temp
+       (sign-message private-key temp)))))
+
 (defun byte-array? (input)
   (typep input '(simple-array (unsigned-byte 8))))
 
@@ -30,7 +41,7 @@
          (length-difference (- reference-length target-length)))
     (concatenate 'string target-key (subseq reference-key 0 length-difference))))
 
-(defun trim-key (key &key (start 0) (end 8))
+(defun trim-key (key &key (start 0) (end 16))
   (if (stringp key)
       (trim-seq key start end)
       (trim-key (decompress-key key) :start start :end end)))
