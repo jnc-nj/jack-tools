@@ -20,7 +20,11 @@
 	   #:PROMPT-READ
 	   #:READ-FLAG
 	   #:COUNT-THREADS
-	   #:DECODE-HTTP-BODY))
+	   #:DECODE-HTTP-BODY
+           #:IF-EXIST-RETURN
+           #:CREATE-DIRECTORY
+           #:WRITE-FILE
+           #:*PROBE-FILE))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
@@ -88,7 +92,10 @@
 	   #:CREATE-ID
 	   #:MAKE-CIPHER
 	   #:PANTS-ON
-	   #:PANTS-OFF))
+	   #:PANTS-OFF
+           #:GENERATE-PRIVATE-PEM
+           #:GENERATE-PUBLIC-PEM
+           #:GENERATE-PEMS))
 
 (defpackage #:jack.tools.maths
   (:use #:cl)
@@ -149,6 +156,7 @@
 	   #:WITH-INFO
            #:WITH-TIMER
 	   #:WITH-TIMED-LOOP
+           #:WITH-SUPPRESSED-OUTPUT
 	   #:WITH-SECURE-API
 	   #:SECURE-CONTENT*))
 

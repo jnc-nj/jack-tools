@@ -31,5 +31,7 @@
                :pem
                :asn1
                :timer-wheel
+               :inferior-shell
+               :uuid
 	       ;;:mgl-mat
 	       ))

@@ -29,3 +29,21 @@
   "For drakma."
   (babel:octets-to-string
    (coerce body '(vector (unsigned-byte 8)))))
+
+(defun if-exist-return (if-part else-part)
+  (if if-part if-part else-part))
+
+(defun create-directory (name &key (head "./"))
+  (ensure-directories-exist (pathname (format nil "~d~d" head name))))
+
+(defun write-file (object target)
+  (with-open-file (file (pathname target)
+                        :direction :output
+                        :if-exists :supersede
+                        :if-does-not-exist :create)
+    (if (stringp object)
+        (format file object)
+        (format file (cl-json:encode-json-to-string object)))))
+
+(defun *probe-file (path)
+  (when path (probe-file path)))

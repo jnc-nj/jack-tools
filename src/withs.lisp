@@ -38,14 +38,18 @@
      (with-bt-thread ,(format nil "[THREAD][~d]" title)
        (handler-case
 	   (with-timer ,threshold nil
-		       ,@body
-		       (when ,print-condition
-			 (log:info ,(format nil "[UPDATE][~d]" title))))
+             ,@body
+             (when ,print-condition
+               (log:info ,(format nil "[UPDATE][~d]" title))))
 	 (sb-thread:join-thread-error () nil)))))
+
+(defmacro with-suppressed-output (&body body)
+  `(with-open-stream (*standard-output* (make-broadcast-stream))
+     ,@body))
 
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
-                    (when ,content
-                      (pants-off ,aes-key ,public-key ,content))))
+                     (when ,content
+                       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))

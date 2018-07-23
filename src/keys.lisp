@@ -136,3 +136,17 @@
     (values (cl-json:decode-json-from-string
 	     (aes-decrypt-message aes-key iv (agethash :body json)))
 	    iv)))
+
+(defun generate-private-pem (private-path &key (identifier (uuid:make-v4-uuid))) 
+  (inferior-shell:run/nil
+   `(progn (openssl genrsa -out ,(pathname (format nil "~d~d.private" private-path identifier)) 2048)))
+  identifier)
+
+(defun generate-public-pem (private-path identifier)
+  (inferior-shell:run/nil
+   `(progn (openssl rsa -in ,(pathname (format nil "~d~d.private" private-path identifier))
+                    -outform PEM
+                    -pubout -out ,(pathname (format nil "~d~d.public" private-path identifier))))))
+
+(defun generate-pems (private-path &key (identifier (uuid:make-v4-uuid)))
+  (generate-public-pem private-path (generate-private-pem private-path :identifier identifier)))
