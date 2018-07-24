@@ -5,11 +5,11 @@
    "(\\n|\\s*$)" (cdar (pem:parse-file (pathname path))) ""))
 
 (defun test-keys (private-key public-key)
-  (let ((temp (create-id :integer? nil)))
+  (let ((temp (create-id :size 8 :integer? nil)))
     (ignore-errors
-      (verify-signature
-       public-key temp
-       (sign-message private-key temp)))))
+     (verify-signature
+      public-key temp
+      (sign-message private-key temp)))))
 
 (defun byte-array? (input)
   (typep input '(simple-array (unsigned-byte 8))))

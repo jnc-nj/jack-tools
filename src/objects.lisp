@@ -46,15 +46,15 @@
 (defun cast (alist class-map)
   (let* ((input-class (find-class-map (mapcar #'car alist) class-map))
 	 (instance (when input-class (make-instance input-class)))
-	 (class (class-of instance)))
-    (when class
+	 (class (class-of instance))) 
+    (when class 
       (dolist (slot-name (get-slot-names class))
 	(let ((value (agethash slot-name alist))) 
-	  (setf (slot-value instance slot-name)
+          (setf (slot-value instance slot-name)
 		(cond ((alistp value) (cast value class-map))
 		      ((or (not (listp value)) (not (listp (car value)))) value)
 		      ((listp (caar value)) (mapcar #'(lambda (v) (cast v class-map)) value))
-		      (t value)))))
+		      (t value))))) 
       (return-from cast instance))
     alist))
 
