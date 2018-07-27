@@ -35,13 +35,13 @@
 (defmacro with-timed-loop (title threshold delay print-condition &body body)
   `(when ,threshold
      (when ,delay (with-timer ,delay 1))
-     (with-bt-thread ,(format nil "[THREAD][~d]" title)
+     (with-bt-thread ,title
        (handler-case
-	   (with-timer ,threshold nil
+           (with-timer ,threshold nil
              ,@body
              (when ,print-condition
                (log:info ,(format nil "[UPDATE][~d]" title))))
-	 (sb-thread:join-thread-error () nil)))))
+         (sb-thread:join-thread-error () nil)))))
 
 (defmacro with-suppressed-output (&body body)
   `(with-open-stream (*standard-output* (make-broadcast-stream))

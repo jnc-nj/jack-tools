@@ -24,7 +24,8 @@
            #:IF-EXIST-RETURN
            #:CREATE-DIRECTORY
            #:WRITE-FILE
-           #:*PROBE-FILE))
+           #:*PROBE-FILE
+           #:JOIN-THREAD))
 
 (defpackage #:jack.tools.objects
   (:use #:cl

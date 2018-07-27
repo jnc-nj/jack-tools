@@ -27,8 +27,9 @@
 
 (defun decode-http-body (body)
   "For drakma."
-  (babel:octets-to-string
-   (coerce body '(vector (unsigned-byte 8)))))
+  (if (stringp body) body
+      (babel:octets-to-string
+       (coerce body '(vector (unsigned-byte 8))))))
 
 (defun if-exist-return (if-part else-part)
   (if if-part if-part else-part))
@@ -47,3 +48,8 @@
 
 (defun *probe-file (path)
   (when path (probe-file path)))
+
+(defun join-thread (thread-name)
+  (sb-thread:join-thread
+   (find-if #'(lambda (thread) (search thread-name (sb-thread:thread-name thread)))
+            (sb-thread:list-all-threads))))
