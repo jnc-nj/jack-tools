@@ -1,6 +1,13 @@
 
 (in-package #:jack.tools.withs)
 
+(defmacro with-profiler (packages times &body body)
+  "Profile PACKAGES with BODY n TIMES."
+  `(progn (sb-profile:profile ,@packages)
+	  (dotimes (n ,times) ,@body)
+	  (sb-profile:report)
+	  (sb-profile:unprofile ,@packages)))
+
 (defmacro with-excepted-api (exception &body body)
   `(handler-case ,@body
      (usocket:connection-refused-error () ,exception)))

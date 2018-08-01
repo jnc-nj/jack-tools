@@ -152,7 +152,8 @@
 	#:jack.tools.misc
 	#:jack.tools.keys
 	#:jack.tools.time)
-  (:export #:WITH-EXCEPTED-API
+  (:export #:WITH-PROFILER
+           #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO
            #:WITH-TIMER

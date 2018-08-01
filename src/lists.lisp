@@ -50,10 +50,8 @@
 	    (push index positions)))
     positions))
 
-(defun map-reduce (map-fn reduce-fn objects
-                   &key map-key reduce-key)
-  (reduce reduce-fn (mapcar map-fn objects :key map-key)
-          :key reduce-key))
+(defun map-reduce (map-fn reduce-fn objects &key map-key reduce-key)
+  (reduce reduce-fn (mapcar map-fn objects) :key reduce-key))
 
 (defun window (window object lst &key (test 'equal))
   "Get all elements within window N of OBJECT in LST."
