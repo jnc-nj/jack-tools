@@ -1,11 +1,13 @@
 (in-package #:jack.tools.keys)
 
+(defvar *prng* (ironclad:make-prng :fortuna :seed :urandom))
+
 (defun parse-pem-file (path)
   (cl-ppcre:regex-replace-all
    "(\\n|\\s*$)" (cdar (pem:parse-file (pathname path))) ""))
 
 (defun test-keys (private-key public-key)
-  (let ((temp (create-id :size 8 :integer? nil)))
+  (let ((temp (uuid:make-v4-uuid)))
     (ignore-errors
      (verify-signature
       public-key temp
@@ -109,13 +111,9 @@
 	 (ironclad:verify-signature public-key message signature))
 	(t (verify-signature public-key (create-digest message) signature))))
 
-(defun create-id (&key (size 16) (integer? t) octets?)
-  (let* ((octets (ironclad:make-random-salt size))
-	 (id (base64:usb8-array-to-base64-string octets))
-	 (integer (base64:base64-string-to-integer id)))
-    (cond (octets? octets)
-	  (integer? integer)
-	  (t id))))
+(defun create-id (&key (size 16))
+  (base64:usb8-array-to-base64-string
+   (ironclad:random-data size *prng*)))
 
 (defun make-cipher (key-1 key-2)
   (ironclad:make-cipher :aes :key key-1
