@@ -37,11 +37,11 @@
 		     (delta-e (- (coerce e-1 'double-float) (coerce e-2 'double-float))))
 		 (sqrt (+ (* delta-n delta-n) (* delta-e delta-e)))))))))
 
-(defun pad-key (target-key reference-key)
+(defun pad-key (target-key reference-key) 
   (let* ((reference-length (length reference-key))
          (target-length (length target-key))
          (length-difference (- reference-length target-length)))
-    (concatenate 'string target-key (subseq reference-key 0 length-difference))))
+    (concatenate 'string target-key (subseq reference-key target-length))))
 
 (defun trim-key (key &key (start 0) (end 16))
   (if (stringp key)
