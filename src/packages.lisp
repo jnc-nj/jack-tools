@@ -24,6 +24,7 @@
            #:IF-EXIST-RETURN
            #:CREATE-DIRECTORY
            #:WRITE-FILE
+           #:OPEN-FILE
            #:*PROBE-FILE
            #:JOIN-THREAD))
 

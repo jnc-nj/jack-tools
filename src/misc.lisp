@@ -46,6 +46,12 @@
         (format file object)
         (format file (cl-json:encode-json-to-string object)))))
 
+(defun open-file (target)
+  (with-open-file (file (pathname target))
+    (let ((contents (make-string (file-length file))))
+      (read-sequence contents file)
+      contents)))
+
 (defun *probe-file (path)
   (when path (probe-file path)))
 
