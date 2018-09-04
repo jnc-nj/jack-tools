@@ -15,6 +15,9 @@
     (map 'vector #'(lambda (n) (/ n length))
 	 (apply #'map 'vector #'+ vectors))))
 
+(defun euclidean-distance (a b)
+  (sqrt (map-reduce #'square #'+ (mapcar #'- a b))))
+
 (defun dot-prod (a b) (reduce #'+ (map 'simple-vector #'* a b)))
 
 (defun square (n) (* n n))

@@ -28,20 +28,25 @@
 
 (defun key-distance (key-1 key-2)
   (cond ((stringp key-1)
-	 (key-distance (decompress-key key-1 :private? nil) key-2))
+	 (key-distance (base64:base64-string-to-usb8-array key-1) key-2))
 	((stringp key-2)
-	 (key-distance key-1 (decompress-key key-2 :private? nil)))
-	(t (with-slots ((n-1 ironclad::n) (e-1 ironclad::e)) key-1
-	     (with-slots ((n-2 ironclad::n) (e-2 ironclad::e)) key-2
-	       (let ((delta-n (- (coerce n-1 'double-float) (coerce n-2 'double-float)))
-		     (delta-e (- (coerce e-1 'double-float) (coerce e-2 'double-float))))
-		 (sqrt (+ (* delta-n delta-n) (* delta-e delta-e)))))))))
+	 (key-distance key-1 (base64:base64-string-to-usb8-array key-2)))
+	(t (euclidean-distance (coerce key-1 'list) (coerce key-2 'list)))))
 
-(defun pad-key (target-key reference-key) 
-  (let* ((reference-length (length reference-key))
-         (target-length (length target-key))
-         (length-difference (- reference-length target-length)))
-    (concatenate 'string target-key (subseq reference-key target-length))))
+(defun pad-key (target-key reference-key)
+  (cond ((stringp target-key)
+         (pad-key (base64:base64-string-to-usb8-array target-key) reference-key))
+        ((stringp reference-key)
+         (pad-key target-key (base64:base64-string-to-usb8-array reference-key)))
+        (t (let* ((reference-length (length reference-key))
+                  (target-length (length target-key))
+                  (length-difference (- reference-length target-length))
+                  (final-key (append (coerce target-key 'list)
+                                     (coerce (subseq reference-key target-length) 'list))))
+             (base64:usb8-array-to-base64-string
+              (make-array (length final-key) 
+                          :element-type '(unsigned-byte 8)
+                          :initial-contents final-key))))))
 
 (defun trim-key (key &key (start 0) (end 16))
   (if (stringp key)
@@ -54,7 +59,11 @@
 (defun decompress-bignum (bignum)
   (base64:base64-string-to-integer bignum))
 
-(defun decompress-key (key &key (private? t))
+(defun usb8-array-to-integer (array)
+  (base64:base64-string-to-integer
+   (base64:usb8-array-to-base64-string array)))
+
+(defun decompress-key (key &key (private? t)) 
   (if private?
       (pem/pkey::read-private-key key)
       (pem/pkey::read-public-key key)))

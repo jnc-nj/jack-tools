@@ -70,10 +70,28 @@
 	   #:ADD-FUNCTION
 	   #:WITH-CLI))
 
+(defpackage #:jack.tools.maths
+  (:use #:cl
+        #:jack.tools.lists)
+  (:export #:RANDOM-FLOAT
+	   #:AVERAGE-VECTORS
+           #:EUCLIDEAN-DISTANCE
+	   #:DOT-PROD
+	   #:SQUARE
+	   #:SUM-OF-SQUARES
+	   #:COS-SIMILARITY
+	   #:SAFE-OP
+	   #:STRICT-OP
+	   #:*/
+	   #:*MAX
+	   #:CLOSEST-2-BASE
+	   #:FY-SHUFFLE))
+
 (defpackage #:jack.tools.keys
   (:use #:cl 
 	#:jack.tools.objects
-	#:jack.tools.lists)
+	#:jack.tools.lists
+        #:jack.tools.maths)
   (:export #:PARSE-PEM-FILE
 	   #:TEST-KEYS
 	   #:BYTE-ARRAY?
@@ -83,7 +101,8 @@
 	   #:PAD-KEY
 	   #:TRIM-KEY
 	   #:COMPRESS-BIGNUM
-	   #:DECOMPRESS-BIGNUM 
+	   #:DECOMPRESS-BIGNUM
+           #:USB8-ARRAY-TO-INTEGER
 	   #:DECOMPRESS-KEY
 	   #:RSA-ENCRYPT-MESSAGE
 	   #:RSA-DECRYPT-MESSAGE
@@ -98,21 +117,6 @@
            #:GENERATE-PRIVATE-PEM
            #:GENERATE-PUBLIC-PEM
            #:GENERATE-PEMS))
-
-(defpackage #:jack.tools.maths
-  (:use #:cl)
-  (:export #:RANDOM-FLOAT
-	   #:AVERAGE-VECTORS
-	   #:DOT-PROD
-	   #:SQUARE
-	   #:SUM-OF-SQUARES
-	   #:COS-SIMILARITY
-	   #:SAFE-OP
-	   #:STRICT-OP
-	   #:*/
-	   #:*MAX
-	   #:CLOSEST-2-BASE
-	   #:FY-SHUFFLE))
 
 (defpackage #:jack.tools.time
   (:use #:cl 
