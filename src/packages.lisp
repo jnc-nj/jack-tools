@@ -25,6 +25,7 @@
            #:CREATE-DIRECTORY
            #:WRITE-FILE
            #:OPEN-FILE
+           #:CMD-READ-PATH
            #:*PROBE-FILE
            #:JOIN-THREAD))
 
@@ -111,6 +112,7 @@
 	   #:SIGN-MESSAGE
 	   #:VERIFY-SIGNATURE
 	   #:CREATE-ID
+           #:CREATE-RANDOM-PATH
 	   #:MAKE-CIPHER
 	   #:PANTS-ON
 	   #:PANTS-OFF

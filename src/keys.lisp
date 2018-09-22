@@ -124,10 +124,13 @@
   (base64:usb8-array-to-base64-string
    (ironclad:random-data size *prng*)))
 
+(defun create-random-path (path &key (size 16))
+  (format nil "~d~d.txt" path (uuid:make-v4-uuid)))
+
 (defun make-cipher (key-1 key-2)
   (ironclad:make-cipher :aes :key key-1
-			:mode :cbc
-			:initialization-vector key-2))
+                             :mode :cbc
+                             :initialization-vector key-2))
 
 (defun pants-on (aes-key public-key object)
   "Takes a lisp or json object, then returns a json."

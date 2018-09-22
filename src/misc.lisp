@@ -52,6 +52,9 @@
       (read-sequence contents file)
       contents)))
 
+(defun cmd-read-path (path)
+  (format nil "$(<~d)" (pathname path)))
+
 (defun *probe-file (path)
   (when path (probe-file path)))
 
