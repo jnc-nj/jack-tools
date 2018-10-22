@@ -1,0 +1,32 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -L sbcl -- $0 "$@"
+|#
+
+;;; COMPILE FLAGS
+(declaim (sb-ext:muffle-conditions cl:style-warning))
+(declaim (optimize (speed 3) (space 0) (debug 0) (safety 0) (compilation-speed 0)))
+(declaim (sb-ext:muffle-conditions sb-ext:compiler-note))
+
+;;; LOAD FLAGS
+
+;;; LOAD FLAGS
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (setf sb-impl::*default-external-format* :utf-8)
+  (setf sb-alien::*default-c-string-external-format* :utf-8) 
+  (setf *read-default-float-format* 'double-float))
+
+;;; USE PACKAGES
+(setf ql:*local-project-directories* (list "~/.roswell/local-projects/"))
+(ql:quickload :jack-tools :silent t)
+(in-package :jack.tools.keys)
+
+;;; HELP FILE
+(defun print-help ())
+
+(defun main (&rest argv)
+  (let* ((split (split-list argv)))
+    ))
+
+

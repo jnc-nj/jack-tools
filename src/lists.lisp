@@ -50,7 +50,7 @@
 	    (push index positions)))
     positions))
 
-(defun map-reduce (map-fn reduce-fn objects &key map-key reduce-key)
+(defun map-reduce (map-fn reduce-fn objects &key reduce-key)
   (reduce reduce-fn (mapcar map-fn objects) :key reduce-key))
 
 (defun window (window object lst &key (test 'equal))
@@ -58,10 +58,28 @@
   (let ((lst-length (length lst)))
     (reduce #'append
 	    (loop for position in (all-positions object lst :test test)
-	       for lower-bound = (- position window)
-	       for upper-bound = (+ position window 1)
-	       collect (delete object
-			       (subseq lst
-				       (if (> lower-bound 0) lower-bound 0)
-				       (when (< upper-bound lst-length) upper-bound))
-			       :test test)))))
+                  for lower-bound = (- position window)
+                  for upper-bound = (+ position window 1)
+                  collect (delete object
+                                  (subseq lst
+                                          (if (> lower-bound 0) lower-bound 0)
+                                          (when (< upper-bound lst-length) upper-bound))
+                                  :test test)))))
+
+(defun random-item (lst &key value)
+  (cond ((listp lst) (nth (random (length lst)) lst)) 
+        ((and value (hash-table-p lst)) (gethash (random-item (hash-table-keys lst)) lst))
+        ((hash-table-p lst) (random-item (hash-table-keys lst)))))
+
+
+(defun random-selection (lst &key (limit 5) value)
+  (cond ((listp lst)
+         (trim-seq (loop repeat (+ 1 (random (- (length lst) 1)))
+                         collect (random-item lst))
+                   0 limit))
+        ((hash-table-p lst)
+         (trim-seq (if value
+                       (mapcar #'(lambda (item) (gethash item lst))
+                               (random-selection (hash-table-keys lst)))
+                       (random-selection (hash-table-keys lst)))
+                   0 limit))))

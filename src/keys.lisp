@@ -75,12 +75,15 @@
 	 (base64:usb8-array-to-base64-string (ironclad:encrypt-message public-key message)))
 	(t (rsa-encrypt-message public-key (ironclad:ascii-string-to-byte-array message)))))
 
-(defun rsa-decrypt-message (private-key message)
+(defun rsa-decrypt-message (private-key message &key string?)
   (cond ((stringp private-key)
-	 (rsa-decrypt-message (decompress-key private-key) message))
+	 (rsa-decrypt-message (decompress-key private-key) message
+                              :string? string?))
 	((byte-array? message)
-	 (babel:octets-to-string (ironclad:decrypt-message private-key message)))
-	(t (rsa-decrypt-message private-key (base64:base64-string-to-usb8-array message)))))
+         (let ((output (ironclad:decrypt-message private-key message)))
+           (if string? (babel:octets-to-string output) output)))
+	(t (rsa-decrypt-message private-key (base64:base64-string-to-usb8-array message)
+                                :string? string?))))
 
 (defun aes-encrypt-message (key iv message)
   (cond ((stringp key)
@@ -93,16 +96,19 @@
 	   (base64:usb8-array-to-base64-string _message)))
 	(t (aes-encrypt-message key iv (ironclad:ascii-string-to-byte-array message)))))
 
-(defun aes-decrypt-message (key iv message)
+(defun aes-decrypt-message (key iv message &key string?)
   (cond ((stringp key)
-	 (aes-decrypt-message (base64:base64-string-to-usb8-array key) iv message))
+	 (aes-decrypt-message (base64:base64-string-to-usb8-array key) iv message
+                              :string? string?))
 	((stringp iv)
-	 (aes-decrypt-message key (base64:base64-string-to-usb8-array iv) message))
+	 (aes-decrypt-message key (base64:base64-string-to-usb8-array iv) message
+                              :string? string?))
 	((byte-array? message)
-	 (let ((_message message))
+	 (let ((_message (copy-seq message)))
 	   (ironclad:decrypt-in-place (make-cipher key iv) _message)
-	   (babel:octets-to-string _message)))
-	(t (aes-decrypt-message key iv (base64:base64-string-to-usb8-array message)))))
+	   (if string? (babel:octets-to-string _message) _message)))
+	(t (aes-decrypt-message key iv (base64:base64-string-to-usb8-array message)
+                                :string? string?))))
 
 (defun sign-message (private-key message)
   (cond ((stringp private-key)
@@ -120,21 +126,24 @@
 	 (ironclad:verify-signature public-key message signature))
 	(t (verify-signature public-key (create-digest message) signature))))
 
-(defun create-id (&key (size 16))
-  (base64:usb8-array-to-base64-string
-   (ironclad:random-data size *prng*)))
+(defun create-id (&key (size 16) (string? t))
+  (let ((id (ironclad:random-data size *prng*)))
+    (if string?
+        (base64:usb8-array-to-base64-string id)
+        id)))
 
 (defun create-random-path (path &key (size 16))
   (format nil "~d~d.txt" path (uuid:make-v4-uuid)))
 
 (defun make-cipher (key-1 key-2)
-  (ironclad:make-cipher :aes :key key-1
-                             :mode :cbc
-                             :initialization-vector key-2))
+  (ironclad:make-cipher
+   :aes :key key-1
+        :mode :cbc
+        :initialization-vector key-2))
 
 (defun pants-on (aes-key public-key object)
   "Takes a lisp or json object, then returns a json."
-  (let ((iv (create-id :integer? nil)))
+  (let ((iv (create-id :string? nil))) 
     (format nil "{\"key\": \"~d\", \"body\": \"~d\"}"
 	    (rsa-encrypt-message public-key iv)
 	    (aes-encrypt-message aes-key iv object))))
@@ -142,9 +151,10 @@
 (defun pants-off (aes-key private-key object)
   "Takes a json, then returns a lisp object."
   (let* ((json (cl-json:decode-json-from-string object))
-	 (iv (rsa-decrypt-message private-key (agethash :key json))))
+	 (iv (rsa-decrypt-message private-key (agethash :key json)))) 
     (values (cl-json:decode-json-from-string
-	     (aes-decrypt-message aes-key iv (agethash :body json)))
+	     (aes-decrypt-message aes-key iv (agethash :body json)
+                                  :string? t))
 	    iv)))
 
 (defun generate-private-pem (private-path &key (identifier (uuid:make-v4-uuid))) 

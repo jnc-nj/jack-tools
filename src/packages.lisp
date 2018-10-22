@@ -1,7 +1,7 @@
 (in-package :cl-user)
 
 (defpackage #:jack.tools.lists
-  (:use #:cl)
+  (:use #:cl #:alexandria)
   (:export #:AGETHASH
 	   #:AGETHASH-VALS
 	   #:SPLIT-LIST
@@ -11,7 +11,9 @@
 	   #:TRIM-SORT
 	   #:ALL-POSITIONS 
 	   #:MAP-REDUCE
-	   #:WINDOWS))
+	   #:WINDOWS
+           #:RANDOM-ITEM
+           #:RANDOM-SELECTION))
 
 (defpackage #:jack.tools.misc
   (:use #:cl
@@ -27,7 +29,8 @@
            #:OPEN-FILE
            #:CMD-READ-PATH
            #:*PROBE-FILE
-           #:JOIN-THREAD))
+           #:JOIN-THREAD
+           #:GET-ALL-SYMBOLS))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
