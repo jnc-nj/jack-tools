@@ -1,0 +1,16 @@
+ # -*- restclient -*-
+
+# URLs
+:url = http://127.0.0.1:4000
+
+# Generate
+POST :url/pants/generate
+Content-Type: application/json
+{"path": "/Users/asclepius/test_"}
+
+# Sign
+POST :url/pants/sign
+Content-Type: application/json
+{"path": "/Users/asclepius/test_A74FF7C8-2ABA-4DF1-BB53-D47BF872DAFA.private",
+ "message": "test"}
+

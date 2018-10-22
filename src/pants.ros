@@ -20,12 +20,52 @@ exec ros -Q -L sbcl -- $0 "$@"
 (ql:quickload :jack-tools :silent t)
 (ql:quickload :inferior-shell :silent t)
 (ql:quickload :log4cl :silent t)
-(in-package :jack.tools.keys)
+(ql:quickload :hunchentoot :silent t)
+
+;;; MODIFY HUNCHENTOOT THREADING
+(in-package :hunchentoot)
+(defmethod start-thread ((taskmaster one-thread-per-connection-taskmaster) thunk &key name)
+  "0. instantiate calling thread's current package
+   1. pass initial special bindings to bordeaux threads
+   2. pass initial special bindings to child threads"
+  (let* ((package-name (package-name *package*)) 
+	 (initial-bindings `((*package* . (find-package ,package-name)))))
+    (bt:make-thread thunk :name name :initial-bindings initial-bindings)))
+
+;;; PACKAGE DECLARATION -- DON'T CROSS IMPORT FILES
+(in-package #:cl-user)
+(defpackage #:jack.tools.pants
+  (:use #:cl 
+	#:hunchentoot
+        #:cl-json
+	#:jack.tools.lists
+	#:jack.tools.keys
+        #:jack.tools.misc
+        #:jack.tools.withs
+        #:jack.tools.objects))
+(in-package #:jack.tools.pants)
 
 ;;; HELP FILE
-(defun main (&rest argv) 
-  (if (inferior-shell:run/ss `(and (openssl -h)))
-      (destructuring-bind (mode private message) argv
-        (cond ((string= mode "generate") (generate-pems private))
-              ((string= mode "sign") (sign-message (parse-pem-file private) message))))
-      (log:info "OpenSSL is required.")))
+(defun main (port) 
+  (cond ((inferior-shell:run/ss `(and (openssl -h)))
+         (start (make-instance 'easy-acceptor :port (read-from-string port)))
+         (define-easy-handler (pants/generate :uri "/pants/generate") ()
+           (setf (content-type*) "application/json")
+           (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
+                  (path (agethash :path content))) 
+             (format nil "{\"fileID\": \"~d\"}"
+                     (write-to-string (generate-pems path)))))
+         (define-easy-handler (pants/sign :uri "/pants/sign") ()
+           (setf (content-type*) "application/json")
+           (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
+                  (path (agethash :path content))
+                  (message (agethash :message content)))
+             (format nil "{\"signature\": \"~d\"}"
+                     (sign-message (parse-pem-file path) message))))
+         (format *standard-output* "Started server.~%")
+         (handler-case
+             (sb-thread:join-thread
+              (find-if #'(lambda (thread) (search "hunchentoot" (sb-thread:thread-name thread)))
+                       (sb-thread:list-all-threads)))
+           (sb-sys:interactive-interrupt () (sb-ext:exit)))) 
+        (t (log:info "OpenSSL is required."))))
