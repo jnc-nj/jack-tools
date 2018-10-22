@@ -10,8 +10,6 @@ exec ros -Q -L sbcl -- $0 "$@"
 (declaim (sb-ext:muffle-conditions sb-ext:compiler-note))
 
 ;;; LOAD FLAGS
-
-;;; LOAD FLAGS
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (setf sb-impl::*default-external-format* :utf-8)
   (setf sb-alien::*default-c-string-external-format* :utf-8) 
@@ -20,13 +18,14 @@ exec ros -Q -L sbcl -- $0 "$@"
 ;;; USE PACKAGES
 (setf ql:*local-project-directories* (list "~/.roswell/local-projects/"))
 (ql:quickload :jack-tools :silent t)
+(ql:quickload :inferior-shell :silent t)
+(ql:quickload :log4cl :silent t)
 (in-package :jack.tools.keys)
 
 ;;; HELP FILE
-(defun print-help ())
-
-(defun main (&rest argv)
-  (let* ((split (split-list argv)))
-    ))
-
-
+(defun main (&rest argv) 
+  (if (inferior-shell:run/ss `(and (openssl -h)))
+      (destructuring-bind (mode private message) argv
+        (cond ((string= mode "generate") (generate-pems private))
+              ((string= mode "sign") (sign-message (parse-pem-file private) message))))
+      (log:info "OpenSSL is required."))
