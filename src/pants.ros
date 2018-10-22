@@ -28,4 +28,4 @@ exec ros -Q -L sbcl -- $0 "$@"
       (destructuring-bind (mode private message) argv
         (cond ((string= mode "generate") (generate-pems private))
               ((string= mode "sign") (sign-message (parse-pem-file private) message))))
-      (log:info "OpenSSL is required."))
+      (log:info "OpenSSL is required.")))
