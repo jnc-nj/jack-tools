@@ -148,14 +148,14 @@
 	    (rsa-encrypt-message public-key iv)
 	    (aes-encrypt-message aes-key iv object))))
 
-(defun pants-off (aes-key private-key object)
+(defun pants-off (aes-key private-key object &key (string? t))
   "Takes a json, then returns a lisp object."
   (let* ((json (cl-json:decode-json-from-string object))
-	 (iv (rsa-decrypt-message private-key (agethash :key json)))) 
-    (values (cl-json:decode-json-from-string
-	     (aes-decrypt-message aes-key iv (agethash :body json)
-                                  :string? t))
-	    iv)))
+	 (iv (rsa-decrypt-message private-key (agethash :key json)))
+         (decryption (aes-decrypt-message aes-key iv (agethash :body json)
+                                          :string? t))) 
+    (values (if string? (cl-json:decode-json-from-string decryption) decryption)
+            iv)))
 
 (defun generate-private-pem (private-path &key (identifier (uuid:make-v4-uuid))) 
   (inferior-shell:run/nil

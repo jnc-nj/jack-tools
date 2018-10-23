@@ -45,6 +45,12 @@ exec ros -Q -L sbcl -- $0 "$@"
         #:jack.tools.objects))
 (in-package #:jack.tools.pants)
 
+;;; INITIALIZE KEYS
+(defconstant +aes-key+ (create-id :size 32 :string? nil))
+(let ((identifier (generate-pems "/Users/asclepius/")))
+  (defconstant +public-key+ (parse-pem-file (format nil "/Users/asclepius/~d.public" identifier)))
+  (defconstant +private-key+ (parse-pem-file (format nil "/Users/asclepius/~d.private" identifier))))
+
 ;;; HELP FILE
 (defun main (port) 
   (cond ((inferior-shell:run/ss `(and (openssl -h)))
@@ -52,17 +58,36 @@ exec ros -Q -L sbcl -- $0 "$@"
          (define-easy-handler (pants/generate :uri "/pants/generate") ()
            (setf (content-type*) "application/json")
            (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
-                  (path (agethash :path content))) 
-             (format nil "{\"fileID\": \"~d\"}"
-                     (write-to-string (generate-pems path)))))
+                  (path (agethash :path content))
+                  (id (write-to-string (generate-pems path)))
+                  (private-path (format nil "~d~d.private" path id))) 
+             (write-file (pants-on +aes-key+ +public-key+ (open-file private-path)) private-path) 
+             (format nil "{\"fileID\": \"~d\"}" id)))
+         
          (define-easy-handler (pants/sign :uri "/pants/sign") ()
            (setf (content-type*) "application/json")
            (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
                   (path (agethash :path content))
-                  (message (agethash :message content)))
+                  (message (agethash :message content))
+                  (private-path (format nil "~d.private" path))
+                  (raw-key (pants-off +aes-key+ +private-key+ (open-file private-path) :string? nil))
+                  (trim-key (cl-ppcre:split "\\n" raw-key))
+                  (fit-key (trim-seq trim-key 1 (- (length trim-key) 1)))) 
              (format nil "{\"signature\": \"~d\"}"
-                     (sign-message (parse-pem-file (format nil "~d.private" path))
+                     (sign-message (pem/pkey::read-private-key
+                                    (format nil "~{~d~}" fit-key))
                                    message))))
+
+         (define-easy-handler (pants/verify :uri "/pants/verify") ()
+           (setf (content-type*) "application/json")
+           (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
+                  (path (agethash :path content))
+                  (message (agethash :message content))
+                  (signature (agethash :signature content)))
+             (format nil "{\"verification\": \"~d\"}"
+                     (verify-signature (parse-pem-file (format nil "~d.public" path))
+                                       message signature))))
+         
          (define-easy-handler (pants/get :uri "/pants/get") ()
            (setf (content-type*) "application/json")
            (let* ((content (decode-json-from-string (raw-post-data :force-text t)))

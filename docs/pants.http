@@ -1,21 +1,28 @@
  # -*- restclient -*-
 
 # URLs
-:url = http://127.0.0.1:4000
+:url = http://127.0.0.1:4001
 
 # Generate
 POST :url/pants/generate
 Content-Type: application/json
-{"path": "/"}
+{"path": "~/"}
 
 # Sign
 POST :url/pants/sign
 Content-Type: application/json
-{"path": "/CA2A3A73-101B-4046-A6C2-3B63CFCAF4E5.private",
+{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027",
  "message": {"test": 1}}
+
+# Verify
+POST :url/pants/verify
+Content-Type: application/json
+{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027",
+ "message": {"test": 1},
+ "signature": "Gi1ljbuRyGX7fBalyTmADGa4xdQ/RFRtoe73g7HHzC6oOrNE7s/oxcP0+sSHb2UeB/+Iw/q1B3PUzUpPlqAGxw0p6FeTrzH7LJsc1ajQvlbRInXBJxnC5cUEAe6beOYkSNqHiFtGmPI20zvvzGH+MOuyHbH3rhTu5ZMk9yz8gWuBXmDiornh2qa79WzKTkaODJ426se1Dc0TBm6tXZRE2eppBEzk/RN1nHe713hjRckVD2gmYyXCpSo/nInUR/nupEwHqUeSqzWrI0wlJ0iaL0U0VHJC55W//XyreaZ4wv2VufXqfgseig8F5YI8Pa6+n92nIbw1aLe7tglOrrVAgQ=="}
 
 # Get
 POST :url/pants/get
 Content-Type: application/json
-{"path": "/CFDC8EA3-8EF8-4A1B-AF5B-CCF6594C8272.public"}
+{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027"}
 
