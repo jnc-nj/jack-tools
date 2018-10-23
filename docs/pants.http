@@ -1,16 +1,21 @@
  # -*- restclient -*-
 
 # URLs
-:url = http://127.0.0.1:4000
+:url = http://127.0.0.1:4001
 
 # Generate
 POST :url/pants/generate
 Content-Type: application/json
-{"path": "/Users/asclepius/test_"}
+{"path": "~/"}
 
 # Sign
 POST :url/pants/sign
 Content-Type: application/json
-{"path": "/Users/asclepius/test_A74FF7C8-2ABA-4DF1-BB53-D47BF872DAFA.private",
- "message": "test"}
+{"path": "~/7986E581-2C38-4121-9D5F-40BBE95CCCFC",
+ "message": {"test": 1}}
+
+# Get
+POST :url/pants/get
+Content-Type: application/json
+{"path": "~/7986E581-2C38-4121-9D5F-40BBE95CCCFC"}
 

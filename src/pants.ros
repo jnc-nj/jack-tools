@@ -61,7 +61,14 @@ exec ros -Q -L sbcl -- $0 "$@"
                   (path (agethash :path content))
                   (message (agethash :message content)))
              (format nil "{\"signature\": \"~d\"}"
-                     (sign-message (parse-pem-file path) message))))
+                     (sign-message (parse-pem-file (format nil "~d.private" path))
+                                   message))))
+         (define-easy-handler (pants/get :uri "/pants/get") ()
+           (setf (content-type*) "application/json")
+           (let* ((content (decode-json-from-string (raw-post-data :force-text t)))
+                  (path (agethash :path content)))
+             (format nil "{\"pubKey\": \"~d\"}"
+                     (parse-pem-file (format nil "~d.public" path)))))
          (format *standard-output* "Started server.~%")
          (handler-case
              (sb-thread:join-thread
