@@ -84,7 +84,7 @@ exec ros -Q -L sbcl -- $0 "$@"
                   (path (agethash :path content))
                   (message (agethash :message content))
                   (signature (agethash :signature content)))
-             (format nil "{\"verification\": \"~d\"}"
+             (format nil "{\"verification\": ~:[false~;true~]}"
                      (verify-signature (parse-pem-file (format nil "~d.public" path))
                                        message signature))))
          

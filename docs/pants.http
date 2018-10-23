@@ -11,18 +11,18 @@ Content-Type: application/json
 # Sign
 POST :url/pants/sign
 Content-Type: application/json
-{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027",
+{"path": "~/BAE06CDF-8B94-4D99-B0E3-AB602106C193",
  "message": {"test": 1}}
 
 # Verify
 POST :url/pants/verify
 Content-Type: application/json
-{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027",
+{"path": "~/BAE06CDF-8B94-4D99-B0E3-AB602106C193",
  "message": {"test": 1},
- "signature": "Gi1ljbuRyGX7fBalyTmADGa4xdQ/RFRtoe73g7HHzC6oOrNE7s/oxcP0+sSHb2UeB/+Iw/q1B3PUzUpPlqAGxw0p6FeTrzH7LJsc1ajQvlbRInXBJxnC5cUEAe6beOYkSNqHiFtGmPI20zvvzGH+MOuyHbH3rhTu5ZMk9yz8gWuBXmDiornh2qa79WzKTkaODJ426se1Dc0TBm6tXZRE2eppBEzk/RN1nHe713hjRckVD2gmYyXCpSo/nInUR/nupEwHqUeSqzWrI0wlJ0iaL0U0VHJC55W//XyreaZ4wv2VufXqfgseig8F5YI8Pa6+n92nIbw1aLe7tglOrrVAgQ=="}
+ "signature": "XwSmngNtsxoBdov3Qd5NYm5yn04FgJs6/fDCT0JHTrgEFyEfsfv8Vu/j4ucvaf2u+/GSQwLaMUD4/WUT2vEiKUR+jiUesnumrS1Z7+M483JpUQvm72+7n4FiC1uPsicn+a3c5cOnh/Zav8K3J96DjqsBsd3qvaqQJ2/i5ucLaPLYEfPQURaypi861BSlDp7U3myUKAuWA+DDCi2r689baxRhmgg+gt4EH8DKwHZMSYfrjHqvlOZVQrD0ghQB6fD5+YoinVBR9H9/dXeBxkle7352OMg+KMeccylN+HZtM80G/pIxuQQKcm+dq1Fgg6DfA9d5j12PDSuzFvb1aJMVag=="}
 
 # Get
 POST :url/pants/get
 Content-Type: application/json
-{"path": "~/D2644F0A-DAEC-4668-9695-58E0D9EF0027"}
+{"path": "~/8856F40A-93AE-460E-ADDB-6F3DBA5829D0"}
 
