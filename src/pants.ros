@@ -48,8 +48,8 @@ exec ros -Q -L sbcl -- $0 "$@"
 ;;; INITIALIZE KEYS
 (defconstant +aes-key+ (create-id :size 32 :string? nil))
 (let ((identifier (generate-pems "/Users/asclepius/")))
-  (defconstant +public-key+ (parse-pem-file (format nil "/Users/asclepius/~d.public" identifier)))
-  (defconstant +private-key+ (parse-pem-file (format nil "/Users/asclepius/~d.private" identifier))))
+  (defconstant +public-key+ (parse-pem-file (format nil "/~d.public" identifier)))
+  (defconstant +private-key+ (parse-pem-file (format nil "/~d.private" identifier))))
 
 ;;; HELP FILE
 (defun main (port) 
