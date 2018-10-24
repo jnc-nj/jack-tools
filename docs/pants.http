@@ -1,28 +1,28 @@
  # -*- restclient -*-
 
 # URLs
-:url = http://127.0.0.1:4001
+:url = http://127.0.0.1:4000
 
 # Generate
 POST :url/pants/generate
 Content-Type: application/json
-{"path": "~/"}
+{"path": "/"}
 
 # Sign
 POST :url/pants/sign
 Content-Type: application/json
-{"path": "~/BAE06CDF-8B94-4D99-B0E3-AB602106C193",
+{"path": "/C501A146-465A-4637-8778-016896D9E421",
  "message": {"test": 1}}
 
 # Verify
 POST :url/pants/verify
 Content-Type: application/json
-{"path": "~/BAE06CDF-8B94-4D99-B0E3-AB602106C193",
+{"path": "/C501A146-465A-4637-8778-016896D9E421",
  "message": {"test": 1},
- "signature": "XwSmngNtsxoBdov3Qd5NYm5yn04FgJs6/fDCT0JHTrgEFyEfsfv8Vu/j4ucvaf2u+/GSQwLaMUD4/WUT2vEiKUR+jiUesnumrS1Z7+M483JpUQvm72+7n4FiC1uPsicn+a3c5cOnh/Zav8K3J96DjqsBsd3qvaqQJ2/i5ucLaPLYEfPQURaypi861BSlDp7U3myUKAuWA+DDCi2r689baxRhmgg+gt4EH8DKwHZMSYfrjHqvlOZVQrD0ghQB6fD5+YoinVBR9H9/dXeBxkle7352OMg+KMeccylN+HZtM80G/pIxuQQKcm+dq1Fgg6DfA9d5j12PDSuzFvb1aJMVag=="}
+ "signature": "EOB2vEtJ3L8YGfqYTWpDEjeyllqEoGdDPQ4/T0iFJcL3IfEDckG5R2+oM9Ok6Q5uaQ1yPsIBCOfCdY7LJuvHr80ZDYqg8WxSlPEAZXH6el28MtZXz9IGooPLqfAhjdUL8Kj6UVveEfubQOcv0qm3fTU3FXkfJE6iOvQBH8MdGR2Uji/N4dwT2ZEVn0HBnjC/qGEGXP6BzNB8F0pYZSzwBY6S9heMXEU7b+stFeWyHY/MojGpttP/EP4LWo0MpHVZ89py9MzucoIRaMFwxC6YumUJuuZCMiXl7eQZnpBPl1EKFuotaB2afFT1cAD76vmX3YU1Ldd4y6z3sDQFTCXmVw=="}
 
 # Get
 POST :url/pants/get
 Content-Type: application/json
-{"path": "~/8856F40A-93AE-460E-ADDB-6F3DBA5829D0"}
+{"path": "/C501A146-465A-4637-8778-016896D9E421"}
 
