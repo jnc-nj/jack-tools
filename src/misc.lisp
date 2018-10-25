@@ -34,8 +34,8 @@
 (defun if-exist-return (if-part else-part)
   (if if-part if-part else-part))
 
-(defun create-directory (name &key (head "./"))
-  (ensure-directories-exist (pathname (format nil "~d~d" head name))))
+(defun create-directory (name)
+  (ensure-directories-exist (pathname name)))
 
 (defun write-file (object target)
   (with-open-file (file (pathname target)
