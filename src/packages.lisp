@@ -13,7 +13,8 @@
 	   #:MAP-REDUCE
 	   #:WINDOWS
            #:RANDOM-ITEM
-           #:RANDOM-SELECTION))
+           #:RANDOM-SELECTION
+	   #:SET-EQUALS))
 
 (defpackage #:jack.tools.misc
   (:use #:cl

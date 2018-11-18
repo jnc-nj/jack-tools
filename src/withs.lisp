@@ -1,4 +1,3 @@
-
 (in-package #:jack.tools.withs)
 
 (defmacro with-profiler (packages times &body body)

@@ -143,7 +143,7 @@
 
 (defun pants-on (aes-key public-key object)
   "Takes a lisp or json object, then returns a json."
-  (let ((iv (create-id :string? nil))) 
+  (let ((iv (create-id :size 16 :string? nil))) 
     (format nil "{\"key\": \"~d\", \"body\": \"~d\"}"
 	    (rsa-encrypt-message public-key iv)
 	    (aes-encrypt-message aes-key iv object))))

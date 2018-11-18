@@ -75,7 +75,7 @@
 (defun random-selection (lst &key (limit 5) value)
   (cond ((listp lst)
          (trim-seq (loop repeat (+ 1 (random (- (length lst) 1)))
-                         collect (random-item lst))
+                      collect (random-item lst))
                    0 limit))
         ((hash-table-p lst)
          (trim-seq (if value
@@ -83,3 +83,8 @@
                                (random-selection (hash-table-keys lst)))
                        (random-selection (hash-table-keys lst)))
                    0 limit))))
+
+(defun set-equals (lst-1 lst-2 &key test key)
+  (and lst-1 lst-2
+       (not (or (set-difference lst-1 lst-2 :test test :key key)
+		(set-difference lst-2 lst-1 :test test :key key)))))
