@@ -43,10 +43,9 @@
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title
        (handler-case
-           (with-timer ,threshold nil
-             ,@body
-             (when ,print-condition
-               (log:info ,(format nil "[UPDATE][~d]" title))))
+           (with-timer ,threshold nil ,@body
+		       (when ,print-condition
+			 (log:info (format nil "[UPDATE][~d]" ,title))))
          (sb-thread:join-thread-error () nil)))))
 
 (defmacro with-suppressed-output (&body body)
