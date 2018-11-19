@@ -42,10 +42,7 @@
   `(when ,threshold
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title
-       (handler-case
-           (with-timer ,threshold nil ,@body
-		       (when ,print-condition
-			 (log:info (format nil "[UPDATE][~d]" ,title))))
+       (handler-case (with-timer ,threshold nil ,@body)
          (sb-thread:join-thread-error () nil)))))
 
 (defmacro with-suppressed-output (&body body)
