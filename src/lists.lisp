@@ -84,7 +84,7 @@
                        (random-selection (hash-table-keys lst)))
                    0 limit))))
 
-(defun set-equals (lst-1 lst-2 &key test key)
+(defun set-equals (lst-1 lst-2 &key (test #'equal) key)
   (and lst-1 lst-2
        (not (or (set-difference lst-1 lst-2 :test test :key key)
 		(set-difference lst-2 lst-1 :test test :key key)))))
