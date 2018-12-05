@@ -91,4 +91,5 @@
 		(set-difference lst-2 lst-1 :test test :key key)))))
 
 (defun dotted-pair-p (obj)
-  (not (listp (cdr obj))))
+  (when (listp obj)
+    (not (listp (cdr obj)))))
