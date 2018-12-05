@@ -1,3 +1,4 @@
+
 (in-package :cl-user)
 
 (defpackage #:jack.tools.lists
@@ -14,7 +15,8 @@
 	   #:WINDOWS
            #:RANDOM-ITEM
            #:RANDOM-SELECTION
-	   #:SET-EQUALS))
+	   #:SET-EQUALS
+	   #:DOTTED-PAIR-P))
 
 (defpackage #:jack.tools.misc
   (:use #:cl

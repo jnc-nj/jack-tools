@@ -1,3 +1,4 @@
+
 (in-package #:jack.tools.lists)
 
 (defun agethash (key alist &key (test 'string=))
@@ -88,3 +89,6 @@
   (and lst-1 lst-2
        (not (or (set-difference lst-1 lst-2 :test test :key key)
 		(set-difference lst-2 lst-1 :test test :key key)))))
+
+(defun dotted-pair-p (obj)
+  (not (listp (cdr obj))))
