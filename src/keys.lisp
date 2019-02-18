@@ -2,6 +2,11 @@
 
 (defvar *prng* (ironclad:make-prng :fortuna :seed :urandom))
 
+(defun read-encoded-key (aes root path)
+  (let ((trim-key (split "\\n" (pants-off aes root (open-file path) :string? nil))))
+    (pem/pkey::read-private-key
+     (format nil "~{~d~}" (trim-seq trim-key 1 (- (length trim-key) 1))))))
+
 (defun parse-pem-file (path)
   (cl-ppcre:regex-replace-all
    "(\\n|\\s*$)" (cdar (pem:parse-file (pathname path))) ""))

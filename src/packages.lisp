@@ -33,7 +33,8 @@
            #:CMD-READ-PATH
            #:*PROBE-FILE
            #:JOIN-THREAD
-           #:GET-ALL-SYMBOLS))
+           #:GET-ALL-SYMBOLS
+	   #:STRING-ALIST-VALUES))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
@@ -99,7 +100,8 @@
 	#:jack.tools.objects
 	#:jack.tools.lists
         #:jack.tools.maths)
-  (:export #:PARSE-PEM-FILE
+  (:export #:READ-ENCODED-KEY
+	   #:PARSE-PEM-FILE
 	   #:TEST-KEYS
 	   #:BYTE-ARRAY?
 	   #:CREATE-HASH
@@ -180,6 +182,23 @@
 	#:jack.tools.trees)
   (:export #:LOAD-MATRIX))
 
+(defpackage #:jack.tools.bootstraps
+  (:use #:cl
+	#:cl-bootstrap)
+  (:export #:BS-BTN
+	   #:BS-BTN-LG
+	   #:BS-BTN-SM
+	   #:BS-BTN-XS
+	   #:BS-BTN-DEFAULT
+	   #:BS-BTN-PRIMARY
+	   #:BS-BTN-SUCCESS
+	   #:BS-BTN-INFO
+	   #:BS-BTN-WARNING
+	   #:BS-BTN-DANGER
+	   #:BS-LINK-BTN
+	   #:BS-BTN-DROPDOWN
+	   #:BS-FORM-TEXT))
+
 (defpackage #:jack.tools
   (:use #:cl #:alexandria
 	#:jack.tools.keys
@@ -190,4 +209,5 @@
 	#:jack.tools.trees
 	#:jack.tools.withs
 	#:jack.tools.misc
-	#:jack.tools.matrices))
+	#:jack.tools.matrices
+	#:jack.tools.bootstraps))

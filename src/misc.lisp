@@ -73,3 +73,11 @@
               (push s lst))
             (push s lst))))
     lst))
+
+(defun string-alist-values (alist)
+  (mapcar #'(lambda (arg)
+	      (cons (car arg)
+		    (if (numberp (cdr arg))
+			(write-to-string (cdr arg))
+			(cdr arg))))
+	  alist))

@@ -14,6 +14,7 @@
 	       (:file "src/withs")
 	       (:file "src/time")
 	       (:file "src/cli")
+	       (:file "src/bootstraps")
 	       ;;(:file "src/matrices")
 	       )
   :depends-on (:alexandria
@@ -33,5 +34,6 @@
                :timer-wheel
                :inferior-shell
                :uuid
+	       :cl-bootstrap
 	       ;;:mgl-mat
 	       ))
