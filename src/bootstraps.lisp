@@ -66,3 +66,18 @@
 
 (defmacro bs-form-text ((&key (label "Text: ") (id nil) (name nil)))
   `(bs-form-input "text" (:label ,label :id ,id :name ,name)))
+
+(defmacro bs-form-static ((&key label id name placeholder value))
+  (let ((g-id (gensym))
+	(g-name (gensym))
+	(g-placeholder (gensym)))
+    `(let ((,g-id ,id)
+	   (,g-name ,name)
+	   (,g-placeholder ,placeholder))
+       (with-html-output (*standard-output*)
+	 (:div :class "form-group"
+	       (:label :for ,g-id ,label)
+	       (:input :type "text" :readonly t :class "form-control-plaintext"
+		       :id ,g-id :value ,value
+		       ,@(when g-name `(:name ,g-name))
+		       ,@(when g-placeholder `(:placeholder ,g-placeholder))))))))

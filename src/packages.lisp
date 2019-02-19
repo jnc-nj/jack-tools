@@ -175,7 +175,8 @@
 	   #:WITH-TIMED-LOOP
            #:WITH-SUPPRESSED-OUTPUT
 	   #:WITH-SECURE-API
-	   #:SECURE-CONTENT*))
+	   #:SECURE-CONTENT*
+	   #:VERIFY-ACCESS-TOKEN))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl
@@ -184,7 +185,8 @@
 
 (defpackage #:jack.tools.bootstraps
   (:use #:cl
-	#:cl-bootstrap)
+	#:cl-bootstrap
+	#:cl-who)
   (:export #:BS-BTN
 	   #:BS-BTN-LG
 	   #:BS-BTN-SM
@@ -197,7 +199,8 @@
 	   #:BS-BTN-DANGER
 	   #:BS-LINK-BTN
 	   #:BS-BTN-DROPDOWN
-	   #:BS-FORM-TEXT))
+	   #:BS-FORM-TEXT
+	   #:BS-FORM-STATIC))
 
 (defpackage #:jack.tools
   (:use #:cl #:alexandria
