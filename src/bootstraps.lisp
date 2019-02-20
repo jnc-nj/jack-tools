@@ -67,17 +67,20 @@
 (defmacro bs-form-text ((&key (label "Text: ") (id nil) (name nil)))
   `(bs-form-input "text" (:label ,label :id ,id :name ,name)))
 
-(defmacro bs-form-static ((&key label id name placeholder value))
+(defmacro bs-form-embd-static ((&key label id name placeholder value))
   (let ((g-id (gensym))
 	(g-name (gensym))
 	(g-placeholder (gensym)))
     `(let ((,g-id ,id)
 	   (,g-name ,name)
 	   (,g-placeholder ,placeholder))
-       (with-html-output (*standard-output*)
-	 (:div :class "form-group"
-	       (:label :for ,g-id ,label)
-	       (:input :type "text" :readonly t :class "form-control-plaintext"
-		       :id ,g-id :value ,value
-		       ,@(when g-name `(:name ,g-name))
-		       ,@(when g-placeholder `(:placeholder ,g-placeholder))))))))
+       (list :div :class "form-group"
+	     (list :label :for ,g-id ,label)
+	     (list :input :type "text" :readonly t :class "form-control-plaintext"
+		   :id ,g-id :value ,value
+		   ,@(when g-name `(:name ,g-name))
+		   ,@(when g-placeholder `(:placeholder ,g-placeholder)))))))
+
+(defmacro bs-form-embd-checkbox (&body body)
+  `(list :div :class "checkbox"
+	 (list :label (list :input :type "checkbox" ,@body))))

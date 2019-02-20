@@ -186,7 +186,8 @@
 (defpackage #:jack.tools.bootstraps
   (:use #:cl
 	#:cl-bootstrap
-	#:cl-who)
+	#:cl-who
+	#:jack.tools.withs)
   (:export #:BS-BTN
 	   #:BS-BTN-LG
 	   #:BS-BTN-SM
@@ -200,7 +201,8 @@
 	   #:BS-LINK-BTN
 	   #:BS-BTN-DROPDOWN
 	   #:BS-FORM-TEXT
-	   #:BS-FORM-STATIC))
+	   #:BS-FORM-EMBD-STATIC
+	   #:BS-FORM-EMBD-CHECKBOX))
 
 (defpackage #:jack.tools
   (:use #:cl #:alexandria
