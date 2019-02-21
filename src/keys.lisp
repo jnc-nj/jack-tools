@@ -27,6 +27,7 @@
 
 (defun create-digest (input)
   (log:info input)
+  (describe input)
   (if (stringp input)
       (ironclad:digest-sequence
        :sha256 (ironclad:ascii-string-to-byte-array input)) 
