@@ -99,7 +99,8 @@
   (:use #:cl 
 	#:jack.tools.objects
 	#:jack.tools.lists
-        #:jack.tools.maths)
+        #:jack.tools.maths
+	#:jack.tools.misc)
   (:export #:READ-ENCODED-KEY
 	   #:PARSE-PEM-FILE
 	   #:TEST-KEYS
