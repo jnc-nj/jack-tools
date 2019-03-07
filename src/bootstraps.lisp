@@ -84,3 +84,21 @@
 (defmacro bs-form-embd-checkbox (&body body)
   `(list :div :class "checkbox"
 	 (list :label (list :input :type "checkbox" ,@body))))
+
+(defmacro bs-embd-modal ((&key (title "")) &body body)
+  `(list :div :class "modal fade" :id "myModal" :tabindex "-1" :role "dialog"
+         (list :div :class "modal-dialog" :role "document"
+               (list :div :class "modal-content"
+		     (list :div :class "modal-header"
+                           (list :button :type "button" :class "close"
+				 :data-dismiss "modal" :aria-label "Close"
+				 (list :span :aria-hidden "true" "&times;"))
+                           (list :h4 :class "modal-title" ,title))
+		     (list :div :class "modal-body" ,@body)
+		     (list :div :class "modal-footer"
+                           (list :button :type "button" :class "btn btn-default"
+				 :data-dismiss "modal" "Close")
+			   (list :button :type "button" :class "btn btn-primary" "Save"))))))
+
+(defmacro bs-embd-table (&body body)
+  `(list :table :class "table",@body))
