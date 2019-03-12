@@ -2,7 +2,7 @@
 (in-package #:jack.tools.lists)
 
 (defun agethash (key alist &key (test 'string=))
-  (when (listp alist)
+  (when (alistp alist)
     (cdr (assoc key alist :test test))))
 
 (defun agethash-vals (key alist &key (result-type 'vector) (test 'string=))
