@@ -1,5 +1,8 @@
 (in-package #:jack.tools.bootstraps)
 
+(defun create-bootstrap-id ()
+  (cl-ppcre:regex-replace-all "[\\W\\d]" (string-downcase (create-id)) ""))
+
 (defmacro bs-btn ((&key (type "default") (size nil)) &body body)
   `(with-html-output (*standard-output*)
      (:button :type "button" :class
@@ -85,9 +88,9 @@
   `(list :div :class "checkbox"
 	 (list :label (list :input :type "checkbox" ,@body))))
 
-(defmacro bs-embd-modal ((&key (title "")) &body body)
-  `(list :div :class "modal fade" :id "myModal" :tabindex "-1" :role "dialog"
-         (list :div :class "modal-dialog" :role "document"
+(defmacro bs-embd-modal ((&key (title "myModal")) &body body)
+  `(list :div :class "modal fade" :id ,title :tabindex "-1" :role "dialog"
+         (list :div :class "modal-dialog modal-lg" :role "document"
                (list :div :class "modal-content"
 		     (list :div :class "modal-header"
                            (list :button :type "button" :class "close"
@@ -96,9 +99,8 @@
                            (list :h4 :class "modal-title" ,title))
 		     (list :div :class "modal-body" ,@body)
 		     (list :div :class "modal-footer"
-                           (list :button :type "button" :class "btn btn-default"
-				 :data-dismiss "modal" "Close")
-			   (list :button :type "button" :class "btn btn-primary" "Save"))))))
+                           (list :button :type "button" :class "btn btn-danger"
+				 :data-dismiss "modal" "Close"))))))
 
 (defmacro bs-embd-table (&body body)
   `(list :table :class "table",@body))

@@ -189,8 +189,10 @@
 	#:cl-bootstrap
 	#:cl-who
 	#:jack.tools.withs
-	#:jack.tools.lists)
-  (:export #:BS-BTN
+	#:jack.tools.lists
+	#:jack.tools.keys)
+  (:export #:CREATE-BOOTSTRAP-ID
+	   #:BS-BTN
 	   #:BS-BTN-LG
 	   #:BS-BTN-SM
 	   #:BS-BTN-XS
