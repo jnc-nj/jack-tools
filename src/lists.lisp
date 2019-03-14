@@ -3,7 +3,10 @@
 
 (defun agethash (key alist &key (test 'string=))
   (when (alistp alist)
-    (cdr (assoc key alist :test test))))
+    (let ((try (cdr (assoc key alist :test test))))
+      (cond ((and (null try) (keywordp key))
+	     (cdr (assoc (string-downcase (string key)) alist :test test)))
+	    (try try)))))
 
 (defun agethash-vals (key alist &key (result-type 'vector) (test 'string=))
   (map result-type #'(lambda (arg) (agethash key arg :test test))
