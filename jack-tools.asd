@@ -15,6 +15,7 @@
 	       (:file "src/time")
 	       (:file "src/cli")
 	       (:file "src/bootstraps")
+	       (:file "src/serialize")
 	       ;;(:file "src/matrices")
 	       )
   :depends-on (:alexandria

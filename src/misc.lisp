@@ -32,6 +32,7 @@
        (coerce body '(vector (unsigned-byte 8))))))
 
 (defun if-exist-return (if-part else-part)
+  "Else-part is unsafe (side-effects via incf etc.)"
   (if if-part if-part else-part))
 
 (defun create-directory (name)
@@ -43,8 +44,8 @@
                         :if-exists :supersede
                         :if-does-not-exist :create)
     (if (stringp object)
-        (format file object)
-        (format file (cl-json:encode-json-to-string object)))))
+        (format file "~d" object)
+        (format file "~d" (cl-json:encode-json-to-string object)))))
 
 (defun open-file (target)
   (with-open-file (file (pathname target))

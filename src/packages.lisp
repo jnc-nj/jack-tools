@@ -210,6 +210,21 @@
 	   #:BS-EMBD-MODAL
 	   #:BS-EMBD-TABLE))
 
+(defpackage #:jack.tools.serialize
+  (:use #:cl #:alexandria
+	#:jack.tools.misc)
+  (:export #:*SERIAL*
+	   #:SERIAL-DICT
+	   #:SERIAL-OBJECT
+	   #:N2S-OF
+	   #:S2N-OF
+	   #:IX
+	   #:SERIAL-UPDATE
+	   #:SERIAL-READ
+	   #:SERIAL-OUTPUT
+	   #:SERIAL
+	   #:SERIALIZE))
+
 (defpackage #:jack.tools
   (:use #:cl #:alexandria
 	#:jack.tools.keys
