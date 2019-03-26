@@ -1,4 +1,3 @@
-
 (in-package #:jack.tools.lists)
 
 (defun agethash (key alist &key (test 'string=))
