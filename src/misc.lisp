@@ -8,14 +8,17 @@
   (force-output *query-io*)
   (read-line *query-io*))
 
-(defun read-flag (flag alist)
-  (let ((str (agethash flag alist)))
+(defun read-flag (flag alist &key force-string)
+  (let ((str (agethash flag alist)) collect)
     (when str
-      (car (mapcar #'(lambda (arg)
-		       (if (string= arg "") arg
-			   (let ((new (read-from-string arg)))
-			     (if (integerp new) new str))))
-		   (split-sequence:split-sequence #\space str))))))
+      (dolist (substring (split-sequence:split-sequence #\space str))
+	(cond ((or force-string (string= substring ""))
+	       (push substring collect))
+	      (t (let ((new (read-from-string substring)))
+		   (if (integerp new)
+		       (push new collect)
+		       (push substring collect))))))
+      (car collect))))
 
 (defun count-threads (key)
   "Count threads matching key."
