@@ -16,7 +16,8 @@
            #:RANDOM-ITEM
            #:RANDOM-SELECTION
 	   #:SET-EQUALS
-	   #:DOTTED-PAIR-P))
+	   #:DOTTED-PAIR-P
+	   #:EVERY-LIST-P))
 
 (defpackage #:jack.tools.misc
   (:use #:cl
@@ -109,6 +110,7 @@
 	   #:CREATE-DIGEST
 	   #:KEY-DISTANCE
 	   #:PAD-KEY
+	   #:CREATE-CUSTOM-KEY
 	   #:TRIM-KEY
 	   #:COMPRESS-BIGNUM
 	   #:DECOMPRESS-BIGNUM

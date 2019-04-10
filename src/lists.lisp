@@ -96,3 +96,9 @@
 (defun dotted-pair-p (obj)
   (when (listp obj)
     (not (listp (cdr obj)))))
+
+(defun every-list-p (obj &key not)
+  (when (listp obj)
+    (if not
+      (every #'(lambda (arg) (not (listp arg))) obj)
+      (every #'listp obj))))

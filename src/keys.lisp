@@ -55,6 +55,15 @@
                           :element-type '(unsigned-byte 8)
                           :initial-contents final-key))))))
 
+(defun create-custom-key (seed &key (size 32))
+  (let* ((b64 (base64:string-to-base64-string seed))
+	 (u8 (base64:base64-string-to-usb8-array b64))
+	 (temp (make-array 0 :element-type '(unsigned-byte 8))))
+    (multiple-value-bind (q d) (floor size (length u8))
+      (dotimes (n q) (setf temp (concatenate '(vector (unsigned-byte 8)) temp u8)))
+      (setf temp (concatenate '(vector (unsigned-byte 8)) temp (subseq u8 0 d)))
+      (base64:usb8-array-to-base64-string temp))))
+
 (defun trim-key (key &key (start 0) (end 16))
   (if (stringp key)
       (trim-seq key start end)
