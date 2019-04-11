@@ -64,6 +64,7 @@
   (let ((collect (make-hash-table :test #'equal)))
     (dolist (class classes)
       (let ((temp-object (make-instance class)))
+	(eval (generate-json-method class))
 	(setf (gethash class collect)
 	      (get-slot-names (class-of temp-object)))))
     collect))
@@ -111,3 +112,12 @@
 (defun object-to-alist (object)
   (cl-json:decode-json-from-string
    (cl-json:encode-json-to-string object)))
+
+(defun generate-json-method (class-name)
+  (let* ((slot-names (get-slot-names (class-of (make-instance class-name)))))
+    `(defmethod %to-json ((,class-name ,class-name))
+       (with-slots ,slot-names ,class-name
+	 (with-object
+	   ,@(loop for item in slot-names collect
+		  `(write-key-value ,(read-from-string (cl-json:encode-json-to-string item))
+				    ,item)))))))

@@ -36,5 +36,6 @@
                :inferior-shell
                :uuid
 	       :cl-bootstrap
+	       :jonathan
 	       ;;:mgl-mat
 	       ))

@@ -39,6 +39,7 @@
 (defpackage #:jack.tools.objects
   (:use #:cl
 	#:alexandria
+	#:jonathan
 	#:jack.tools.lists)
   (:export #:ADDRESS-BOOK
 	   #:INTERFACES
@@ -53,7 +54,9 @@
 	   #:GET-SLOT-NAMES
 	   #:SLOTS-EQUAL?
 	   #:OBJECTP
-           #:OBJECT-TO-ALIST))
+           #:OBJECT-TO-ALIST
+	   #:GENERATE-JSON-METHOD
+	   #:GENERATE-JSON-METHODS))
 
 (defpackage #:jack.tools.cli
   (:use #:cl
