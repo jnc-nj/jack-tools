@@ -12,8 +12,8 @@
   (let ((str (agethash flag alist)) collect)
     (when str
       (dolist (substring (split-sequence:split-sequence #\space str))
-	(cond ((or force-string (string= substring ""))
-	       (push substring collect))
+	(cond ((string= substring "") nil)
+	      (force-string (push substring collect))
 	      (t (let ((new (read-from-string substring)))
 		   (if (integerp new)
 		       (push new collect)

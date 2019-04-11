@@ -1,4 +1,3 @@
-
 (in-package :cl-user)
 
 (defpackage #:jack.tools.lists
