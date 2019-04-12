@@ -31,7 +31,7 @@
   (if (stringp input)
       (ironclad:digest-sequence
        :sha256 (ironclad:ascii-string-to-byte-array input)) 
-      (create-digest (cl-json:encode-json-to-string input))))
+      (create-digest (jonathan:to-json input))))
 
 (defun key-distance (key-1 key-2)
   (cond ((stringp key-1)
