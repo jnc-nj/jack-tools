@@ -1,5 +1,7 @@
 (in-package #:jack.tools.misc)
 
+(defun dekeywordfy (name) (read-from-string (cl-json:encode-json-to-string name)))
+
 (defun keywordfy (name) (values (intern (string-upcase name) "KEYWORD")))
 
 (defun prompt-read (prompt)

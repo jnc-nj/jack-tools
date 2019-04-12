@@ -22,7 +22,8 @@
 (defpackage #:jack.tools.misc
   (:use #:cl
 	#:jack.tools.lists)
-  (:export #:KEYWORDFY 
+  (:export #:DEKEYWORDFY
+	   #:KEYWORDFY 
 	   #:PROMPT-READ
 	   #:READ-FLAG
 	   #:COUNT-THREADS
@@ -41,7 +42,8 @@
   (:use #:cl
 	#:alexandria
 	#:jonathan
-	#:jack.tools.lists)
+	#:jack.tools.lists
+	#:jack.tools.misc)
   (:export #:ADDRESS-BOOK
 	   #:INTERFACES
 	   #:STACK
