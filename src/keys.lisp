@@ -12,7 +12,7 @@
    "(\\n|\\s*$)" (cdar (pem:parse-file (pathname path))) ""))
 
 (defun test-keys (private-key public-key)
-  (let ((temp (uuid:make-v4-uuid)))
+  (let ((temp (write-to-string (uuid:make-v4-uuid))))
     (ignore-errors
      (verify-signature
       public-key temp
