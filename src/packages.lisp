@@ -21,6 +21,7 @@
 
 (defpackage #:jack.tools.misc
   (:use #:cl
+	#:symbol-munger
 	#:jack.tools.lists)
   (:export #:DEKEYWORDFY
 	   #:KEYWORDFY 

@@ -1,6 +1,6 @@
 (in-package #:jack.tools.misc)
 
-(defun dekeywordfy (name) (read-from-string (cl-json:encode-json-to-string name)))
+(defun dekeywordfy (name) (symbol-munger:lisp->camel-case name))
 
 (defun keywordfy (name) (values (intern (string-upcase name) "KEYWORD")))
 

@@ -37,5 +37,6 @@
                :uuid
 	       :cl-bootstrap
 	       :jonathan
+	       :symbol-munger
 	       ;;:mgl-mat
 	       ))
