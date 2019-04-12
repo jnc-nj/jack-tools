@@ -1,3 +1,4 @@
 /src/*.lisp~
 /src/pants
 /src/#misc.lisp#
+/src/#objects.lisp#

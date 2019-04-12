@@ -44,4 +44,3 @@
   "Get sorted regex matches from str given list." 
   (sort (cl-ppcre:all-matches-as-strings list str)
 	#'> :key #'length))
-

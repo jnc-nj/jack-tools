@@ -16,7 +16,8 @@
            #:RANDOM-SELECTION
 	   #:SET-EQUALS
 	   #:DOTTED-PAIR-P
-	   #:EVERY-LIST-P))
+	   #:EVERY-LIST-P
+	   #:ALIST-TO-PLIST))
 
 (defpackage #:jack.tools.misc
   (:use #:cl

@@ -120,4 +120,4 @@
 	 (with-object
 	   ,@(loop for item in slot-names collect
 		  `(write-key-value ,(read-from-string (cl-json:encode-json-to-string item))
-				    ,item)))))))
+				    (if (alistp ,item) (alist-to-plist ,item) ,item))))))))
