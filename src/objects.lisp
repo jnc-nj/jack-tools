@@ -119,11 +119,10 @@
        (with-slots ,slot-names ,class-name
 	 (with-object
 	   ,@(loop for item in slot-names collect
-		  `(write-key-value ,(read-from-string (cl-json:encode-json-to-string item))
-				    (if (alistp ,item)
-					(with-object
-					  (dolist (i ,item)
-					    (log:info i)
-					    (write-key (dekeywordfy (car i)))
-					    (write-value (cdr i))))
-					,item))))))))
+		  `(write-key-value
+		    ,(dekeywordfy item)
+		    (if (alistp ,item)
+		        (alist-hash-table
+			 (mapcar #'(lambda (arg) (cons (dekeywordfy (car arg)) (cdr arg)))
+				 ,item))
+			,item))))))))
