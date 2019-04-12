@@ -111,7 +111,7 @@
 
 (defun object-to-alist (object)
   (cl-json:decode-json-from-string
-   (cl-json:encode-json-to-string object)))
+   (jonathan:to-json object)))
 
 (defun generate-json-method (class-name)
   (let* ((slot-names (get-slot-names (class-of (make-instance class-name)))))
