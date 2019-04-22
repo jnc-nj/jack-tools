@@ -36,6 +36,7 @@
            #:CMD-READ-PATH
            #:*PROBE-FILE
            #:JOIN-THREAD
+	   #:FIND-THREAD
            #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES))
 
@@ -144,6 +145,7 @@
            #:CREATE-TIME
            #:TIME-DIFFERENCE
            #:TIMESTAMP>
+	   #:TIMESTAMP>=
            #:TIMED-INDEX
            #:TIMEOUT
            #:WAIT

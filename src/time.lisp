@@ -21,6 +21,13 @@
 	 (timestamp> time-1 (local-time:parse-timestring time-2)))
 	(t (local-time:timestamp> time-1 time-2))))
 
+(defun timestamp>= (time-1 time-2)
+  (cond ((stringp time-1)
+	 (timestamp>= (local-time:parse-timestring time-1) time-2))
+	((stringp time-2)
+	 (timestamp>= time-1 (local-time:parse-timestring time-2)))
+	(t (local-time:timestamp>= time-1 time-2))))
+
 (defun timed-index (timestamp interval objects &key return?)
   (let ((index (floor (mod (*/ (time-difference (create-time) timestamp)
 			       interval)

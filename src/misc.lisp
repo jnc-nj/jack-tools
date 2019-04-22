@@ -66,8 +66,11 @@
 
 (defun join-thread (thread-name)
   (sb-thread:join-thread
-   (find-if #'(lambda (thread) (search thread-name (sb-thread:thread-name thread)))
-            (sb-thread:list-all-threads))))
+   (find-thread thread-name)))
+
+(defun find-thread (thread-name)
+  (find-if #'(lambda (thread) (search thread-name (sb-thread:thread-name thread)))
+           (sb-thread:list-all-threads)))
 
 (defun get-all-symbols (&optional package)
   (let ((lst ())

@@ -39,7 +39,7 @@
                     ,@body)))))
 
 (defmacro with-timed-loop (title threshold delay print-condition &body body)
-  `(when ,threshold
+  `(when (and ,threshold (null (find-thread ,title)))
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title
        (handler-case (with-timer ,threshold nil ,@body)

@@ -15,9 +15,7 @@
 	       (:file "src/time")
 	       (:file "src/cli")
 	       (:file "src/bootstraps")
-	       (:file "src/serialize")
-	       ;;(:file "src/matrices")
-	       )
+	       (:file "src/serialize"))
   :depends-on (:alexandria
 	       :cl-ppcre
 	       :cl-json
@@ -37,6 +35,4 @@
                :uuid
 	       :cl-bootstrap
 	       :jonathan
-	       :symbol-munger
-	       ;;:mgl-mat
-	       ))
+	       :symbol-munger))
