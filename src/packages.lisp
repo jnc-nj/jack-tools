@@ -186,8 +186,7 @@
 	   #:WITH-TIMED-LOOP
            #:WITH-SUPPRESSED-OUTPUT
 	   #:WITH-SECURE-API
-	   #:SECURE-CONTENT*
-	   #:VERIFY-ACCESS-TOKEN))
+	   #:SECURE-CONTENT*))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl

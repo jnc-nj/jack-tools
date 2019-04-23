@@ -52,18 +52,7 @@
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
-                     (when ,content
-                       (pants-off ,aes-key ,public-key ,content))))
+                    (when ,content
+                      (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defun verify-access-token (host uri access-token)
-  (string= "success"
-	   (agethash :message
-		     (cl-json:decode-json-from-string
-		      (decode-http-body
-		       (with-excepted-api nil
-			 (drakma:http-request (format nil "~d/~d" host uri)
-					      :method :post :content-length t
-					      :content-type "application/json"
-					      :content (format nil "{\"access_token\": \"~d\"}"
-							       access-token))))))))
