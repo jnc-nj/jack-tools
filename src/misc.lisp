@@ -41,7 +41,8 @@
   (if if-part if-part else-part))
 
 (defun create-directory (name)
-  (ensure-directories-exist (pathname name)))
+  (ensure-directories-exist (pathname name))
+  name)
 
 (defun write-file (object target)
   (with-open-file (file (pathname target)
