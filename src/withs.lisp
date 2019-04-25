@@ -49,10 +49,25 @@
   `(with-open-stream (*standard-output* (make-broadcast-stream))
      ,@body))
 
+(defmacro with-multiple-slots (lst &rest body)
+  `(let (collect)
+     (dolist (item (reverse ,lst))
+       (if collect
+	   (setf collect `(with-slots ,(car item) ,(cadr item) ,collect))
+	   (setf collect `(with-slots ,(car item) ,(cadr item) ,,@body))))
+     collect))
+
+#+nil
+(defmacro with-multiple-slots (lst &rest body)
+  `(with-slots ,(first lst) ,(second lst)
+     (log:info ,(cddr lst))
+     (if ,(cddr lst)
+	 (with-multiple-slots ,(cddr lst) ,@body)
+	 ,@body)))
+
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
                     (when ,content
                       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
-
