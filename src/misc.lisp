@@ -42,7 +42,7 @@
 
 (defun create-directory (name)
   (ensure-directories-exist (pathname name))
-  name)
+  (truename name))
 
 (defun write-file (object target)
   (with-open-file (file (pathname target)
