@@ -60,6 +60,10 @@
       alist))
   alist)
 
+(defun cast-all (objects class-map)
+  (loop for object in objects
+       collect (cast object class-map)))
+
 (defun create-class-map (&rest classes)
   (let ((collect (make-hash-table :test #'equal)))
     (dolist (class classes)

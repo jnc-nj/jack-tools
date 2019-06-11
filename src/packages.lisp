@@ -51,7 +51,8 @@
 	   #:STACK
 	   #:COPY-INSTANCE
 	   #:TO-ADDRESS-BOOK
-	   #:CAST 
+	   #:CAST
+	   #:CAST-ALL
 	   #:CREATE-CLASS-MAP
 	   #:FIND-CLASS-MAP
 	   #:GET-CLASS-ID
