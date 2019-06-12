@@ -24,7 +24,6 @@
 	       :local-time
 	       :babel
 	       :uuid
-	       :drakma
 	       :bordeaux-threads
 	       :cl-base64
 	       :log4cl
@@ -35,4 +34,5 @@
                :uuid
 	       :cl-bootstrap
 	       :jonathan
-	       :symbol-munger))
+	       :symbol-munger
+	       :closer-mop))

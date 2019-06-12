@@ -90,8 +90,8 @@
 	(write-to-string object))))
 
 (defun get-slot-names (class)
-  (mapcar #'sb-mop:slot-definition-name
-	  (sb-mop:class-slots class)))
+  (mapcar #'c2mop:slot-definition-name
+	  (c2mop:class-slots class)))
 
 (defun slots-equal? (object-1 object-2)
   (let ((class-1 (class-of object-1))

@@ -25,8 +25,8 @@
 (defun count-threads (key)
   "Count threads matching key."
   (let ((count 0))
-    (dolist (thread (sb-thread:list-all-threads))
-      (when (search key (sb-thread:thread-name thread))
+    (dolist (thread (bt:all-threads))
+      (when (search key (bt:thread-name thread))
 	(incf count)))
     count))
 
@@ -66,12 +66,12 @@
   (when path (probe-file path)))
 
 (defun join-thread (thread-name)
-  (sb-thread:join-thread
+  (bt:join-thread
    (find-thread thread-name)))
 
 (defun find-thread (thread-name)
-  (find-if #'(lambda (thread) (search thread-name (sb-thread:thread-name thread)))
-           (sb-thread:list-all-threads)))
+  (find-if #'(lambda (thread) (search thread-name (bt:thread-name thread)))
+           (bt:all-threads)))
 
 (defun get-all-symbols (&optional package)
   (let ((lst ())
