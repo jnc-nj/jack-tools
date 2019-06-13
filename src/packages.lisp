@@ -110,7 +110,16 @@
 	#:jack.tools.lists
         #:jack.tools.maths
 	#:jack.tools.misc)
-  (:export #:READ-ENCODED-KEY
+  (:export #:*PRNG*
+	   
+	   #:PANTS
+	   #:BELT
+	   #:BRIEFS
+	   #:PANTS-ON
+	   #:PANTS-OFF
+	   #:REMOVE-PANTS
+	   
+	   #:READ-ENCODED-KEY
 	   #:PARSE-PEM-FILE
 	   #:TEST-KEYS
 	   #:BYTE-ARRAY?
@@ -133,8 +142,6 @@
 	   #:CREATE-ID
            #:CREATE-RANDOM-PATH
 	   #:MAKE-CIPHER
-	   #:PANTS-ON
-	   #:PANTS-OFF
            #:GENERATE-PRIVATE-PEM
            #:GENERATE-PUBLIC-PEM
            #:GENERATE-PEMS))

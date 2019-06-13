@@ -22,7 +22,6 @@
 		       ((listp object) (mapcar #'interpret object)) 
 		       ((objectp object)
 			(let* ((class (class-of object))
-			       (class-id (get-class-id class))
 			       (object-id (get-object-id object))
 			       (slot-names (get-slot-names class))
 			       switch) 

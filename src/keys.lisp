@@ -2,6 +2,36 @@
 
 (defvar *prng* (ironclad:make-prng :fortuna :seed :urandom))
 
+(defclass pants ()
+  ((belt :initarg :belt :initform "")
+   (briefs :initarg :briefs :initform "")))
+
+(defun pants-on (aes-key public-key object)
+  "Takes a lisp or json object, then returns a json."
+  (let ((iv (create-id :size 16 :string? nil))) 
+    (make-instance
+     'pants
+     :belt (rsa-encrypt-message public-key iv)
+     :briefs (aes-encrypt-message aes-key iv object))))
+
+(defun pants-off (aes-key private-key pants &key (string? t) (json? t))
+  "Takes a json, then returns a lisp object."
+  (cond ((stringp pants)
+	 (let ((message (if json? (decode-json-from-string pants) pants)))
+	   (remove-pants aes-key private-key
+			 (agethash :belt message)
+			 (agethash :briefs message)
+			 :string? string? :json? json?)))
+	(t (with-slots (belt briefs) pants
+	     (remove-pants aes-key private-key belt briefs
+			   :string? string? :json? json?)))))
+
+(defun remove-pants (aes-key private-key belt briefs &key (string? t) (json? t))
+  (let* ((iv (rsa-decrypt-message private-key belt))
+	 (decryption (aes-decrypt-message aes-key iv briefs :string? string?))) 
+    (cond (json? (values (cl-json:decode-json-from-string decryption) iv))
+	  (t (values decryption iv)))))
+
 (defun read-encoded-key (aes root path)
   (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root (open-file path) :string? nil))))
     (pem/pkey::read-private-key
@@ -157,22 +187,6 @@
    :aes :key key-1
         :mode :cbc
         :initialization-vector key-2))
-
-(defun pants-on (aes-key public-key object)
-  "Takes a lisp or json object, then returns a json."
-  (let ((iv (create-id :size 16 :string? nil))) 
-    (format nil "{\"key\": \"~d\", \"body\": \"~d\"}"
-	    (rsa-encrypt-message public-key iv)
-	    (aes-encrypt-message aes-key iv object))))
-
-(defun pants-off (aes-key private-key object &key (string? t))
-  "Takes a json, then returns a lisp object."
-  (let* ((json (cl-json:decode-json-from-string object))
-	 (iv (rsa-decrypt-message private-key (agethash :key json)))
-         (decryption (aes-decrypt-message aes-key iv (agethash :body json)
-                                          :string? t))) 
-    (values (if string? (cl-json:decode-json-from-string decryption) decryption)
-            iv)))
 
 (defun generate-private-pem (private-path &key (identifier (uuid:make-v4-uuid))) 
   (inferior-shell:run/nil
