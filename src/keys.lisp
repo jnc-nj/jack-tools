@@ -3,34 +3,51 @@
 (defvar *prng* (ironclad:make-prng :fortuna :seed :urandom))
 
 (defclass pants ()
-  ((belt :initarg :belt :initform "")
+  ((belts :initarg :belts :initform '())
    (briefs :initarg :briefs :initform "")))
 
-(defun pants-on (aes-key public-key object)
+(defun pants-on (aes-key public-keys object)
   "Takes a lisp or json object, then returns a json."
   (let ((iv (create-id :size 16 :string? nil))) 
     (make-instance
      'pants
-     :belt (rsa-encrypt-message public-key iv)
-     :briefs (aes-encrypt-message aes-key iv object))))
+     :belts (loop for public-key in public-keys
+	       collect (rsa-encrypt-message public-key iv))
+     :briefs (aes-encrypt-message (if-exist-return aes-key iv)
+				  iv object))))
 
 (defun pants-off (aes-key private-key pants &key (string? t) (json? t))
   "Takes a json, then returns a lisp object."
   (cond ((stringp pants)
 	 (let ((message (if json? (decode-json-from-string pants) pants)))
 	   (remove-pants aes-key private-key
-			 (agethash :belt message)
+			 (agethash :belts message)
 			 (agethash :briefs message)
 			 :string? string? :json? json?)))
-	(t (with-slots (belt briefs) pants
-	     (remove-pants aes-key private-key belt briefs
+	(t (with-slots (belts briefs) pants
+	     (remove-pants aes-key private-key belts briefs
 			   :string? string? :json? json?)))))
 
-(defun remove-pants (aes-key private-key belt briefs &key (string? t) (json? t))
-  (let* ((iv (rsa-decrypt-message private-key belt))
-	 (decryption (aes-decrypt-message aes-key iv briefs :string? string?))) 
-    (cond (json? (values (cl-json:decode-json-from-string decryption) iv))
-	  (t (values decryption iv)))))
+(defun remove-pants (aes-key private-key belts briefs &key (string? t) (json? t))
+  (let ((ivs (remove-belts private-key belts)))
+    (dolist (iv ivs)
+      (handler-case
+	  (let* ((aes (if-exist-return aes-key iv))
+		 (decryption (aes-decrypt-message aes iv briefs :string? string?)))
+	    (return-from remove-pants
+	      (cond (json? (values (cl-json:decode-json-from-string decryption) iv))
+		    (t (values decryption iv)))))
+	(error () nil)))))
+
+(defun remove-belts (private-key belts)
+  (let (collect)
+    (dolist (belt belts)
+      (handler-case
+	  (let ((decryption (rsa-decrypt-message private-key belt)))
+	    (when (= 16 (length decryption))
+	      (push decryption collect)))
+	(error () nil)))
+    collect))
 
 (defun read-encoded-key (aes root path)
   (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root (open-file path) :string? nil))))

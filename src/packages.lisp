@@ -113,11 +113,12 @@
   (:export #:*PRNG*
 	   
 	   #:PANTS
-	   #:BELT
+	   #:BELTS
 	   #:BRIEFS
 	   #:PANTS-ON
 	   #:PANTS-OFF
 	   #:REMOVE-PANTS
+	   #:REMOVE-BELTS
 	   
 	   #:READ-ENCODED-KEY
 	   #:PARSE-PEM-FILE
