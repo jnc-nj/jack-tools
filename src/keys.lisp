@@ -19,7 +19,7 @@
 (defun pants-off (aes-key private-key pants &key (string? t) (json? t))
   "Takes a json, then returns a lisp object."
   (cond ((stringp pants)
-	 (let ((message (if json? (decode-json-from-string pants) pants)))
+	 (let ((message (if json? (cl-json:decode-json-from-string pants) pants)))
 	   (remove-pants aes-key private-key
 			 (agethash :belts message)
 			 (agethash :briefs message)
@@ -92,9 +92,7 @@
          (pad-key (base64:base64-string-to-usb8-array target-key) reference-key))
         ((stringp reference-key)
          (pad-key target-key (base64:base64-string-to-usb8-array reference-key)))
-        (t (let* ((reference-length (length reference-key))
-                  (target-length (length target-key))
-                  (length-difference (- reference-length target-length))
+        (t (let* ((target-length (length target-key))
                   (final-key (append (coerce target-key 'list)
                                      (coerce (subseq reference-key target-length) 'list))))
              (base64:usb8-array-to-base64-string
@@ -196,7 +194,7 @@
         (base64:usb8-array-to-base64-string id)
         id)))
 
-(defun create-random-path (path &key (size 16))
+(defun create-random-path (path)
   (format nil "~d~d.txt" path (uuid:make-v4-uuid)))
 
 (defun make-cipher (key-1 key-2)
