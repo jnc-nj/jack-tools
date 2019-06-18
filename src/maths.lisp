@@ -34,7 +34,7 @@
   (let ((arglist (delete nil args)))
     (when arglist (reduce fn arglist))))
 
-(defun strict-op (fn return &rest args)
+(defun strict-op (fn &rest args)
   (unless (member nil args)
     (reduce fn args)))
 

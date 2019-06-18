@@ -4,6 +4,8 @@
   :maintainer "Jack Nai-Chieh Chou <jacknchou@icloud.com>"
   :serial t
   :components ((:file "src/packages")
+	       (:file "src/threads")
+	       (:file "src/filesystems")
 	       (:file "src/keys")
 	       (:file "src/lists")
 	       (:file "src/maths")

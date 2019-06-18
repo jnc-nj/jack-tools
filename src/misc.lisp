@@ -22,25 +22,12 @@
 		       (push substring collect))))))
       (car collect))))
 
-(defun count-threads (key)
-  "Count threads matching key."
-  (let ((count 0))
-    (dolist (thread (bt:all-threads))
-      (when (search key (bt:thread-name thread))
-	(incf count)))
-    count))
-
-(defun connect-client (client-name)
-  (handler-case (join-thread client-name)
-    (sb-sys:interactive-interrupt ()
-      (sb-ext:exit))))
-
 (defun jsonp (str)
   (eq (char str 0) #\{))
 
 (defun decode-http-body (body)
   (cond ((and (stringp body) (jsonp body))
-	 (decode-json-from-string body))
+	 (cl-json:decode-json-from-string body))
 	((or (stringp body) (numberp body)) body)
 	(t (decode-http-body
 	    (babel:octets-to-string
@@ -49,39 +36,6 @@
 (defun if-exist-return (if-part else-part)
   "Else-part is unsafe (side-effects via incf etc.)"
   (if if-part if-part else-part))
-
-(defun create-directory (name)
-  (ensure-directories-exist (pathname name))
-  (truename name))
-
-(defun write-file (object target)
-  (with-open-file (file (pathname target)
-                        :direction :output
-                        :if-exists :supersede
-                        :if-does-not-exist :create)
-    (if (stringp object)
-        (format file "~d" object)
-        (format file "~d" (cl-json:encode-json-to-string object)))))
-
-(defun open-file (target)
-  (with-open-file (file (pathname target))
-    (let ((contents (make-string (file-length file))))
-      (read-sequence contents file)
-      contents)))
-
-(defun cmd-read-path (path)
-  (format nil "$(<~d)" (pathname path)))
-
-(defun *probe-file (path)
-  (when path (probe-file path)))
-
-(defun join-thread (thread-name)
-  (bt:join-thread
-   (find-thread thread-name)))
-
-(defun find-thread (thread-name)
-  (find-if #'(lambda (thread) (search thread-name (bt:thread-name thread)))
-           (bt:all-threads)))
 
 (defun get-all-symbols (&optional package)
   (let ((lst ())
@@ -95,6 +49,7 @@
     lst))
 
 (defun string-alist-values (alist &key reverse)
+  "Convert values in alist to string if they were not previously, or vice versa."
   (cond ((dotted-pair-p alist)
 	 (cons (car alist) (string-alist-values (cdr alist) :reverse reverse)))
 	((listp alist)

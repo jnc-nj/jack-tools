@@ -38,7 +38,7 @@
            (loop do (wait lock condition-variable)
                     ,@body)))))
 
-(defmacro with-timed-loop (title threshold delay print-condition &body body)
+(defmacro with-timed-loop (title threshold delay &body body)
   `(when (and ,threshold (null (find-thread ,title)))
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title

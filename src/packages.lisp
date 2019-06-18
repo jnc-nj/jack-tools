@@ -1,5 +1,20 @@
 (in-package :cl-user)
 
+(defpackage #:jack.tools.threads
+  (:use #:cl)
+  (:export #:COUNT-THREADS
+	   #:CONNECT-CLIENT
+	   #:JOIN-THREAD
+	   #:FIND-THREAD))
+
+(defpackage #:jack.tools.filesystems
+  (:use #:cl)
+  (:export #:CREATE-DIRECTORY
+           #:WRITE-FILE
+           #:OPEN-FILE
+           #:CMD-READ-PATH
+           #:*PROBE-FILE))
+
 (defpackage #:jack.tools.lists
   (:use #:cl #:alexandria)
   (:export #:AGETHASH
@@ -27,18 +42,9 @@
 	   #:KEYWORDFY 
 	   #:PROMPT-READ
 	   #:READ-FLAG
-	   #:COUNT-THREADS
-	   #:CONNECT-CLIENT
 	   #:JSONP
 	   #:DECODE-HTTP-BODY
            #:IF-EXIST-RETURN
-           #:CREATE-DIRECTORY
-           #:WRITE-FILE
-           #:OPEN-FILE
-           #:CMD-READ-PATH
-           #:*PROBE-FILE
-           #:JOIN-THREAD
-	   #:FIND-THREAD
            #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES))
 
@@ -111,7 +117,8 @@
 	#:jack.tools.objects
 	#:jack.tools.lists
         #:jack.tools.maths
-	#:jack.tools.misc)
+	#:jack.tools.misc
+	#:jack.tools.filesystems)
   (:export #:*PRNG*
 	   
 	   #:PANTS
@@ -174,7 +181,8 @@
 
 (defpackage #:jack.tools.trees
   (:use #:cl
-	#:jack.tools.lists)
+	#:jack.tools.lists
+	#:jack.tools.maths)
   (:export #:TREE-SIMILARITY
 	   #:UPSILON
 	   #:COMPARE-TREES
