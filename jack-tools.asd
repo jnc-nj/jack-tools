@@ -35,4 +35,5 @@
 	       :cl-bootstrap
 	       :jonathan
 	       :symbol-munger
-	       :closer-mop))
+	       :closer-mop
+	       :usocket))
