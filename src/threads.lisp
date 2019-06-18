@@ -20,3 +20,6 @@
 (defun find-thread (thread-name)
   (find-if #'(lambda (thread) (search thread-name (bt:thread-name thread)))
            (bt:all-threads)))
+
+(defun all-thread-names ()
+  (mapcar #'bt:thread-name (bt:all-threads)))

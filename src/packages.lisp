@@ -5,7 +5,8 @@
   (:export #:COUNT-THREADS
 	   #:CONNECT-CLIENT
 	   #:JOIN-THREAD
-	   #:FIND-THREAD))
+	   #:FIND-THREAD
+	   #:ALL-THREAD-NAMES))
 
 (defpackage #:jack.tools.filesystems
   (:use #:cl)
