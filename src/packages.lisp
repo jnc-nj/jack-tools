@@ -38,7 +38,6 @@
 (defpackage #:jack.tools.misc
   (:use #:cl
 	#:symbol-munger
-	#:ningle
 	#:lack.response
 	#:lack.request
 	#:jack.tools.lists)
@@ -48,6 +47,7 @@
 	   #:READ-FLAG
 	   #:JSONP
 	   #:DECODE-HTTP-BODY
+	   #:ENCODE-HTTP-BODY
            #:IF-EXIST-RETURN
            #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES

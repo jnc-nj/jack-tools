@@ -33,6 +33,11 @@
 	    (babel:octets-to-string
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
+(defun encode-http-body (body)
+  (cond ((stringp body) body)
+	((alistp body) (jonathan:to-json body :from :alist))
+	(t (jonathan:to-json body))))
+
 (defun if-exist-return (if-part else-part)
   "Else-part is unsafe (side-effects via incf etc.)"
   (if if-part if-part else-part))
@@ -62,11 +67,11 @@
 	(alist alist)))
 
 (defmacro defhandler ((app uri &key (method :get) (content-type "application/json")) &body body)
-  `(setf (route ,app ,uri :method ,method)
+  `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))
-	     (setf (getf (response-headers *response*)
+	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
-	     (let ((http-content* (decode-http-body (request-content *request*))))
-	       ,@body))))
+	     (let ((http-content* (decode-http-body (request-content ningle:*request*))))
+	       (encode-http-body (progn ,@body))))))
