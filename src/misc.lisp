@@ -30,11 +30,21 @@
 	(incf count)))
     count))
 
+(defun connect-client (client-name)
+  (handler-case (join-thread client-name)
+    (sb-sys:interactive-interrupt ()
+      (sb-ext:exit))))
+
+(defun jsonp (str)
+  (eq (char str 0) #\{))
+
 (defun decode-http-body (body)
-  "For drakma."
-  (if (stringp body) body
-      (babel:octets-to-string
-       (coerce body '(vector (unsigned-byte 8))))))
+  (cond ((and (stringp body) (jsonp body))
+	 (decode-json-from-string body))
+	((or (stringp body) (numberp body)) body)
+	(t (decode-http-body
+	    (babel:octets-to-string
+	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun if-exist-return (if-part else-part)
   "Else-part is unsafe (side-effects via incf etc.)"

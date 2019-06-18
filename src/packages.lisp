@@ -28,6 +28,8 @@
 	   #:PROMPT-READ
 	   #:READ-FLAG
 	   #:COUNT-THREADS
+	   #:CONNECT-CLIENT
+	   #:JSONP
 	   #:DECODE-HTTP-BODY
            #:IF-EXIST-RETURN
            #:CREATE-DIRECTORY
