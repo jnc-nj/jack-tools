@@ -25,8 +25,8 @@
 (defun jsonp (str)
   (eq (char str 0) #\{))
 
-(defun decode-http-body (body)
-  (cond ((and (stringp body) (jsonp body))
+(defun decode-http-body (body &key (json? t))
+  (cond ((and (stringp body) (jsonp body) json?)
 	 (cl-json:decode-json-from-string body))
 	((or (stringp body) (numberp body)) body)
 	(t (decode-http-body
