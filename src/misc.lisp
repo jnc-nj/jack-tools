@@ -61,7 +61,7 @@
 	((numberp alist) (write-to-string alist))
 	(alist alist)))
 
-(defmacro handle ((app uri &key (method :get) (content-type "text/plain")) &body body)
+(defmacro defhandler ((app uri &key (method :get) (content-type "text/plain")) &body body)
   `(setf (route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))

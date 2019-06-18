@@ -50,7 +50,7 @@
            #:IF-EXIST-RETURN
            #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES
-	   #:HANDLE))
+	   #:DEFHANDLER))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
