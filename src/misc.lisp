@@ -60,3 +60,13 @@
 	 (read-from-string alist))
 	((numberp alist) (write-to-string alist))
 	(alist alist)))
+
+(defmacro defhandler ((app uri &key (method :get) (content-type "text/plain")) &body body)
+  `(setf (route ,app ,uri :method ,method)
+	 #'(lambda (params)
+	     (declare (ignorable params))
+	     (setf (getf (response-headers *response*)
+			 :content-type)
+		   ,content-type)
+	     (let ((http-content* (decode-http-body (request-content *request*))))
+	       ,@body))))

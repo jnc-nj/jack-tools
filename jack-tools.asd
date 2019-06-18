@@ -38,4 +38,6 @@
 	       :jonathan
 	       :symbol-munger
 	       :closer-mop
-	       :usocket))
+	       :usocket
+	       :ningle
+	       :lack))

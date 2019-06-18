@@ -37,6 +37,9 @@
 (defpackage #:jack.tools.misc
   (:use #:cl
 	#:symbol-munger
+	#:ningle
+	#:lack.response
+	#:lack.request
 	#:jack.tools.lists)
   (:export #:DEKEYWORDFY
 	   #:KEYWORDFY 
@@ -46,7 +49,8 @@
 	   #:DECODE-HTTP-BODY
            #:IF-EXIST-RETURN
            #:GET-ALL-SYMBOLS
-	   #:STRING-ALIST-VALUES))
+	   #:STRING-ALIST-VALUES
+	   #:DEFHANDLER))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
