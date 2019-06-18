@@ -11,6 +11,7 @@
 	       (:file "src/maths")
 	       (:file "src/misc")
 	       (:file "src/objects")
+	       (:file "src/https")
 	       (:file "src/strings")
 	       (:file "src/trees")
 	       (:file "src/withs")

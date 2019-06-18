@@ -45,13 +45,10 @@
 	   #:KEYWORDFY 
 	   #:PROMPT-READ
 	   #:READ-FLAG
-	   #:JSONP
-	   #:DECODE-HTTP-BODY
-	   #:ENCODE-HTTP-BODY
            #:IF-EXIST-RETURN
            #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES
-	   #:DEFHANDLER))
+	   #:LIST-PACKAGE-SYMBOLS))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
@@ -76,6 +73,17 @@
            #:OBJECT-TO-ALIST
 	   #:GENERATE-JSON-METHOD
 	   #:GENERATE-JSON-METHODS))
+
+(defpackage #:jack.tools.https
+  (:use #:cl
+	#:lack.response
+	#:lack.request
+	#:jack.tools.objects
+	#:jack.tools.lists)
+  (:export #:JSONP
+	   #:DECODE-HTTP-BODY
+	   #:ENCODE-HTTP-BODY
+	   #:DEFHANDLER))
 
 (defpackage #:jack.tools.cli
   (:use #:cl
@@ -201,7 +209,8 @@
 	#:jack.tools.lists
 	#:jack.tools.misc
 	#:jack.tools.keys
-	#:jack.tools.time)
+	#:jack.tools.time
+	#:jack.tools.threads)
   (:export #:WITH-PROFILER
            #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
@@ -258,16 +267,3 @@
 	   #:SERIAL-OUTPUT
 	   #:SERIAL
 	   #:SERIALIZE))
-
-(defpackage #:jack.tools
-  (:use #:cl #:alexandria
-	#:jack.tools.keys
-	#:jack.tools.maths
-	#:jack.tools.objects
-	#:jack.tools.strings
-	#:jack.tools.lists
-	#:jack.tools.trees
-	#:jack.tools.withs
-	#:jack.tools.misc
-	#:jack.tools.matrices
-	#:jack.tools.bootstraps))

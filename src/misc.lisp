@@ -22,22 +22,6 @@
 		       (push substring collect))))))
       (car collect))))
 
-(defun jsonp (str)
-  (eq (char str 0) #\{))
-
-(defun decode-http-body (body &key (json? t))
-  (cond ((and (stringp body) (jsonp body) json?)
-	 (cl-json:decode-json-from-string body))
-	((or (stringp body) (numberp body)) body)
-	(t (decode-http-body
-	    (babel:octets-to-string
-	     (coerce body '(vector (unsigned-byte 8))))))))
-
-(defun encode-http-body (body)
-  (cond ((stringp body) body)
-	((alistp body) (jonathan:to-json body :from :alist))
-	(t (jonathan:to-json body))))
-
 (defun if-exist-return (if-part else-part)
   "Else-part is unsafe (side-effects via incf etc.)"
   (if if-part if-part else-part))
@@ -66,14 +50,8 @@
 	((numberp alist) (write-to-string alist))
 	(alist alist)))
 
-(defmacro defhandler ((app uri &key (method :get) (content-type "application/json") (decode? t))
-		      &body body)
-  `(setf (ningle:route ,app ,uri :method ,method)
-	 #'(lambda (params)
-	     (declare (ignorable params))
-	     (setf (getf (response-headers ningle:*response*)
-			 :content-type)
-		   ,content-type)
-	     (let* ((request* (request-content ningle:*request*))
-		    (http-content* (if ,decode? (decode-http-body request*) request*)))
-	       (encode-http-body (progn ,@body))))))
+(defun list-package-symbols (package)
+  (let (collect)
+    (do-external-symbols (symbol (find-package package))
+      (push symbol collect))
+    (sort collect #'string>)))
