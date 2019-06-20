@@ -1,7 +1,9 @@
 (in-package #:jack.tools.https)
 
 (defun jsonp (str)
-  (eq (char str 0) #\{))
+  (and (stringp str)
+       (not (string= str ""))
+       (eq (char str 0) #\{)))
 
 (defun decode-http-body (body)
   (cond ((and (stringp body) (jsonp body))
@@ -31,4 +33,5 @@
 			   (,class-map (cast (decode-http-body request*) ,class-map))
 			   (,decode? (decode-http-body request*))
 			   (t request*))))
+	       (declare (ignorable http-content*))
 	       (encode-http-body (progn ,@body))))))
