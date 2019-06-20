@@ -19,8 +19,7 @@
 	(t (jonathan:to-json body))))
 
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
-			   (content-type "application/json"))
-		      &body body)
+			   (content-type "application/json")) &body body)
   `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))

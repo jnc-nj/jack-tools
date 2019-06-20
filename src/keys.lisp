@@ -29,7 +29,6 @@
 
 (defun remove-pants (aes-key private-key belts briefs &key (string? t))
   (let ((ivs (remove-belts private-key belts)))
-    (log:info ivs)
     (dolist (iv ivs)
       (handler-case
 	  (let* ((aes (if-exist-return aes-key iv))
@@ -45,15 +44,13 @@
     (dolist (belt belts)
       (handler-case
 	  (let ((decryption (rsa-decrypt-message private-key belt)))
-	    (log:info decryption)
 	    (when (= 16 (length decryption))
 	      (push decryption collect)))
 	(error () nil)))
     collect))
 
 (defun read-encoded-key (aes root path)
-  (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root (open-file path) :string? nil))))
-    (log:info aes root (open-file path))
+  (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root (open-file path)))))
     (pem/pkey::read-private-key
      (format nil "~{~d~}" (trim-seq trim-key 1 (- (length trim-key) 1))))))
 

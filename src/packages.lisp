@@ -212,17 +212,22 @@
 	#:jack.tools.misc
 	#:jack.tools.keys
 	#:jack.tools.time
-	#:jack.tools.threads)
+	#:jack.tools.threads
+	#:jack.tools.https
+	#:jack.tools.objects)
   (:export #:WITH-PROFILER
-           #:WITH-EXCEPTED-API
+	   #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO
-           #:WITH-TIMER
+	   #:WITH-TIMER
 	   #:WITH-TIMED-LOOP
-           #:WITH-SUPPRESSED-OUTPUT
+	   #:WITH-SUPPRESSED-OUTPUT
 	   #:WITH-MUTLIPLE-SLOTS
 	   #:WITH-SECURE-API
-	   #:SECURE-CONTENT*))
+	   #:SECURE-CONTENT*
+	   #:WITH-QUERY
+	   #:HTTP-BODY*
+	   #:HTTP-CODE*))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl
