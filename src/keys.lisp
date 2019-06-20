@@ -216,4 +216,5 @@
   identifier)
 
 (defun generate-pems (private-path &key (identifier (uuid:make-v4-uuid)))
+  (create-directory private-path)
   (generate-public-pem private-path (generate-private-pem private-path :identifier identifier)))
