@@ -83,7 +83,8 @@
   (:export #:JSONP
 	   #:DECODE-HTTP-BODY
 	   #:ENCODE-HTTP-BODY
-	   #:DEFHANDLER))
+	   #:DEFHANDLER
+	   #:HTTP-CONTENT*))
 
 (defpackage #:jack.tools.cli
   (:use #:cl
