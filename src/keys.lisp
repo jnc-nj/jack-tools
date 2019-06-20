@@ -16,26 +16,27 @@
      :briefs (aes-encrypt-message (if-exist-return aes-key iv)
 				  iv object))))
 
-(defun pants-off (aes-key private-key pants &key (string? t) (json? t))
+(defun pants-off (aes-key private-key pants &key (string? t))
   "Takes a json, then returns a lisp object."
   (cond ((stringp pants)
-	 (let ((message (if json? (cl-json:decode-json-from-string pants) pants)))
+	 (let ((message (if (jsonp pants) (cl-json:decode-json-from-string pants) pants)))
 	   (remove-pants aes-key private-key
 			 (agethash :belts message)
 			 (agethash :briefs message)
-			 :string? string? :json? json?)))
+			 :string? string?)))
 	(t (with-slots (belts briefs) pants
-	     (remove-pants aes-key private-key belts briefs
-			   :string? string? :json? json?)))))
+	     (remove-pants aes-key private-key belts briefs :string? string?)))))
 
-(defun remove-pants (aes-key private-key belts briefs &key (string? t) (json? t))
+(defun remove-pants (aes-key private-key belts briefs &key (string? t))
   (let ((ivs (remove-belts private-key belts)))
+    (log:info ivs)
     (dolist (iv ivs)
       (handler-case
 	  (let* ((aes (if-exist-return aes-key iv))
 		 (decryption (aes-decrypt-message aes iv briefs :string? string?)))
 	    (return-from remove-pants
-	      (cond (json? (values (cl-json:decode-json-from-string decryption) iv))
+	      (cond ((jsonp decryption)
+		     (values (cl-json:decode-json-from-string decryption) iv))
 		    (t (values decryption iv)))))
 	(error () nil)))))
 
@@ -44,6 +45,7 @@
     (dolist (belt belts)
       (handler-case
 	  (let ((decryption (rsa-decrypt-message private-key belt)))
+	    (log:info decryption)
 	    (when (= 16 (length decryption))
 	      (push decryption collect)))
 	(error () nil)))
@@ -51,6 +53,7 @@
 
 (defun read-encoded-key (aes root path)
   (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root (open-file path) :string? nil))))
+    (log:info aes root (open-file path))
     (pem/pkey::read-private-key
      (format nil "~{~d~}" (trim-seq trim-key 1 (- (length trim-key) 1))))))
 
@@ -103,12 +106,12 @@
 (defun create-custom-key (seed &key (size 32))
   (when (> (length seed) 0)
     (let* ((b64 (base64:string-to-base64-string seed))
-	 (u8 (base64:base64-string-to-usb8-array b64))
-	 (temp (make-array 0 :element-type '(unsigned-byte 8))))
-    (multiple-value-bind (q d) (floor size (length u8))
-      (dotimes (n q) (setf temp (concatenate '(vector (unsigned-byte 8)) temp u8)))
-      (setf temp (concatenate '(vector (unsigned-byte 8)) temp (subseq u8 0 d)))
-      (base64:usb8-array-to-base64-string temp)))))
+	   (u8 (base64:base64-string-to-usb8-array b64))
+	   (temp (make-array 0 :element-type '(unsigned-byte 8))))
+      (multiple-value-bind (q d) (floor size (length u8))
+	(dotimes (n q) (setf temp (concatenate '(vector (unsigned-byte 8)) temp u8)))
+	(setf temp (concatenate '(vector (unsigned-byte 8)) temp (subseq u8 0 d)))
+	(base64:usb8-array-to-base64-string temp)))))
 
 (defun trim-key (key &key (start 0) (end 16))
   (if (stringp key)

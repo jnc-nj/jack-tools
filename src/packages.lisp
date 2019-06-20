@@ -132,7 +132,8 @@
 	#:jack.tools.lists
         #:jack.tools.maths
 	#:jack.tools.misc
-	#:jack.tools.filesystems)
+	#:jack.tools.filesystems
+	#:jack.tools.https)
   (:export #:*PRNG*
 	   
 	   #:PANTS
