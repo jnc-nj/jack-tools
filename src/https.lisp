@@ -3,7 +3,8 @@
 (defun jsonp (str)
   (and (stringp str)
        (not (string= str ""))
-       (eq (char str 0) #\{)))
+       (or (eq (char str 0) #\{)
+	   (eq (char str 0) #\[))))
 
 (defun decode-http-body (body)
   (cond ((and (stringp body) (jsonp body))
@@ -14,6 +15,7 @@
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
+  (log:info body)
   (cond ((stringp body) body)
 	((alistp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
