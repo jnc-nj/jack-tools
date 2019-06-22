@@ -81,6 +81,10 @@
 		(body-output (progn ,@body)))
 	   (values (if-exist-return body-output http-body*) http-code*))))))
 
-(defmacro with-fail-message ((fail-message &rest fail-vars) &body body)
-  `(let ((output (progn ,@body)))
-     (if-exist-return output (log:warn ,fail-message ,@fail-vars))))
+(defmacro with-log (evaluator (&optional success-message &rest success-vars) (&optional fail-message &rest fail-vars) &body body)
+  `(let ((evaluation (progn ,evaluator)))
+     (if evaluation
+	 (let ((output (progn ,@body)))
+	   (when ,success-message (log:info ,success-message ,@success-vars))
+	   (if-exist-return output t))
+	 (log:warn ,fail-message ,@fail-vars))))

@@ -46,7 +46,6 @@
 	   #:PROMPT-READ
 	   #:READ-FLAG
            #:IF-EXIST-RETURN
-           #:GET-ALL-SYMBOLS
 	   #:STRING-ALIST-VALUES
 	   #:LIST-PACKAGE-SYMBOLS))
 
@@ -228,7 +227,7 @@
 	   #:WITH-QUERY
 	   #:HTTP-BODY*
 	   #:HTTP-CODE*
-	   #:WITH-FAIL-MESSAGE))
+	   #:WITH-LOG))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl
