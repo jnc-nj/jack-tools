@@ -45,3 +45,14 @@
     (do-external-symbols (symbol (find-package package))
       (push symbol collect))
     (sort collect #'string>)))
+
+(defun largest-key (table &key outputs)
+  (let ((val 0) out)
+    (maphash #'(lambda (key value)
+		 (let ((int (if (listp value) (length value) value)))
+		   (cond ((> int val) (setf out (list key) val int))
+			 ((= int val) (push key out)))))
+	     table)
+    (if outputs
+	(map-reduce #'(lambda (key) (gethash key table)) #'append out)
+	out)))

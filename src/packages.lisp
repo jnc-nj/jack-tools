@@ -47,7 +47,8 @@
 	   #:READ-FLAG
            #:IF-EXIST-RETURN
 	   #:STRING-ALIST-VALUES
-	   #:LIST-PACKAGE-SYMBOLS))
+	   #:LIST-PACKAGE-SYMBOLS
+	   #:LARGEST-KEY))
 
 (defpackage #:jack.tools.objects
   (:use #:cl

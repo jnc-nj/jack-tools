@@ -15,7 +15,6 @@
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
-  (log:info body)
   (cond ((stringp body) body)
 	((alistp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
