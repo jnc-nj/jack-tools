@@ -227,7 +227,8 @@
 	   #:SECURE-CONTENT*
 	   #:WITH-QUERY
 	   #:HTTP-BODY*
-	   #:HTTP-CODE*))
+	   #:HTTP-CODE*
+	   #:WITH-FAIL-MESSAGE))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl

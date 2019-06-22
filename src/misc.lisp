@@ -23,9 +23,9 @@
 		       (push substring collect))))))
       (car collect))))
 
-(defun if-exist-return (if-part else-part)
+(defmacro if-exist-return (if-part &body else-part)
   "Else-part is unsafe (side-effects via incf etc.)"
-  (if if-part if-part else-part))
+  `(if ,if-part ,if-part (progn ,@else-part)))
 
 (defun get-all-symbols (&optional package)
   (let ((lst ())

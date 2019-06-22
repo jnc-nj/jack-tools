@@ -28,6 +28,7 @@
 	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
+	     #+nil(log:info (request-body-parameters ningle:*request*))
 	     (let* ((request* (request-content ningle:*request*))
 		    (http-content*
 		     (cond (,multicast (cast-all (decode-http-body request*) ,class-map))

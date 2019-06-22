@@ -67,11 +67,12 @@
 (defmacro with-query (address (target payload &key class-map multicast) &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
-         (if ,payload
+         (if (null ,payload)
+	     (dex:get (format nil "http://~d/~d" ,address ,target))
 	     (dex:post (format nil "http://~d/~d" ,address ,target)
 		       :headers '(("Content-Type" . "application/json"))
-		       :content ,payload)
-	     (dex:get (format nil "http://~d/~d" ,address ,target)))
+		       :content (if (jsonp ,payload) ,payload
+				    (jonathan:to-json ,payload))))
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
@@ -79,3 +80,7 @@
 				  (t _http-body)))
 		(body-output (progn ,@body)))
 	   (values (if-exist-return body-output http-body*) http-code*))))))
+
+(defmacro with-fail-message ((fail-message &rest fail-vars) &body body)
+  `(let ((output (progn ,@body)))
+     (if-exist-return output (log:warn ,fail-message ,@fail-vars))))
