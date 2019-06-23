@@ -46,6 +46,9 @@
 (defun trim-sort (key seq limit direction &key (start 0))
   (trim-seq (sort seq direction :key key) start limit))
 
+(defun union-sort (key seq-1 seq-2 direction)
+  (sort (union seq-1 seq-2 :key key) direction :key key))
+
 (defun all-positions (object lst &key (test 'equal))
   (let (positions)
     (loop for item in lst

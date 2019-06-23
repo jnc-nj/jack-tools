@@ -25,7 +25,8 @@
 
 (defmacro if-exist-return (if-part &body else-part)
   "Else-part is unsafe (side-effects via incf etc.)"
-  `(if ,if-part ,if-part (progn ,@else-part)))
+  `(let ((condition (progn ,if-part)))
+     (if condition condition (progn ,@else-part))))
 
 (defun string-alist-values (alist &key reverse)
   "Convert values in alist to string if they were not previously, or vice versa."

@@ -25,6 +25,7 @@
 	   #:ALISTP
 	   #:TRIM-SEQ
 	   #:TRIM-SORT
+	   #:UNION-SORT
 	   #:ALL-POSITIONS 
 	   #:MAP-REDUCE
 	   #:WINDOWS

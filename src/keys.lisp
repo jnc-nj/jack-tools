@@ -8,13 +8,13 @@
 
 (defun pants-on (aes-key public-keys object)
   "Takes a lisp or json object, then returns a json."
-  (let ((iv (create-id :size 16 :string? nil))) 
+  (let* ((iv (create-id :size 16 :string? nil))
+	 (aes (if aes-key aes-key iv))) 
     (make-instance
      'pants
      :belts (loop for public-key in public-keys
 	       collect (rsa-encrypt-message public-key iv))
-     :briefs (aes-encrypt-message (if-exist-return aes-key iv)
-				  iv object))))
+     :briefs (aes-encrypt-message aes iv object))))
 
 (defun pants-off (aes-key private-key pants &key (string? t))
   "Takes a json, then returns a lisp object."
@@ -31,7 +31,7 @@
   (let ((ivs (remove-belts private-key belts)))
     (dolist (iv ivs)
       (handler-case
-	  (let* ((aes (if-exist-return aes-key iv))
+	  (let* ((aes (if aes-key aes-key iv))
 		 (decryption (aes-decrypt-message aes iv briefs :string? string?)))
 	    (return-from remove-pants
 	      (cond ((jsonp decryption)
