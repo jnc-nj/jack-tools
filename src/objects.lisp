@@ -43,7 +43,7 @@
 	output-object))))
 
 (defun cast (alist class-map)
-  (when (listp alist)
+  (when (alistp alist)
     (let* ((input-class (find-class-map (mapcar #'car alist) class-map))
            (instance (when input-class (make-instance input-class)))
            (class (class-of instance))) 
