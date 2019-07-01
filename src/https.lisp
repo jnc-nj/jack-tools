@@ -27,7 +27,7 @@
 	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
-	     (log:info (request-headers ningle:*request*))
+	     (log:info (alexandria:hash-table-alist (request-headers ningle:*request*)))
 	     (let* ((request* (request-content ningle:*request*))
 		    (http-content*
 		     (cond (,multicast (cast-all (decode-http-body request*) ,class-map))
