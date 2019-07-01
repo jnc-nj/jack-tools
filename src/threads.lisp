@@ -10,8 +10,7 @@
 
 (defun connect-client (client-name)
   (handler-case (join-thread client-name)
-    (sb-sys:interactive-interrupt () (sb-ext:exit))
-    (error () nil)))
+    (sb-sys:interactive-interrupt () (sb-ext:exit))))
 
 (defun join-thread (thread-name)
   (bt:join-thread
