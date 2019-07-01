@@ -27,7 +27,6 @@
 	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
-	     (log:info (alexandria:hash-table-alist (request-headers ningle:*request*)))
 	     (let* ((request* (request-content ningle:*request*))
 		    (http-content*
 		     (cond (,multicast (cast-all (decode-http-body request*) ,class-map))
@@ -35,5 +34,4 @@
 			   (,decode? (decode-http-body request*))
 			   (t request*))))
 	       (declare (ignorable http-content*))
-	       (log:info (babel:octets-to-string (coerce request* '(vector (unsigned-byte 8)))))
 	       (encode-http-body (progn ,@body))))))
