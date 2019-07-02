@@ -27,10 +27,11 @@
 	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
-	     (let ((http-content*
-		    (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
-			  (,class-map (cast (request-parameters ningle:*request*) ,class-map))
-			  (,decode? (request-parameters ningle:*request*))
-			  (t (request-content ningle:*request*)))))
+	     (let* ((request* (request-content ningle:*request*))
+		    (http-content*
+		     (cond (,multicast (cast-all (decode-http-body request*) ,class-map))
+			   (,class-map (cast (decode-http-body request*) ,class-map))
+			   (,decode? (decode-http-body request*))
+			   (t request*))))
 	       (declare (ignorable http-content*))
 	       (encode-http-body (progn ,@body))))))
