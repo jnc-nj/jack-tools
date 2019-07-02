@@ -34,4 +34,6 @@
 			   (,decode? (decode-http-body request*))
 			   (t request*))))
 	       (declare (ignorable http-content*))
-	       (encode-http-body (progn ,@body))))))
+	       (let ((result (progn ,@body)))
+		 (log:info result)
+		 (encode-http-body result))))))
