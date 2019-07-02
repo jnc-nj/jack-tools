@@ -15,8 +15,7 @@
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
-  (cond ((null body) "{}")
-	((stringp body) body)
+  (cond ((stringp body) body)
 	((alistp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
 
@@ -35,6 +34,4 @@
 			   (,decode? (decode-http-body request*))
 			   (t request*))))
 	       (declare (ignorable http-content*))
-	       (let ((result (encode-http-body (progn ,@body))))
-		 (log:info result)
-		 result)))))
+	       (encode-http-body (progn ,@body))))))
