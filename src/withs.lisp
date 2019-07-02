@@ -73,12 +73,14 @@
 		       :headers '(("Content-Type" . "application/json"))
 		       :content (if (jsonp ,payload) ,payload
 				    (jonathan:to-json ,payload))))
+       (log:info http-body http-code*)
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
 				  (,class-map (cast _http-body ,class-map))
 				  (t _http-body)))
 		(body-output (progn ,@body)))
+	   (log:info body-output http-body*)
 	   (values (if-exist-return body-output http-body*) http-code*))))))
 
 (defmacro with-log (evaluator (&optional success-message &rest success-vars) (&optional fail-message &rest fail-vars) &body body)
