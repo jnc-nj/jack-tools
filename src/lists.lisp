@@ -92,9 +92,7 @@
                    0 limit))))
 
 (defun set-equals (lst-1 lst-2 &key (test #'equal) key)
-  (and lst-1 lst-2
-       (not (or (set-difference lst-1 lst-2 :test test :key key)
-		(set-difference lst-2 lst-1 :test test :key key)))))
+  (null (set-exclusive-or lst-1 lst-2 :key key :test test)))
 
 (defun dotted-pair-p (obj)
   (when (listp obj)

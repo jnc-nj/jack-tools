@@ -74,7 +74,7 @@
 
 (defun find-class-map (alist-names class-map) 
   (maphash #'(lambda (key value) 
-	       (when (null (set-exclusive-or alist-names value :test #'string=))
+	       (when (set-equals alist-names value :test #'string= :key #'string-upcase)
 		 (return-from find-class-map key)))
 	   class-map))
 

@@ -205,7 +205,7 @@
 
 (defun generate-private-pem (private-path &key (identifier (uuid:make-v4-uuid))) 
   (inferior-shell:run/nil
-   `(progn (openssl genrsa -out ,(pathname (format nil "~d~d.private" private-path identifier)) 2048)))
+   `(progn (openssl genrsa -f4 -out ,(pathname (format nil "~d~d.private" private-path identifier)) 2048)))
   identifier)
 
 (defun generate-public-pem (private-path &key (identifier (uuid:make-v4-uuid)))
