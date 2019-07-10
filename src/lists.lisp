@@ -1,14 +1,12 @@
 (in-package #:jack.tools.lists)
 
-(defun agethash (key alist &key (test 'string=))
+(defun agethash (keyword alist &key (test #'string=) (key #'string-upcase))
   (when (alistp alist)
-    (let ((try (cdr (assoc key alist :test test))))
-      (cond ((and (null try) (keywordp key))
-	     (cdr (assoc (string-downcase (string key)) alist :test test)))
-	    (try try)))))
+    (cdr (assoc (funcall key (string keyword))
+		alist :test test :key key))))
 
-(defun agethash-vals (key alist &key (result-type 'vector) (test 'string=))
-  (map result-type #'(lambda (arg) (agethash key arg :test test))
+(defun agethash-vals (keyword alist &key (result-type 'vector) (test #'string=) (key #'string-upcase))
+  (map result-type #'(lambda (arg) (agethash keyword arg :test test :key key))
        alist))
 
 (defun split-list (lst)
