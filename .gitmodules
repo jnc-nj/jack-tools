@@ -1,0 +1,9 @@
+[submodule "submodules/asn1"]
+	path = submodules/asn1
+	url = https://github.com/jnc-nj/asn1.git
+[submodule "submodules/pem"]
+	path = submodules/pem
+	url = https://github.com/jnc-nj/pem.git
+[submodule "submodules/timer-wheel"]
+	path = submodules/timer-wheel
+	url = https://github.com/jnc-nj/timer-wheel.git
