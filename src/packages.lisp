@@ -5,6 +5,7 @@
   (:export #:COUNT-THREADS
 	   #:CONNECT-CLIENT
 	   #:JOIN-THREAD
+	   #:DESTROY-THREAD
 	   #:FIND-THREAD
 	   #:ALL-THREAD-NAMES))
 
