@@ -15,7 +15,8 @@
            #:WRITE-FILE
            #:OPEN-FILE
            #:CMD-READ-PATH
-           #:*PROBE-FILE))
+           #:*PROBE-FILE
+	   #:TRUENAMEP))
 
 (defpackage #:jack.tools.lists
   (:use #:cl #:alexandria)

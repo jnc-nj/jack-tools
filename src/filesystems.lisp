@@ -25,3 +25,6 @@
 (defun *probe-file (path)
   (when path (probe-file path)))
 
+(defun truenamep (path)
+  (handler-case (pathname (truename path))
+    (error () nil)))

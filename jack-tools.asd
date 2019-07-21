@@ -41,4 +41,5 @@
 	       :closer-mop
 	       :usocket
 	       :ningle
-	       :lack))
+	       :lack
+	       :dexador))
