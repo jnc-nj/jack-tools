@@ -29,11 +29,9 @@
 		(apply #'combinations (cdr lists)))
 	(list nil))))
 
-(defun alistp (obj)
-  (when (and (listp obj)
-	     (listp (car obj))
-	     (not (listp (caar obj))))
-    t))
+(defun alistp (lst)
+  (when (listp lst)
+    (every #'dotted-pair-p lst)))
 
 (defun trim-seq (seq start &optional end)
   (cond ((null end) (subseq seq start end))
