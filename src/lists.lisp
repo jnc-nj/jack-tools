@@ -30,7 +30,9 @@
 	(list nil))))
 
 (defun alistp (lst)
-  (and (listp lst) (every #'listp lst)))
+  (and (listp lst)
+       (listp (car lst))
+       (not (listp (caar lst)))))
 
 (defun trim-seq (seq start &optional end)
   (cond ((null end) (subseq seq start end))
