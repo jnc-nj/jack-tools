@@ -30,8 +30,7 @@
 	(list nil))))
 
 (defun alistp (lst)
-  (when (listp lst)
-    (every #'dotted-pair-p lst)))
+  (and (listp lst) (every #'listp lst)))
 
 (defun trim-seq (seq start &optional end)
   (cond ((null end) (subseq seq start end))
@@ -91,8 +90,8 @@
   (null (set-exclusive-or lst-1 lst-2 :key key :test test)))
 
 (defun dotted-pair-p (obj)
-  (when (listp obj)
-    (not (listp (cdr obj)))))
+  (and (listp obj)
+       (not (listp (cdr obj)))))
 
 (defun every-list-p (obj &key not)
   (when (listp obj)
