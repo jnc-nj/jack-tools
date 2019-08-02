@@ -22,6 +22,11 @@
      (format t "...Done. [~ds]~%"
 	     (- (sec-now) start-time))))
 
+(defmacro with-enter-leave (name &body body)
+  `(progn (log:info ,(format nil "[~d][entering sequence]" name))
+	  ,@body
+	  (log:info ,(format nil "[~d][leaving sequence]" name))))
+
 (defmacro with-timer (interval iterations &body body)
   `(let* ((lock (bt:make-lock))
           (condition-variable (bt:make-condition-variable))
@@ -36,7 +41,7 @@
              (wait lock condition-variable)
              ,@body)
            (loop do (wait lock condition-variable)
-                    ,@body)))))
+                ,@body)))))
 
 (defmacro with-timed-loop (title threshold delay &body body)
   `(when (and ,threshold (null (find-thread ,title)))
