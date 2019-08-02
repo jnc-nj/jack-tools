@@ -17,12 +17,10 @@
   (bt:join-thread
    (find-thread thread-name)))
 
-(defun destroy-thread (&rest thread-name)
-  (when thread-name
-    (if (listp thread-name)
-	(mapcar #'destroy-thread thread-name)
-	(let ((thread (find-thread thread-name)))
-	  (when thread (bt:destroy-thread thread))))))
+(defun destroy-thread (&rest thread-names)
+  (dolist (thread-name thread-names)
+    (let ((thread (find-thread thread-name)))
+      (when thread (bt:destroy-thread thread)))))
 
 (defun find-thread (thread-name)
   (find-if #'(lambda (thread) (search thread-name (bt:thread-name thread)))
