@@ -18,7 +18,7 @@
    (find-thread thread-name)))
 
 (defun destroy-thread (&rest thread-name)
-  (if (listp thread-name)
+  (if (and thread-name (listp thread-name))
       (mapcar #'destroy-thread thread-name)
       (let ((thread (find-thread thread-name)))
 	(when thread (bt:destroy-thread thread)))))
