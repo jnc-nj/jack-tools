@@ -57,18 +57,21 @@
 (defun map-reduce (map-fn reduce-fn objects &key reduce-key)
   (reduce reduce-fn (mapcar map-fn objects) :key reduce-key))
 
+(defun reduce-map (reduce-fn map-fn objects &key reduce-key)
+  (mapcar map-fn (reduce reduce-fn objects :key reduce-key)))
+
 (defun window (window object lst &key (test 'equal))
   "Get all elements within window N of OBJECT in LST."
   (let ((lst-length (length lst)))
     (reduce #'append
 	    (loop for position in (all-positions object lst :test test)
-                  for lower-bound = (- position window)
-                  for upper-bound = (+ position window 1)
-                  collect (delete object
-                                  (subseq lst
-                                          (if (> lower-bound 0) lower-bound 0)
-                                          (when (< upper-bound lst-length) upper-bound))
-                                  :test test)))))
+               for lower-bound = (- position window)
+               for upper-bound = (+ position window 1)
+               collect (delete object
+                               (subseq lst
+                                       (if (> lower-bound 0) lower-bound 0)
+                                       (when (< upper-bound lst-length) upper-bound))
+                               :test test)))))
 
 (defun random-item (lst &key value)
   (cond ((listp lst) (nth (random (length lst)) lst)) 

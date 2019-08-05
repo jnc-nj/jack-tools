@@ -30,6 +30,7 @@
 	   #:UNION-SORT
 	   #:ALL-POSITIONS 
 	   #:MAP-REDUCE
+	   #:REDUCE-MAP
 	   #:WINDOWS
            #:RANDOM-ITEM
            #:RANDOM-SELECTION
