@@ -76,8 +76,9 @@
 	     (dex:get (format nil "http://~d/~d" ,address ,target))
 	     (dex:post (format nil "http://~d/~d" ,address ,target)
 		       :headers '(("Content-Type" . "application/json"))
-		       :content (if (jsonp ,payload) ,payload
-				    (jonathan:to-json ,payload))))
+		       :content (cond ((jsonp ,payload) ,payload)
+				      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
+				      (t (jonathan:to-json ,payload)))))
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
