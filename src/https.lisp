@@ -15,9 +15,10 @@
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
+  (log:info body)
   (cond ((jsonp body) body)
 	((stringp body) (format nil "{\"message\": \"~d\"}" body))
-	((alistp body) (jonathan:to-json body :from :alist))
+	((listp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
 
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
