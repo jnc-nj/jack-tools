@@ -1,5 +1,8 @@
 (in-package #:jack.tools.misc)
 
+(defun empty-p (obj)
+  (or (null obj) (and (stringp obj) (string= "" obj))))
+
 (defun dekeywordfy (name) (symbol-munger:lisp->camel-case name))
 
 (defun keywordfy (name) (values (intern (string-upcase name) "KEYWORD")))

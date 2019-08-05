@@ -44,7 +44,8 @@
 	#:lack.response
 	#:lack.request
 	#:jack.tools.lists)
-  (:export #:DEKEYWORDFY
+  (:export #:EMPTY-P
+	   #:DEKEYWORDFY
 	   #:KEYWORDFY 
 	   #:PROMPT-READ
 	   #:READ-FLAG
