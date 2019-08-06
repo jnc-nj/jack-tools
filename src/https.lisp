@@ -15,7 +15,6 @@
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
-  (log:info body)
   (cond ((jsonp body) body)
 	((stringp body) (format nil "{\"message\": \"~d\"}" body))
 	((listp body) (jonathan:to-json body :from :alist))
