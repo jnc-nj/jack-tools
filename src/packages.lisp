@@ -197,7 +197,8 @@
 	   #:SUBSTRINGP
 	   #:REGEXFY
 	   #:CONCATSTRING
-	   #:GET-REGEX-MATCH))
+	   #:GET-REGEX-MATCH
+	   #:STRING-TEST-P))
 
 (defpackage #:jack.tools.trees
   (:use #:cl
