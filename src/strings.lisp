@@ -47,6 +47,6 @@
 
 (defun string-test-p (str &key (test #'numberp))
   (let ((unstring (handler-case (read-from-string content) (error () nil))))
-    (if (listp unstring)
+    (if (and unstring (listp unstring))
 	(every test unstring)
-	(funcall test unstringp))))
+	(funcall test unstring))))
