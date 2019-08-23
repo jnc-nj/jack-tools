@@ -45,8 +45,7 @@
   (sort (cl-ppcre:all-matches-as-strings list str)
 	#'> :key #'length))
 
-(defun string-test-p (str &key (test #'numberp))
+(defun string-test-p (content &key (test #'numberp))
   (let ((unstring (handler-case (read-from-string content) (error () nil))))
-    (if (and unstring (listp unstring))
-	(every test unstring)
-	(funcall test unstring))))
+    (cond ((and unstring (listp unstring)) (every test unstring))
+	  (unstring (funcall test unstring)))))
