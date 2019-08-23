@@ -174,7 +174,8 @@
 	   #:MAKE-CIPHER
            #:GENERATE-PRIVATE-PEM
            #:GENERATE-PUBLIC-PEM
-           #:GENERATE-PEMS))
+           #:GENERATE-PEMS
+	   #:PUBKEYP))
 
 (defpackage #:jack.tools.time
   (:use #:cl 

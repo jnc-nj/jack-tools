@@ -219,3 +219,7 @@
   (generate-private-pem private-path :identifier identifier)
   (generate-public-pem private-path :identifier identifier)
   identifier)
+
+(defun pubkeyp (key)
+  (handler-case (pants-on +aes-key+ (list key) (create-id :size 8))
+    (error () nil)))
