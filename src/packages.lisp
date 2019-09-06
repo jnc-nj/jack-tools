@@ -16,7 +16,8 @@
            #:OPEN-FILE
            #:CMD-READ-PATH
            #:*PROBE-FILE
-	   #:TRUENAMEP))
+	   #:TRUENAMEP
+	   #:GET-EXTENSION))
 
 (defpackage #:jack.tools.lists
   (:use #:cl #:alexandria)
