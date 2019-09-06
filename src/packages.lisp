@@ -199,7 +199,8 @@
 	   #:REGEXFY
 	   #:CONCATSTRING
 	   #:GET-REGEX-MATCH
-	   #:STRING-TEST-P))
+	   #:STRING-TEST-P
+	   #:TRIM-WHITESPACE))
 
 (defpackage #:jack.tools.trees
   (:use #:cl
