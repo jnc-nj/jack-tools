@@ -202,7 +202,8 @@
 	   #:CONCATSTRING
 	   #:GET-REGEX-MATCH
 	   #:STRING-TEST-P
-	   #:TRIM-WHITESPACE))
+	   #:TRIM-WHITESPACE
+	   #:BRACE-BALANCE-P))
 
 (defpackage #:jack.tools.trees
   (:use #:cl

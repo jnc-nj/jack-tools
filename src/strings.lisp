@@ -52,3 +52,7 @@
 
 (defun trim-whitespace (str)
   (string-trim '(#\space #\tab #\newline) str))
+
+(defun brace-balance-p (str)
+  (= (count "(" str :test #'string=)
+     (count ")" str :test #'string=)))
