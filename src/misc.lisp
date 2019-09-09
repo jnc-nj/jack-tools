@@ -60,3 +60,8 @@
     (if outputs
 	(map-reduce #'(lambda (key) (gethash key table)) #'append out)
 	out)))
+
+(defmacro ensure-package (name &rest dependencies)
+  `(progn (defpackage ,(keywordfy name)
+	    (:use ,@(mapcar #'keywordfy dependencies)))
+	  (in-package ,(keywordfy name))))

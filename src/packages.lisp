@@ -53,7 +53,8 @@
            #:IF-EXIST-RETURN
 	   #:STRING-ALIST-VALUES
 	   #:LIST-PACKAGE-SYMBOLS
-	   #:LARGEST-KEY))
+	   #:LARGEST-KEY
+	   #:ENSURE-PACKAGE))
 
 (defpackage #:jack.tools.objects
   (:use #:cl
