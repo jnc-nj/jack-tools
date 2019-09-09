@@ -50,8 +50,10 @@
     (cond ((and unstring (listp unstring)) (every test unstring))
 	  (unstring (funcall test unstring)))))
 
-(defun trim-whitespace (str)
-  (string-trim '(#\space #\tab #\newline) str))
+(defun trim-whitespace (str &key exclude)
+  (string-trim (remove-if #'(lambda (arg) (member arg exclude))
+			  (list #\space #\tab #\newline))
+	       str))
 
 (defun brace-balance-p (str)
   (let ((l (count "(" str :test #'string=))

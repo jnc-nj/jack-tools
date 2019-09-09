@@ -10,7 +10,8 @@
 	   #:ALL-THREAD-NAMES))
 
 (defpackage #:jack.tools.filesystems
-  (:use #:cl)
+  (:use #:cl
+	#:cl-ppcre)
   (:export #:CREATE-DIRECTORY
            #:WRITE-FILE
            #:OPEN-FILE

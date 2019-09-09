@@ -30,4 +30,4 @@
     (error () nil)))
 
 (defun get-extension (path)
-  (scan-to-strings "\\.\\w+" (namestring path)))
+  (scan-to-strings "\\.\\w+$" (namestring path)))
