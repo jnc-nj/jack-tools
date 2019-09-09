@@ -54,5 +54,6 @@
   (string-trim '(#\space #\tab #\newline) str))
 
 (defun brace-balance-p (str)
-  (= (count "(" str :test #'string=)
-     (count ")" str :test #'string=)))
+  (let ((l (count "(" str :test #'string=))
+	(r (count ")" str :test #'string=)))
+    (values (= l r) l r)))
