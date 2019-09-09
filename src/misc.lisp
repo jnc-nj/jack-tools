@@ -62,6 +62,7 @@
 	out)))
 
 (defmacro ensure-package (name &rest dependencies)
-  `(progn (defpackage ,(keywordfy name)
-	    (:use ,@(mapcar #'keywordfy dependencies)))
-	  (in-package ,(keywordfy name))))
+  `(let ((pname (keywordfy ,name)))
+     (eval `(defpackage ,pname
+	      (:use ,,@(mapcar #'keywordfy dependencies))))
+     (eval `(in-package ,pname))))
