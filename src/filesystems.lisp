@@ -28,3 +28,6 @@
 (defun truenamep (path)
   (handler-case (pathname (truename path))
     (error () nil)))
+
+(defun get-extension (path)
+  (scan-to-strings "\\.\\w+" (namestring path)))

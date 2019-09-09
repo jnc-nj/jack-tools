@@ -49,3 +49,6 @@
   (let ((unstring (handler-case (read-from-string content) (error () nil))))
     (cond ((and unstring (listp unstring)) (every test unstring))
 	  (unstring (funcall test unstring)))))
+
+(defun trim-whitespace (str)
+  (string-trim '(#\space #\tab #\newline) str))

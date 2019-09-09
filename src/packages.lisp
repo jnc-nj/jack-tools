@@ -16,7 +16,8 @@
            #:OPEN-FILE
            #:CMD-READ-PATH
            #:*PROBE-FILE
-	   #:TRUENAMEP))
+	   #:TRUENAMEP
+	   #:GET-EXTENSION))
 
 (defpackage #:jack.tools.lists
   (:use #:cl #:alexandria)
@@ -200,7 +201,8 @@
 	   #:REGEXFY
 	   #:CONCATSTRING
 	   #:GET-REGEX-MATCH
-	   #:STRING-TEST-P))
+	   #:STRING-TEST-P
+	   #:TRIM-WHITESPACE))
 
 (defpackage #:jack.tools.trees
   (:use #:cl
