@@ -39,7 +39,8 @@
 	   #:SET-EQUALS
 	   #:DOTTED-PAIR-P
 	   #:EVERY-LIST-P
-	   #:ALIST-TO-PLIST))
+	   #:ALIST-TO-PLIST
+	   #:PUSH-ALL))
 
 (defpackage #:jack.tools.misc
   (:use #:cl

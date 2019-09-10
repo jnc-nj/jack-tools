@@ -112,3 +112,7 @@
 	  (push (read-from-string (format nil ":~d" (car item))) collect))
       (push (cdr item) collect))
     (reverse collect)))
+
+(defun push-all (lst place)
+  (dolist (item lst)
+    (push item place)))
