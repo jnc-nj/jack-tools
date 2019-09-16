@@ -94,3 +94,17 @@
 	   (when ,success-message (log:info ,success-message ,@success-vars))
 	   (if-exist-return output t))
 	 (log:warn ,fail-message ,@fail-vars))))
+
+(defmacro with-ensure-package ((release? return-package name &rest dependencies) &body body)
+  `(ensure-package ,name ,@dependencies) 
+  `(let* ((output (multiple-value-list (progn ,@body)))
+	  (str (write-to-string (gensym)))
+	  (sym (intern str))) 
+     (defvar sym output) 
+     (export (quote sym)) 
+     (in-package ,return-package) 
+     (let ((out (symbol-value (find-symbol str (find-package (keywordfy ,name)))))) 
+       (when ,release?
+	 (handler-case (delete-package ,name)
+	   (error () nil))) 
+       out)))
