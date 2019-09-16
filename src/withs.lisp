@@ -95,7 +95,7 @@
 	   (if-exist-return output t))
 	 (log:warn ,fail-message ,@fail-vars))))
 
-(defmacro with-ensure-package ((release? return-package) (name &rest dependencies) &body body)
+(defmacro with-ensure-package ((gc return-package) (name &rest dependencies) &body body)
   `(let ((pname (keywordfy ,name)))
      (eval `(defpackage ,pname (:use ,,@(mapcar #'keywordfy dependencies))))
      (eval `(in-package ,pname))
@@ -106,7 +106,7 @@
        (export sym ,name)     
        (in-package ,(keywordfy return-package)) 
        (let ((out (symbol-value (find-symbol str (find-package pname))))) 
-	 (when ,release?
+	 (when ,gc
 	   (handler-case (delete-package ,name)
 	     (error () nil))) 
 	 out))))
