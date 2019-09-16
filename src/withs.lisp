@@ -95,7 +95,7 @@
 	   (if-exist-return output t))
 	 (log:warn ,fail-message ,@fail-vars))))
 
-(defmacro with-ensure-package ((release? return-package name &rest dependencies) &body body)
+(defmacro with-ensure-package ((release? return-package) (name &rest dependencies) &body body)
   `(let ((pname (keywordfy ,name)))
      (eval `(defpackage ,pname (:use ,,@(mapcar #'keywordfy dependencies))))
      (eval `(in-package ,pname))
