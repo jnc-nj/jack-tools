@@ -6,9 +6,9 @@
        (or (eq (char str 0) #\{)
 	   (eq (char str 0) #\[))))
 
-(defun decode-http-body (body)
+(defun decode-http-body (body) 
   (cond ((and (stringp body) (jsonp body))
-	 (cl-json:decode-json-from-string body))
+	 (jonathan:parse body :as :alist))
 	((or (stringp body) (numberp body)) body)
 	(t (decode-http-body
 	    (babel:octets-to-string
