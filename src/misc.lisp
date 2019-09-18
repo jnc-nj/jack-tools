@@ -60,3 +60,8 @@
     (if outputs
 	(map-reduce #'(lambda (key) (gethash key table)) #'append out)
 	out)))
+
+(defun system-version (system-designator)
+  (let ((system (asdf:find-system system-designator nil)))
+    (when (and system (slot-boundp system 'asdf:version))
+      (asdf:component-version system))))
