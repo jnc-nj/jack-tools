@@ -13,6 +13,7 @@
 
 (defmacro with-bt-thread (name &body body)
   `(labels ((fn nil ,@body))
+     (destroy-thread ,name)
      (bt:make-thread #'(lambda () (fn)) :name ,name)))
 
 (defmacro with-info (info &body body)
@@ -103,7 +104,7 @@
 	   (if-exist-return output t))
 	 (log:warn ,fail-message ,@fail-vars))))
 
-(defmacro with-ensure-package ((gc return-package) (name &rest dependencies) &body body)
+(defmacro with-ensure-package ((gc name &rest dependencies) &body body)
   `(let ((pname (keywordfy ,name)))
      (eval `(defpackage ,pname (:use ,,@(mapcar #'keywordfy dependencies))))
      (eval `(in-package ,pname))
@@ -112,7 +113,7 @@
 	    (sym (intern str pname))) 
        (setf (symbol-value sym) output)
        (export sym pname)
-       (in-package ,(keywordfy return-package)) 
+       (in-package ,(keywordfy (package-name *package*))) 
        (let ((out (symbol-value (find-symbol str (find-package pname))))) 
 	 (when ,gc
 	   (handler-case (delete-package pname)
