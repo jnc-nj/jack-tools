@@ -105,7 +105,8 @@
 	 (log:warn ,fail-message ,@fail-vars))))
 
 (defmacro with-ensure-package ((gc name &rest dependencies) &body body)
-  `(let ((pname (keywordfy ,name)))
+  `(let ((pname (keywordfy ,name))
+	 (current-package (keywordfy (package-name *package*))))
      (eval `(defpackage ,pname (:use ,,@(mapcar #'keywordfy dependencies))))
      (eval `(in-package ,pname))
      (let* ((output (multiple-value-list (progn ,@body)))
@@ -113,7 +114,7 @@
 	    (sym (intern str pname))) 
        (setf (symbol-value sym) output)
        (export sym pname)
-       (in-package ,(keywordfy (package-name *package*))) 
+       (eval `(in-package ,current-package)) 
        (let ((out (symbol-value (find-symbol str (find-package pname))))) 
 	 (when ,gc
 	   (handler-case (delete-package pname)
