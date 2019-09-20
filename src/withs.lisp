@@ -74,15 +74,15 @@
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (if (null ,payload)
-	     #+nil
 	     (dex:get (format nil "http://~d/~d" ,address ,target))
-	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :get)
-	     #+nil
+	     #+nil 
+	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :get) 
 	     (dex:post (format nil "http://~d/~d" ,address ,target)
 		       :headers '(("Content-Type" . "application/json"))
 		       :content (cond ((jsonp ,payload) ,payload)
 				      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
 				      (t (jonathan:to-json ,payload))))
+	     #+nil
 	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :post
 				  :content-type "application/json"
 				  :content (cond ((jsonp ,payload) ,payload)
