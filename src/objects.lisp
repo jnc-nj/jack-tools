@@ -132,7 +132,8 @@
 
 (defun get-object-size (object)
   (sb-sys:without-gcing
-    (nth-value 2 (sb-vm::reconstitute-object
-		  (ash (logandc1 sb-vm:lowtag-mask
-				 (sb-kernel:get-lisp-obj-address object))
-		       (- sb-vm:n-fixnum-tag-bits))))))
+    (/ (nth-value 2 (sb-vm::reconstitute-object
+		     (ash (logandc1 sb-vm:lowtag-mask
+				    (sb-kernel:get-lisp-obj-address object))
+			  (- sb-vm:n-fixnum-tag-bits))))
+       8)))
