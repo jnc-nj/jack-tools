@@ -81,7 +81,7 @@
 	   #:OBJECTP
            #:OBJECT-TO-ALIST
 	   #:GENERATE-JSON-METHOD
-	   #:GENERATE-JSON-METHODS))
+	   #:GET-OBJECT-SIZE))
 
 (defpackage #:jack.tools.https
   (:use #:cl
