@@ -205,7 +205,8 @@
 	   #:GET-REGEX-MATCH
 	   #:STRING-TEST-P
 	   #:TRIM-WHITESPACE
-	   #:BRACE-BALANCE-P))
+	   #:BRACE-BALANCE-P
+	   #:PERFECT-MATCH))
 
 (defpackage #:jack.tools.trees
   (:use #:cl

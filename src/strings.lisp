@@ -61,3 +61,7 @@
   (let ((l (count "(" str :test #'string=))
 	(r (count ")" str :test #'string=)))
     (values (= l r) l r)))
+
+(defun perfect-match (str)
+  (multiple-value-bind (start end) (cl:ppcre:scan "\\w+\\/\\w+" str)
+    (and (= start 0) (= end (length str)))))
