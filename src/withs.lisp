@@ -96,6 +96,11 @@
 		(body-output (progn ,@body)))
 	   (values (if-exist-return body-output http-body*) http-code*))))))
 
+(defun connection-alive-p (address)
+  (when address
+    (handler-case (with-query address ("" nil))
+      (error () nil))))
+
 (defmacro with-log (evaluator (&optional success-message &rest success-vars) (&optional fail-message &rest fail-vars) &body body)
   `(let ((evaluation (progn ,evaluator)))
      (if evaluation

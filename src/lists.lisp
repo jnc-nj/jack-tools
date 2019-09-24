@@ -74,9 +74,10 @@
                                :test test)))))
 
 (defun random-item (lst &key value)
-  (cond ((listp lst) (nth (random (length lst)) lst)) 
-        ((and value (hash-table-p lst)) (gethash (random-item (hash-table-keys lst)) lst))
-        ((hash-table-p lst) (random-item (hash-table-keys lst)))))
+  (when lst
+    (cond ((listp lst) (nth (random (length lst)) lst)) 
+	  ((and value (hash-table-p lst)) (gethash (random-item (hash-table-keys lst)) lst))
+	  ((hash-table-p lst) (random-item (hash-table-keys lst))))))
 
 
 (defun random-selection (lst &key (limit 5) value)

@@ -241,9 +241,10 @@
 	   #:WITH-SECURE-API
 	   #:WITH-ENSURE-PACKAGE
 	   #:SECURE-CONTENT*
-	   #:WITH-QUERY
+	   #:WITH-QUERY 
 	   #:HTTP-BODY*
 	   #:HTTP-CODE*
+	   #:CONNECTION-ALIVE-P
 	   #:WITH-LOG))
 
 (defpackage #:jack.tools.matrices
