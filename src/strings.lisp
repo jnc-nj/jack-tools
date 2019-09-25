@@ -51,16 +51,19 @@
 	  (unstring (funcall test unstring)))))
 
 (defun trim-whitespace (str &key exclude)
+  (trim-string str :chars (list #\space #\tab #\newline) :exclude exclude))
+
+(defun trim-string (str &key chars exclude)
   (if (listp str)
-      (mapcar #'(lambda (arg) (trim-whitespace arg :exclude exclude)) str)
-      (string-trim (remove-if #'(lambda (arg) (member arg exclude))
-			      (list #\space #\tab #\newline))
+      (mapcar #'(lambda (arg) (string-trim arg :chars chars :exclude exclude)) str)
+      (string-trim (remove-if #'(lambda (arg) (member arg exclude)) chars)
 		   str)))
 
 (defun brace-balance-p (str)
-  (let ((l (count "(" str :test #'string=))
-	(r (count ")" str :test #'string=)))
-    (values (= l r) l r)))
+  (when (stringp str)
+    (let ((l (count "(" str :test #'string=))
+	  (r (count ")" str :test #'string=)))
+      (values (= l r) l r))))
 
 (defun perfect-match (regex str)
   (multiple-value-bind (start end) (cl-ppcre:scan regex str)
