@@ -70,7 +70,7 @@
                       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defmacro with-query (address (target payload &key class-map multicast (version 1)) &body body)
+(defmacro with-query (address (target payload &key class-map multicast (version 1.1)) &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (if (null ,payload)
