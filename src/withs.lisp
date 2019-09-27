@@ -74,11 +74,11 @@
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (if (null ,payload)
-	     (dex:get (format nil "http://~d/~d" ,address ,target) :version version)
+	     (dex:get (format nil "http://~d/~d" ,address ,target) :version ,version)
 	     #+nil	     
 	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :get) 
 	     (dex:post (format nil "http://~d/~d" ,address ,target)
-		       :version version
+		       :version ,version
 		       :headers '(("Content-Type" . "application/json"))
 		       :content (cond ((jsonp ,payload) ,payload)
 				      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
