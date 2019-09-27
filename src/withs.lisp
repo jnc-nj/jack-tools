@@ -70,15 +70,15 @@
                       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defmacro with-query (address (target payload &key class-map multicast) &body body)
+(defmacro with-query (address (target payload &key class-map multicast (version 1.1)) &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (if (null ,payload)
-	     (dex:get (format nil "http://~d/~d" ,address ,target) :version 1.1)
+	     (dex:get (format nil "http://~d/~d" ,address ,target) :version version)
 	     #+nil	     
 	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :get) 
 	     (dex:post (format nil "http://~d/~d" ,address ,target)
-		       :version 1.1
+		       :version version
 		       :headers '(("Content-Type" . "application/json"))
 		       :content (cond ((jsonp ,payload) ,payload)
 				      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
