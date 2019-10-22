@@ -73,10 +73,17 @@
     collect))
 
 (defun find-class-map (alist-names class-map) 
-  (maphash #'(lambda (key value) 
-	       (when (set-equals alist-names value :test #'string= :key #'string-upcase)
-		 (return-from find-class-map key)))
-	   class-map))
+  (let ((faux-value 1000) faux-key)
+    (maphash #'(lambda (key value) 
+		 (cond ((set-equals alist-names value :test #'string= :key #'string-upcase)
+			(return-from find-class-map key))
+		       ((and (subsetp alist-names value :test #'string= :key #'string-upcase)
+			     (or (null faux-value)
+				 (and faux-value
+				      (> faux-value (length value))))) 
+		        (setf faux-key key faux-value (length value)))))
+	     class-map)
+    faux-key))
 
 (defun get-class-id (class)
   (car (cl-ppcre:all-matches-as-strings
