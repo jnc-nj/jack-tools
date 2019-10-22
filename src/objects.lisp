@@ -73,15 +73,19 @@
     collect))
 
 (defun find-class-map (alist-names class-map) 
-  (let ((faux-value 1000) faux-key)
-    (maphash #'(lambda (key value) 
-		 (cond ((set-equals alist-names value :test #'string= :key #'string-upcase)
-			(return-from find-class-map key))
-		       ((and (subsetp alist-names value :test #'string= :key #'string-upcase)
-			     (or (null faux-value)
-				 (and faux-value
-				      (> faux-value (length value))))) 
-		        (setf faux-key key faux-value (length value)))))
+  (let (faux-key faux-value)
+    (maphash #'(lambda (key value)
+		 (let ((value-count (length value))
+		       (intersect-count (length (intersection alist-names value
+							      :test #'string=
+							      :key #'string-upcase))))
+		   (cond ((= intersect-count value-count)
+			  (return-from find-class-map key))
+			 ((and (> intersect-count 0)
+			       (or (null faux-value)
+				   (and faux-value
+					(> faux-value value-count)))) 
+			  (setf faux-key key faux-value value-count)))))
 	     class-map)
     faux-key))
 
