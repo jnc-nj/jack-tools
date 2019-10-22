@@ -42,4 +42,5 @@
 	       :usocket
 	       :ningle
 	       :lack
-	       :drakma))
+	       :drakma
+	       :dexador))

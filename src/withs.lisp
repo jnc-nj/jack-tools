@@ -66,8 +66,8 @@
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
-                    (when ,content
-                      (pants-off ,aes-key ,public-key ,content))))
+		    (when ,content
+		      (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
 (defmacro with-query (address (target payload &key class-map multicast (version 1.1)) &body body)
