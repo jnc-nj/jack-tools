@@ -70,25 +70,33 @@
 		      (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defmacro with-query (address (target payload &key class-map multicast (version 1.1)) &body body)
+(defmacro with-query (address (target payload &key params class-map multicast (version 1.1) (client :dexador) (protocol "http")) &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
-         (if (null ,payload)
-	     (dex:get (format nil "http://~d/~d" ,address ,target) :version ,version)
-	     #+nil	     
-	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :get) 
-	     (dex:post (format nil "http://~d/~d" ,address ,target)
-		       :version ,version
-		       :headers '(("Content-Type" . "application/json"))
-		       :content (cond ((jsonp ,payload) ,payload)
-				      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
-				      (t (jonathan:to-json ,payload))))
-	     #+nil
-	     (drakma:http-request (format nil "http://~d/~d" ,address ,target) :method :post
-				  :content-type "application/json"
-				  :content (cond ((jsonp ,payload) ,payload)
-						 ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
-						 (t (jonathan:to-json ,payload))))) 
+         (let ((content (cond ((null ,payload) nil)
+			      ((jsonp ,payload) ,payload)
+			      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
+			      (t (jonathan:to-json ,payload)))))
+	   (cond ((and (null content) (eq ,client :dexador))
+		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
+				   ,protocol ,address ,target ,params ,params)
+			   :version ,version))
+		 ((and (null content) (eq ,client :drakma))
+		  (drakma:http-request (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
+					       ,protocol ,address ,target ,params ,params)
+				       :method :get)) 
+		 ((eq ,client :dexador)
+		  (dex:post (format nil "~d://~d/~:[~;~d~]"
+				    ,protocol ,address ,target ,target)
+			    :version ,version
+			    :headers '(("Content-Type" . "application/json"))
+			    :content content))
+		 ((eq ,client :drakma)
+		  (drakma:http-request (format nil "~d://~d/~:[~;~d~]"
+					       ,protocol ,address ,target ,target)
+				       :method :post
+				       :content-type "application/json"
+				       :content content)))) 
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
