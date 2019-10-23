@@ -72,27 +72,24 @@
 	      (get-slot-names (class-of temp-object)))))
     collect))
 
-(defun find-class-map (alist-names class-map &key (strategy :count)) 
-  (let (faux-key faux-value) 
-    (maphash #'(lambda (key value)
-		 (let* ((intersect-length (length (intersection alist-names value
-								:test #'string=
-								:key #'string-upcase)))
-			(degree (if (eq strategy :count)
-				    intersect-length
-				    (/ intersect-length
-				       (length (union alist-names value
-						      :test #'string=
-						      :key #'string-upcase))))))
-		   (cond ((or (and (eq strategy :count) (= degree (length alist-names)))
-			      (and (eq strategy :degree) (= degree 1)))
-			  (return-from find-class-map key)) 
-			 ((and (> degree 0)
-			       (or (null faux-value)
-				   (and faux-value
-					(> degree faux-value)))) 
-			  (setf faux-key key faux-value degree)))))
-	     class-map)
+(defun find-class-map (alist-names class-map) 
+  (let ((intersect-length 0) faux-key subset?)
+    ;; if alist-names is equivalent to value, return
+    ;; if alist-names is a subset of value, return largest value
+    ;; if alist-names is an intersection of value, return largest intersection
+    ;; else return nothing
+    (maphash
+     #'(lambda (key value)
+	 (let ((equals (set-equals alist-names value :test #'string= :key #'string-upcase))
+	       (subset (subsetp alist-names value :test #'string= :key #'string-upcase))
+	       (intersect (intersection alist-names value :test #'string= :key #'string-upcase)))
+	   (cond (equals (return-from find-class-map key)) 
+		 ((or (and (not subset?) subset)
+		      (and subset (> (length value) (length (gethash faux-key class-map)))))
+		  (setf faux-key key subset? t))
+		 ((and intersect (not subset?) (> (length intersect) intersect-length))
+		  (setf faux-key key intersect-length (length intersect))))))
+     class-map)
     faux-key))
 
 (defun get-class-id (class)
