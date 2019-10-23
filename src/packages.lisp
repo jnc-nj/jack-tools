@@ -14,7 +14,9 @@
 	#:cl-ppcre)
   (:export #:CREATE-DIRECTORY
            #:WRITE-FILE
+	   #:ADD-LINE
            #:OPEN-FILE
+	   #:BATCH-DELETE
            #:CMD-READ-PATH
            #:*PROBE-FILE
 	   #:TRUENAMEP
