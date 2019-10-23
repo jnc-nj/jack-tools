@@ -72,16 +72,21 @@
 	      (get-slot-names (class-of temp-object)))))
     collect))
 
-(defun find-class-map (alist-names class-map) 
-  (let (faux-key faux-value)
+(defun find-class-map (alist-names class-map &key (strategy :count)) 
+  (let (faux-key faux-value) 
     (maphash #'(lambda (key value)
-		 (let ((degree (/ (length (intersection alist-names value
-							:test #'string=
-							:key #'string-upcase))
-				  (length (union alist-names value
-						 :test #'string=
-						 :key #'string-upcase)))))
-		   (cond ((= degree 1) (return-from find-class-map key))
+		 (let* ((intersect-length (length (intersection alist-names value
+								:test #'string=
+								:key #'string-upcase)))
+			(degree (if (eq strategy :count)
+				    intersect-length
+				    (/ intersect-length
+				       (length (union alist-names value
+						      :test #'string=
+						      :key #'string-upcase))))))
+		   (cond ((or (and (eq strategy :count) (= degree (length alist-names)))
+			      (and (eq strategy :degree) (= degree 1)))
+			  (return-from find-class-map key)) 
 			 ((and (> degree 0)
 			       (or (null faux-value)
 				   (and faux-value
