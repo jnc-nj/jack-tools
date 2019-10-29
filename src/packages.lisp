@@ -1,5 +1,20 @@
 (in-package :cl-user)
 
+(defpackage #:jack.tools.strings
+  (:use #:cl)
+  (:export #:RREPLACE
+	   #:STRINGFY
+	   #:SEXPP
+	   #:SUBSTRINGP
+	   #:REGEXFY
+	   #:CONCATSTRING
+	   #:GET-REGEX-MATCH
+	   #:STRING-TEST-P
+	   #:TRIM-WHITESPACE
+	   #:TRIM-STRING
+	   #:BRACE-BALANCE-P
+	   #:PERFECT-MATCH))
+
 (defpackage #:jack.tools.threads
   (:use #:cl)
   (:export #:COUNT-THREADS
@@ -85,18 +100,6 @@
 	   #:GENERATE-JSON-METHOD
 	   #:GET-OBJECT-SIZE))
 
-(defpackage #:jack.tools.https
-  (:use #:cl
-	#:lack.response
-	#:lack.request
-	#:jack.tools.objects
-	#:jack.tools.lists)
-  (:export #:JSONP
-	   #:DECODE-HTTP-BODY
-	   #:ENCODE-HTTP-BODY
-	   #:DEFHANDLER
-	   #:HTTP-CONTENT*))
-
 (defpackage #:jack.tools.cli
   (:use #:cl
 	#:alexandria
@@ -136,6 +139,20 @@
 	   #:*MAX
 	   #:CLOSEST-2-BASE
 	   #:FY-SHUFFLE))
+
+(defpackage #:jack.tools.https
+  (:use #:cl
+	#:lack.response
+	#:lack.request
+	#:jack.tools.objects
+	#:jack.tools.strings
+	#:jack.tools.lists)
+  (:export #:JSONP
+	   #:HTMLP
+	   #:DECODE-HTTP-BODY
+	   #:ENCODE-HTTP-BODY
+	   #:DEFHANDLER
+	   #:HTTP-CONTENT*))
 
 (defpackage #:jack.tools.keys
   (:use #:cl 
@@ -195,21 +212,6 @@
            #:TIMEOUT
            #:WAIT
            #:RELEASE))
-
-(defpackage #:jack.tools.strings
-  (:use #:cl)
-  (:export #:RREPLACE
-	   #:STRINGFY
-	   #:SEXPP
-	   #:SUBSTRINGP
-	   #:REGEXFY
-	   #:CONCATSTRING
-	   #:GET-REGEX-MATCH
-	   #:STRING-TEST-P
-	   #:TRIM-WHITESPACE
-	   #:TRIM-STRING
-	   #:BRACE-BALANCE-P
-	   #:PERFECT-MATCH))
 
 (defpackage #:jack.tools.trees
   (:use #:cl

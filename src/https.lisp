@@ -8,8 +8,7 @@
 
 (defun htmlp (str)
   (and (stringp str)
-       (not (string= str ""))
-       (eq (char str 0) #\<)))
+       (substringp "<!DOCTYPE html>" str)))
 
 (defun decode-http-body (body) 
   (cond ((and (stringp body) (jsonp body))
@@ -39,4 +38,5 @@
 			  (,decode? (request-parameters ningle:*request*))
 			  (t (request-content ningle:*request*)))))
 	       (declare (ignorable http-content*))
+	       (log:info (progn ,@body))
 	       (encode-http-body (progn ,@body))))))
