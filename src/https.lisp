@@ -13,15 +13,14 @@
 
 (defun decode-http-body (body) 
   (cond ((and (stringp body) (jsonp body))
-	 (jonathan:parse body :as :alist))
-	((and (stringp body) (htmlp body)))
+	 (jonathan:parse body :as :alist)) 
 	((or (stringp body) (numberp body)) body)
 	(t (decode-http-body
 	    (babel:octets-to-string
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
 (defun encode-http-body (body)
-  (cond ((jsonp body) body)
+  (cond ((or (jsonp body) (htmlp body)) body) 
 	((stringp body) (format nil "{\"message\": \"~d\"}" body))
 	((listp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
