@@ -118,13 +118,8 @@
     (equal object-1 object-2)))
 
 (defun objectp (object)
-  (not (or (symbolp object)
-	   (numberp object)
-	   (stringp object)
-	   (listp object)
-	   (hash-table-p object)
-	   (eq t object)
-	   (eq nil object))))
+  (handler-case (make-instance (class-of object))
+    (error () nil)))
 
 (defun object-to-alist (object)
   (cl-json:decode-json-from-string

@@ -6,9 +6,15 @@
        (or (eq (char str 0) #\{)
 	   (eq (char str 0) #\[))))
 
+(defun htmlp (str)
+  (and (stringp str)
+       (not (string= str ""))
+       (eq (char str 0) #\<)))
+
 (defun decode-http-body (body) 
   (cond ((and (stringp body) (jsonp body))
 	 (jonathan:parse body :as :alist))
+	((and (stringp body) (htmlp body)))
 	((or (stringp body) (numberp body)) body)
 	(t (decode-http-body
 	    (babel:octets-to-string

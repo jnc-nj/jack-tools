@@ -76,7 +76,7 @@
          (let ((content (cond ((null ,payload) nil)
 			      ((jsonp ,payload) ,payload)
 			      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
-			      (t (jonathan:to-json ,payload)))))
+			      (t (jonathan:to-json ,payload))))) 
 	   (cond ((and (null content) (eq ,client :dexador))
 		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				   ,protocol ,address ,target ,params ,params)
