@@ -37,6 +37,5 @@
 			  (,class-map (cast (request-parameters ningle:*request*) ,class-map))
 			  (,decode? (request-parameters ningle:*request*))
 			  (t (request-content ningle:*request*)))))
-	       (declare (ignorable http-content*))
-	       (log:info (progn ,@body))
+	       (declare (ignorable http-content*)) 
 	       (encode-http-body (progn ,@body))))))
