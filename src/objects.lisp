@@ -42,9 +42,9 @@
 	(interpret object)
 	output-object))))
 
-(defun cast (alist class-map)
+(defun cast (alist class-map &key strict)
   (when (alistp alist)
-    (let* ((input-class (find-class-map (mapcar #'car alist) class-map))
+    (let* ((input-class (find-class-map (mapcar #'car alist) class-map :strict strict))
            (instance (when input-class (make-instance input-class)))
            (class (class-of instance))) 
       (when instance 
@@ -72,7 +72,7 @@
 	      (get-slot-names (class-of temp-object)))))
     collect))
 
-(defun find-class-map (alist-names class-map) 
+(defun find-class-map (alist-names class-map &key strict) 
   (let ((intersect-length 0) faux-key subset?)
     ;; if alist-names is equivalent to value, return
     ;; if alist-names is a subset of value, return largest value
@@ -81,13 +81,14 @@
     (maphash
      #'(lambda (key value)
 	 (let ((equals (set-equals alist-names value :test #'string= :key #'string-upcase))
-	       (subset (subsetp alist-names value :test #'string= :key #'string-upcase))
-	       (intersect (intersection alist-names value :test #'string= :key #'string-upcase)))
+	       (subset (unless strict (subsetp alist-names value :test #'string= :key #'string-upcase)))
+	       (intersect (unless strict (intersection alist-names value :test #'string= :key #'string-upcase))))
 	   (cond (equals (return-from find-class-map key)) 
-		 ((or (and (not subset?) subset)
-		      (and subset (> (length value) (length (gethash faux-key class-map)))))
+		 ((and (not strict)
+		       (or (and (not subset?) subset)
+			   (and subset (> (length value) (length (gethash faux-key class-map))))))
 		  (setf faux-key key subset? t))
-		 ((and intersect (not subset?) (> (length intersect) intersect-length))
+		 ((and (not strict) intersect (not subset?) (> (length intersect) intersect-length))
 		  (setf faux-key key intersect-length (length intersect))))))
      class-map)
     faux-key))
