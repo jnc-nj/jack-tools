@@ -77,8 +77,7 @@
 	   #:SYSTEM-VERSION))
 
 (defpackage #:jack.tools.objects
-  (:use #:cl
-	#:alexandria
+  (:use #:cl #:alexandria
 	#:jonathan
 	#:jack.tools.lists
 	#:jack.tools.misc)
@@ -101,8 +100,7 @@
 	   #:GET-OBJECT-SIZE))
 
 (defpackage #:jack.tools.cli
-  (:use #:cl
-	#:alexandria
+  (:use #:cl #:alexandria
 	#:jack.tools.lists
 	#:jack.tools.misc
 	#:jack.tools.objects)
@@ -214,7 +212,8 @@
            #:RELEASE))
 
 (defpackage #:jack.tools.trees
-  (:use #:cl
+  (:use #:cl #:alexandria
+	#:jack.tools.misc
 	#:jack.tools.lists
 	#:jack.tools.maths)
   (:export #:TREE-SIMILARITY

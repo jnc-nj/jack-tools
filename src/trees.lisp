@@ -49,7 +49,9 @@
       (if quote? (string lst) lst)))
 
 (defun recursive-alist-hash-table (alist)
-  (cond ((alistp alist) (recursive-alist-hash-table (alexandria:alist-hash-table alist)))
+  (cond ((alistp alist) (recursive-alist-hash-table
+			 (alist-hash-table
+			  (mapcar #'(lambda (arg) (cons (dekeywordfy (car arg)) (cdr arg))) alist))))
 	((hash-table-p alist)
 	 (maphash #'(lambda (key value) (setf (gethash key alist) (recursive-alist-hash-table value)))
 		  alist)
