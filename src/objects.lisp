@@ -51,9 +51,10 @@
         (dolist (slot-name (get-slot-names class))
           (let ((value (agethash slot-name alist)))
             (setf (slot-value instance slot-name)
-                  (cond ((alistp value) (cast value class-map))
+                  (cond ((alistp value) (cast value class-map :strict strict))
                         ((or (not (listp value)) (not (listp (car value)))) value)
-                        ((listp (caar value)) (mapcar #'(lambda (v) (cast v class-map)) value))
+                        ((listp (caar value))
+			 (mapcar #'(lambda (v) (cast v class-map :strict strict)) value))
                         (t value))))) 
 	(return-from cast instance))
       alist))
@@ -135,9 +136,7 @@
 		  `(write-key-value
 		    ,(dekeywordfy item)
 		    (if (alistp ,item)
-		        (alist-hash-table
-			 (mapcar #'(lambda (arg) (cons (dekeywordfy (car arg)) (cdr arg)))
-				 ,item))
+		        (recursive-alist-hash-table ,item)
 			,item))))))))
 
 (defun get-object-size (object)

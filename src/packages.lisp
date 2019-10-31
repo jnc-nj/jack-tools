@@ -76,9 +76,40 @@
 	   #:LARGEST-KEY
 	   #:SYSTEM-VERSION))
 
+(defpackage #:jack.tools.maths
+  (:use #:cl
+        #:jack.tools.lists)
+  (:export #:RANDOM-FLOAT
+	   #:AVERAGE-VECTORS
+           #:EUCLIDEAN-DISTANCE
+	   #:DOT-PROD
+	   #:SQUARE
+	   #:SUM-OF-SQUARES
+	   #:COS-SIMILARITY
+	   #:SAFE-OP
+	   #:STRICT-OP
+	   #:*/
+	   #:*MAX
+	   #:CLOSEST-2-BASE
+	   #:FY-SHUFFLE))
+
+(defpackage #:jack.tools.trees
+  (:use #:cl #:alexandria
+	#:jack.tools.misc
+	#:jack.tools.lists
+	#:jack.tools.maths)
+  (:export #:TREE-SIMILARITY
+	   #:UPSILON
+	   #:COMPARE-TREES
+	   #:ELIMINATE
+	   #:SUBBER
+	   #:UNQUOTE
+	   #:RECURSIVE-ALIST-HASH-TABLE))
+
 (defpackage #:jack.tools.objects
   (:use #:cl #:alexandria
 	#:jonathan
+	#:jack.tools.trees
 	#:jack.tools.lists
 	#:jack.tools.misc)
   (:export #:ADDRESS-BOOK
@@ -120,23 +151,6 @@
 	   #:ADD-RUN
 	   #:ADD-FUNCTION
 	   #:WITH-CLI))
-
-(defpackage #:jack.tools.maths
-  (:use #:cl
-        #:jack.tools.lists)
-  (:export #:RANDOM-FLOAT
-	   #:AVERAGE-VECTORS
-           #:EUCLIDEAN-DISTANCE
-	   #:DOT-PROD
-	   #:SQUARE
-	   #:SUM-OF-SQUARES
-	   #:COS-SIMILARITY
-	   #:SAFE-OP
-	   #:STRICT-OP
-	   #:*/
-	   #:*MAX
-	   #:CLOSEST-2-BASE
-	   #:FY-SHUFFLE))
 
 (defpackage #:jack.tools.https
   (:use #:cl
@@ -210,19 +224,6 @@
            #:TIMEOUT
            #:WAIT
            #:RELEASE))
-
-(defpackage #:jack.tools.trees
-  (:use #:cl #:alexandria
-	#:jack.tools.misc
-	#:jack.tools.lists
-	#:jack.tools.maths)
-  (:export #:TREE-SIMILARITY
-	   #:UPSILON
-	   #:COMPARE-TREES
-	   #:ELIMINATE
-	   #:SUBBER
-	   #:UNQUOTE
-	   #:RECURSIVE-ALIST-HASH-TABLE))
 
 (defpackage #:jack.tools.withs
   (:use #:cl
