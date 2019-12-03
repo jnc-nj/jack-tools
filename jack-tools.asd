@@ -11,6 +11,7 @@
 	       (:file "src/maths")
 	       (:file "src/misc")
 	       (:file "src/objects")
+	       (:file "src/couchdb")
 	       (:file "src/https")
 	       (:file "src/strings")
 	       (:file "src/trees")
@@ -43,4 +44,5 @@
 	       :ningle
 	       :lack
 	       :drakma
-	       :dexador))
+	       :dexador
+	       :clouchdb))

@@ -130,6 +130,23 @@
 	   #:GENERATE-JSON-METHOD
 	   #:GET-OBJECT-SIZE))
 
+(defpackage #:jack.tools.couchdb
+  (:use #:cl #:alexandria
+	#:clouchdb
+	#:jack.tools.objects)
+  (:export #:+COUCH-HOST+
+	   #:+COUCH-PORT+
+	   #:+COUCH-USER+
+	   #:+COUCH-KEY+
+
+	   #:WITH-COUCH
+	   #:GET-IDS
+	   #:RETURN-DOCUMENT
+	   #:RETURN-VIEW
+	   #:ADD-DOC
+	   #:DELETE-DOC
+	   #:RESTART-DB))
+
 (defpackage #:jack.tools.cli
   (:use #:cl #:alexandria
 	#:jack.tools.lists
