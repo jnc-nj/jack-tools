@@ -124,8 +124,9 @@
     (error () nil)))
 
 (defun object-to-alist (object)
-  (cl-json:decode-json-from-string
-   (jonathan:to-json object)))
+  (if (stringp object)
+      (cl-json:decode-json-from-string object)
+      (object-to-alist (jonathan:to-json object))))
 
 (defun generate-json-method (class-name)
   (let* ((slot-names (get-slot-names (class-of (make-instance class-name)))))
@@ -146,3 +147,7 @@
 				    (sb-kernel:get-lisp-obj-address object))
 			  (- sb-vm:n-fixnum-tag-bits))))
        8)))
+
+(defun *slot-value (object slot-name)
+  (handler-case (slot-value object slot-name)
+    (error () nil)))

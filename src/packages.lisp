@@ -128,7 +128,8 @@
 	   #:OBJECTP
            #:OBJECT-TO-ALIST
 	   #:GENERATE-JSON-METHOD
-	   #:GET-OBJECT-SIZE))
+	   #:GET-OBJECT-SIZE
+	   #:*SLOT-VALUE))
 
 (defpackage #:jack.tools.couchdb
   (:use #:cl #:alexandria
