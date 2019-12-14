@@ -65,3 +65,6 @@
   (let ((system (asdf:find-system system-designator nil)))
     (when (and system (slot-boundp system 'asdf:version))
       (asdf:component-version system))))
+
+(defun ql-installed-systems ()
+  (mapcar #'ql::name (ql::installed-systems (ql::find-dist "quicklisp"))))

@@ -74,7 +74,8 @@
 	   #:STRING-ALIST-VALUES
 	   #:LIST-PACKAGE-SYMBOLS
 	   #:LARGEST-KEY
-	   #:SYSTEM-VERSION))
+	   #:SYSTEM-VERSION
+	   #:QL-INSTALLED-SYSTEMS))
 
 (defpackage #:jack.tools.maths
   (:use #:cl
