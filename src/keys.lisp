@@ -137,7 +137,7 @@
 	 (rsa-encrypt-message (decompress-key public-key :private? nil) message))
 	((byte-array? message)
 	 (base64:usb8-array-to-base64-string (ironclad:encrypt-message public-key message)))
-	(t (rsa-encrypt-message public-key (ironclad:ascii-string-to-byte-array message)))))
+	(t (rsa-encrypt-message public-key (babel:string-to-octets message)))))
 
 (defun rsa-decrypt-message (private-key message &key string?)
   (cond ((stringp private-key)
@@ -158,7 +158,7 @@
 	 (let ((_message (copy-seq message)))
 	   (ironclad:encrypt-in-place (make-cipher key iv) _message)
 	   (base64:usb8-array-to-base64-string _message)))
-	(t (aes-encrypt-message key iv (ironclad:ascii-string-to-byte-array message)))))
+	(t (aes-encrypt-message key iv (babel:string-to-octets message)))))
 
 (defun aes-decrypt-message (key iv message &key string?)
   (cond ((stringp key)
