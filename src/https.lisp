@@ -24,6 +24,12 @@
 	((listp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
 
+(defun local-address ()
+  (let ((listener-thread (find-thread "listener")))
+    (when listener-thread
+      (cl-ppcre:scan-to-strings "\\d+\\.\\d+\\.\\d+\\.\\d+\\:\\d+"
+				(bt:thread-name listener-thread)))))
+
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
 			   (content-type "application/json")) &body body)
   `(setf (ningle:route ,app ,uri :method ,method)

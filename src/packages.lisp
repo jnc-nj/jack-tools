@@ -176,12 +176,14 @@
 	#:lack.response
 	#:lack.request
 	#:jack.tools.objects
+	#:jack.tools.threads
 	#:jack.tools.strings
 	#:jack.tools.lists)
   (:export #:JSONP
 	   #:HTMLP
 	   #:DECODE-HTTP-BODY
 	   #:ENCODE-HTTP-BODY
+	   #:LOCAL-ADDRESS
 	   #:DEFHANDLER
 	   #:HTTP-CONTENT*))
 
