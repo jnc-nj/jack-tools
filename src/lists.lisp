@@ -5,6 +5,11 @@
     (cdr (assoc (funcall key (string keyword))
 		alist :test test :key key))))
 
+(defun set-agethash (slot place new)
+  (setf (cdr (assoc slot place :test #'string=)) new))
+
+(defsetf agethash set-agethash)
+
 (defun agethash-vals (keyword alist &key (result-type 'vector) (test #'string=) (key #'string-upcase))
   (map result-type #'(lambda (arg) (agethash keyword arg :test test :key key))
        alist))
