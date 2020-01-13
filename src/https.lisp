@@ -25,7 +25,7 @@
 	(t (jonathan:to-json body))))
 
 (defun local-address ()
-  (let ((listener-thread (find-thread "listener")))
+  (let ((listener-thread (find-thread "handler")))
     (when listener-thread
       (cl-ppcre:scan-to-strings "\\d+\\.\\d+\\.\\d+\\.\\d+\\:\\d+"
 				(bt:thread-name listener-thread)))))
