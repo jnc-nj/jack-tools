@@ -255,7 +255,9 @@
 	#:jack.tools.threads
 	#:jack.tools.https
 	#:jack.tools.objects)
-  (:export #:WITH-PROFILER
+  (:export #:*WITH-ENTER-LEAVE-PRINT*
+	   
+	   #:WITH-PROFILER
 	   #:WITH-EXCEPTED-API
 	   #:WITH-BT-THREAD
 	   #:WITH-INFO

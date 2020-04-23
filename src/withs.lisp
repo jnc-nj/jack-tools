@@ -1,5 +1,7 @@
 (in-package #:jack.tools.withs)
 
+(defvar *with-enter-leave-print* nil)
+
 (defmacro with-profiler (packages times &body body)
   "Profile PACKAGES with BODY n TIMES."
   `(progn (sb-profile:profile ,@packages)
@@ -24,9 +26,11 @@
 	     (- (sec-now) start-time))))
 
 (defmacro with-enter-leave (name &body body)
-  `(progn (log:info ,(format nil "[~d][entering sequence]" name))
+  `(progn (when *with-enter-leave-print*
+	    (log:info ,(format nil "[~d][entering sequence]" name)))
 	  ,@body
-	  (log:info ,(format nil "[~d][leaving sequence]" name))))
+	  (when *with-enter-leave-print*
+	    (log:info ,(format nil "[~d][leaving sequence]" name)))))
 
 (defmacro with-timer (interval iterations &body body)
   `(let* ((lock (bt:make-lock))
