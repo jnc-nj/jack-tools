@@ -35,9 +35,9 @@
 	     (cast-all items ,class-map)
 	     items)))))
 
-(defmacro add-doc (database object id)
+(defmacro add-doc (database object &optional id)
   `(with-couch ,database
-     (let ((document (get-document ,id :if-missing :ignore)))
+     (let ((document (when ,id (get-document ,id :if-missing :ignore))))
        (if document
 	   (put-document (append (list (assoc :|_id| document)
 				       (assoc :|_rev| document))
