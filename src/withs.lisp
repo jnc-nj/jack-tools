@@ -82,6 +82,8 @@
 			      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
 			      (t (jonathan:to-json ,payload))))) 
 	   (cond ((and (null content) (eq ,client :dexador))
+		  (print (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
+				 ,protocol ,address ,target ,params ,params))
 		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				   ,protocol ,address ,target ,params ,params)
 			   :version ,version))

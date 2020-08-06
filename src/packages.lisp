@@ -239,6 +239,7 @@
   (:export #:SEC-NOW
            #:CREATE-TIME
            #:TIME-DIFFERENCE
+	   #:YEAR-DIFFERENCE
            #:TIMESTAMP>
 	   #:TIMESTAMP>=
            #:TIMED-INDEX

@@ -14,6 +14,14 @@
 	(t (- (local-time:timestamp-to-universal time-1)
 	      (local-time:timestamp-to-universal time-2)))))
 
+(defun year-difference (time-1 time-2)
+  (cond ((stringp time-1)
+	 (year-difference (local-time:parse-timestring time-1) time-2))
+	((stringp time-2)
+	 (year-difference time-1 (local-time:parse-timestring time-2)))
+	(t (- (local-time:timestamp-year time-1)
+	      (local-time:timestamp-year time-2)))))
+
 (defun timestamp> (time-1 time-2)
   (cond ((null time-1) nil)
 	((null time-2) t)
