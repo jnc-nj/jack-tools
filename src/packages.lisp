@@ -236,7 +236,8 @@
 (defpackage #:jack.tools.time
   (:use #:cl 
 	#:jack.tools.maths)
-  (:export #:SEC-NOW
+  (:export #:UNIVERSAL-TO-TIMESTRING
+	   #:SEC-NOW
            #:CREATE-TIME
            #:TIME-DIFFERENCE
 	   #:YEAR-DIFFERENCE

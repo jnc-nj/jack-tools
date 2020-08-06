@@ -1,5 +1,8 @@
 (in-package #:jack.tools.time)
 
+(defun universal-to-timestring (universal)
+  (local-time:format-timestring nil (local-time:universal-to-timestamp universal)))
+
 (defun sec-now ()
   (local-time:timestamp-to-universal (local-time:now)))
 
