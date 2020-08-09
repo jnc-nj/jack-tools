@@ -31,7 +31,7 @@
 				(bt:thread-name listener-thread)))))
 
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
-			   (content-type "application/json")) &body body)
+				 (content-type "application/json")) &body body)
   `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))
@@ -39,9 +39,9 @@
 			 :content-type)
 		   ,content-type)
 	     (let ((http-content*
-		    (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
-			  (,class-map (cast (request-parameters ningle:*request*) ,class-map))
-			  (,decode? (request-parameters ningle:*request*))
-			  (t (request-content ningle:*request*)))))
+		     (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
+			   (,class-map (cast (request-parameters ningle:*request*) ,class-map))
+			   (,decode? (request-parameters ningle:*request*))
+			   (t (request-content ningle:*request*)))))
 	       (declare (ignorable http-content*)) 
 	       (encode-http-body (progn ,@body))))))

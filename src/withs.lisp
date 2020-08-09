@@ -74,7 +74,7 @@
 		      (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defmacro with-query (address (target payload &key params class-map multicast (version 1.1) (client :dexador) (protocol "http")) &body body)
+(defmacro with-query (address (target payload &key params class-map multicast (version 1.1) (client :dexador) (protocol "http") headers) &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (let ((content (cond ((null ,payload) nil)
@@ -95,7 +95,7 @@
 		  (dex:post (format nil "~d://~d/~:[~;~d~]"
 				    ,protocol ,address ,target ,target)
 			    :version ,version
-			    :headers '(("Content-Type" . "application/json"))
+			    :headers (append ,headers '(("Content-Type" . "application/json")))
 			    :content content))
 		 ((eq ,client :drakma)
 		  (drakma:http-request (format nil "~d://~d/~:[~;~d~]"
