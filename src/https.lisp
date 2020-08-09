@@ -31,13 +31,17 @@
 				(bt:thread-name listener-thread)))))
 
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
-				 (content-type "application/json")) &body body)
+				 (content-type "application/json") cross-domain) &body body)
   `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))
 	     (setf (getf (response-headers ningle:*response*)
 			 :content-type)
 		   ,content-type)
+	     (when ,cross-domain
+	       (setf (response-headers *response*)
+		     (append (response-headers *response*)
+			     (list :vary (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip")))))
 	     (let ((http-content*
 		     (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
 			   (,class-map (cast (request-parameters ningle:*request*) ,class-map))
