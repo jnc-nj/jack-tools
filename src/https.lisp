@@ -35,14 +35,12 @@
   `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))
-	     (setf (getf (response-headers ningle:*response*)
-			 :content-type)
-		   ,content-type)
 	     (when ,cross-domain
-	       (setf (response-headers *response*)
-		     (append (response-headers *response*)
+	       (setf (response-headers ningle:*response*)
+		     (append (response-headers ningle:*response*)
 			     (list :vary (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip"))
-			     (list :access-control-allow-origin "*"))))
+			     (list :access-control-allow-origin "*")
+			     (list :content-type ,content-type))))
 	     (let ((http-content*
 		     (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
 			   (,class-map (cast (request-parameters ningle:*request*) ,class-map))
