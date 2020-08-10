@@ -31,7 +31,7 @@
 				(bt:thread-name listener-thread)))))
 
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
-				 (content-type "application/json") cross-domain) &body body)
+				 (content-type "application/json") (cross-domain t)) &body body)
   `(setf (ningle:route ,app ,uri :method ,method)
 	 #'(lambda (params)
 	     (declare (ignorable params))
