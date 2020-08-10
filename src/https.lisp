@@ -37,7 +37,7 @@
        (setf headers (append headers
 			     (list :vary "accept-encoding,origin,access-control-request-headers,access-control-request-method,accept-encoding-gzip")
 			     (list :access-control-allow-origin "*")
-			     (list :access-control-allow-headers "X-Requested-With")
+			     (list :access-control-allow-headers "X-Requested-With,Authorization,Content-Type,Keep-Alive,User-Agent,Cache-Control,If-Modified-Since,DNT,X-Mx-ReqToken")
 			     (list :access-control-allow-methods "PUT,POST,GET,DELETE,OPTIONS"))))
      (setf (ningle:route ,app ,uri :method ,method)
 	   #'(lambda (params)
