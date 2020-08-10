@@ -49,4 +49,17 @@
 			   (,decode? (request-parameters ningle:*request*))
 			   (t (request-content ningle:*request*)))))
 	       (declare (ignorable http-content*)) 
-	       (encode-http-body (progn ,@body))))))
+	       (encode-http-body (progn ,@body)))))
+
+  `(when ,cross-domain
+     (setf (ningle:route ,app ,uri :method :options)
+	   #'(lambda (params)
+	       (declare (ignorable params))
+	       (setf (response-headers ningle:*response*)
+		     (append (response-headers ningle:*response*)
+			     (list :vary (format nil "~{~d~^,~}" (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip")))
+			     (list :access-control-allow-origin "*")
+			     (list :access-control-allow-headers "X-Requested-With")
+			     (list :access-control-allow-methods "PUT,POST,GET,DELETE,OPTIONS")
+			     (list :content-type ,content-type)))
+	       "Success"))))
