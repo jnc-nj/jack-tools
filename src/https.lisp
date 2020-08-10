@@ -41,7 +41,8 @@
 	     (when ,cross-domain
 	       (setf (response-headers *response*)
 		     (append (response-headers *response*)
-			     (list :vary (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip")))))
+			     (list :vary (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip"))
+			     (list :access-control-allow-origin "*"))))
 	     (let ((http-content*
 		     (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
 			   (,class-map (cast (request-parameters ningle:*request*) ,class-map))
