@@ -38,8 +38,10 @@
 	     (when ,cross-domain
 	       (setf (response-headers ningle:*response*)
 		     (append (response-headers ningle:*response*)
-			     (list :vary (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip"))
+			     (list :vary (format nil "~{~d~^,~}" (list "accept-encoding" "origin" "access-control-request-headers" "access-control-request-method" "accept-encoding-gzip")))
 			     (list :access-control-allow-origin "*")
+			     (list :access-control-allow-headers "X-Requested-With")
+			     (list :access-control-allow-methods "PUT,POST,GET,DELETE,OPTIONS")
 			     (list :content-type ,content-type))))
 	     (let ((http-content*
 		     (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
