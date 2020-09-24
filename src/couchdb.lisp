@@ -27,6 +27,13 @@
 	     (cast (cddr document) ,class-map)
 	     document)))))
 
+(defmacro return-all-documents (database &key class-map)
+  `(let (collect)
+     (dolist (item (get-ids ,database))
+       (push (return-document item ,database :class-map ,class-map)
+	     collect))
+     (reverse collect)))
+
 (defmacro return-view (view database &key class-map)
   `(with-couch ,database
      (let ((items (ad-hoc-view ,view)))

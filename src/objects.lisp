@@ -124,9 +124,9 @@
     (error () nil)))
 
 (defun object-to-alist (object)
-  (if (stringp object)
-      (cl-json:decode-json-from-string object)
-      (object-to-alist (jonathan:to-json object))))
+  (cond ((stringp object) (cl-json:decode-json-from-string object))
+	((alistp object) object)
+	(t (object-to-alist (jonathan:to-json object)))))
 
 (defun generate-json-method (class-name)
   (let* ((slot-names (get-slot-names (class-of (make-instance class-name)))))
