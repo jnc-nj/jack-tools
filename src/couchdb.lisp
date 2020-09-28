@@ -45,11 +45,12 @@
 (defmacro add-doc (database object &optional id)
   `(with-couch ,database
      (let ((document (when ,id (get-document ,id :if-missing :ignore))))
-       (if document
-	   (put-document (append (list (assoc :|_id| document)
-				       (assoc :|_rev| document))
-				 (object-to-alist ,object)))
-	   (put-document (object-to-alist ,object) :id ,id)))))
+       (cond (document
+	      (put-document (append (list (assoc :|_id| document)
+					  (assoc :|_rev| document))
+				    (object-to-alist ,object))))
+	     (,id (put-document (object-to-alist ,object) :id ,id))
+	     (t (post-document (object-to-alist ,object)))))))
 
 (defmacro delete-doc (database id)
   `(with-couch ,database
