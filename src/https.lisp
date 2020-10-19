@@ -12,8 +12,11 @@
 
 (defun decode-http-body (body) 
   (cond ((and (stringp body) (jsonp body))
-	 (jonathan:parse body :as :alist)) 
-	((or (stringp body) (numberp body)) body)
+	 (jonathan:parse
+	  (regex-replace-all "\\r" body "")
+	  :as :alist)) 
+	((or (stringp body) (numberp body))
+	 (regex-replace-all "\\r" body ""))
 	(t (decode-http-body
 	    (babel:octets-to-string
 	     (coerce body '(vector (unsigned-byte 8))))))))

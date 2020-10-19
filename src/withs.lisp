@@ -70,8 +70,8 @@
 (defmacro with-secure-api (content aes-key private-key public-key &body body)
   `(pants-on ,aes-key ,private-key
 	     (let ((secure-content*
-		    (when ,content
-		      (pants-off ,aes-key ,public-key ,content))))
+		     (when ,content
+		       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
 (defmacro with-query (address (target payload &key params class-map multicast (version 1.1) (client :dexador) (protocol "http") headers) &body body)
@@ -80,7 +80,8 @@
          (let ((content (cond ((null ,payload) nil)
 			      ((jsonp ,payload) ,payload)
 			      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
-			      (t (jonathan:to-json ,payload))))) 
+			      (t (jonathan:to-json ,payload)))))
+	   (log:info content)
 	   (cond ((and (null content) (eq ,client :dexador))
 		  (print (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				 ,protocol ,address ,target ,params ,params))
@@ -102,7 +103,7 @@
 					       ,protocol ,address ,target ,target)
 				       :method :post
 				       :content-type "application/json"
-				       :content content)))) 
+				       :content content))))
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))

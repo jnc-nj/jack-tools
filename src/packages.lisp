@@ -174,6 +174,7 @@
 
 (defpackage #:jack.tools.https
   (:use #:cl
+	#:cl-ppcre
 	#:lack.response
 	#:lack.request
 	#:jack.tools.objects

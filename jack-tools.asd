@@ -23,6 +23,7 @@
   :depends-on (:alexandria
 	       :cl-ppcre
 	       :cl-json
+	       :cl-fad
 	       :ironclad
 	       :split-sequence
 	       :local-time
