@@ -1,6 +1,6 @@
 (in-package #:jack.tools.lists)
 
-(defun agethash (keyword alist &key (test #'string=) (key #'string-upcase))
+(defun agethash (keyword alist &key (test #'string=) (key #'(lambda (arg) (remove #\* (string-upcase arg)))))
   (when (alistp alist)
     (cdr (assoc (funcall key (string keyword))
 		alist :test test :key key))))

@@ -74,14 +74,20 @@
 		       (pants-off ,aes-key ,public-key ,content))))
 	       ,@body)))
 
-(defmacro with-query (address (target payload &key params class-map multicast (version 1.1) (client :dexador) (protocol "http") headers) &body body)
+(defmacro with-query (address (target payload
+			       &key params class-map multicast headers
+				 (version 1.1) (client :dexador) (protocol "http")
+				 (encoder :jonathan) (decoder :jonathan))
+		      &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (let ((content (cond ((null ,payload) nil)
 			      ((jsonp ,payload) ,payload)
-			      ((alistp ,payload) (jonathan:to-json ,payload :from :alist))
-			      (t (jonathan:to-json ,payload)))))
-	   (log:info content)
+			      ((and (eq ,encoder :jonathan) (alistp ,payload))
+			       (jonathan:to-json ,payload :from :alist))
+			      ((alistp ,payload) (cl-json:encode-json-to-string ,payload))
+			      ((eq ,encoder :jonathan) (jonathan:to-json ,payload))
+			      (t (cl-json:encode-json-to-string ,payload)))))
 	   (cond ((and (null content) (eq ,client :dexador))
 		  (print (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				 ,protocol ,address ,target ,params ,params))
@@ -105,7 +111,7 @@
 				       :content-type "application/json"
 				       :content content))))
        (when (= 200 http-code*)
-	 (let* ((_http-body (decode-http-body http-body))
+	 (let* ((_http-body (decode-http-body http-body :decoder ,decoder))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
 				  (,class-map (cast _http-body ,class-map))
 				  (t _http-body)))

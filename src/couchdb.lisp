@@ -17,7 +17,9 @@
 
 (defmacro get-ids (database)
   `(with-couch ,database
-     (query-document '(:** :|id|) (get-all-documents))))
+     (remove-if
+      #'(lambda (id) (substringp "_design" id))
+      (query-document '(:** :|id|) (get-all-documents)))))
 
 (defmacro return-document (id database &key class-map)
   `(with-couch ,database

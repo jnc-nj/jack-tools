@@ -10,11 +10,14 @@
   (and (stringp str)
        (substringp "<!DOCTYPE html>" str)))
 
-(defun decode-http-body (body) 
-  (cond ((and (stringp body) (jsonp body))
+(defun decode-http-body (body &key (decoder :jonathan)) 
+  (cond ((and (stringp body) (jsonp body) (eq decoder :jonathan))
 	 (jonathan:parse
 	  (regex-replace-all "\\r" body "")
-	  :as :alist)) 
+	  :as :alist))
+	((and (stringp body) (jsonp body))
+	 (cl-json:decode-json-from-string
+	  (regex-replace-all "\\r" body "")))
 	((or (stringp body) (numberp body))
 	 (regex-replace-all "\\r" body ""))
 	(t (decode-http-body

@@ -135,7 +135,8 @@
 (defpackage #:jack.tools.couchdb
   (:use #:cl #:alexandria
 	#:clouchdb
-	#:jack.tools.objects)
+	#:jack.tools.objects
+	#:jack.tools.strings)
   (:export #:+COUCH-HOST+
 	   #:+COUCH-PORT+
 	   #:+COUCH-USER+
