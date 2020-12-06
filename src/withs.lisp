@@ -89,8 +89,6 @@
 			      ((eq ,encoder :jonathan) (jonathan:to-json ,payload))
 			      (t (cl-json:encode-json-to-string ,payload)))))
 	   (cond ((and (null content) (eq ,client :dexador))
-		  (print (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
-				 ,protocol ,address ,target ,params ,params))
 		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				   ,protocol ,address ,target ,params ,params)
 			   :version ,version))
