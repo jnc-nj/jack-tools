@@ -13,7 +13,7 @@
     (make-instance
      'pants
      :belts (loop for public-key in public-keys
-	       collect (rsa-encrypt-message public-key iv))
+		  collect (rsa-encrypt-message public-key iv))
      :briefs (aes-encrypt-message aes iv object))))
 
 (defun pants-off (aes-key private-key pants &key (string? t))
@@ -73,7 +73,7 @@
 (defun create-hash (input &key length)
   (trim-seq
    (base64:usb8-array-to-base64-string
-    (create-digest input))
+    (create-digest (sort input #'string>)))
    0 length))
 
 (defun create-digest (input)
@@ -176,14 +176,14 @@
 
 (defun sign-message (private-key message)
   (cond ((stringp private-key)
-	 (sign-message (decompress-key private-key) (sort message #'string<)))
+	 (sign-message (decompress-key private-key) message))
 	((byte-array? message)
 	 (base64:usb8-array-to-base64-string (ironclad:sign-message private-key message)))
 	(t (sign-message private-key (create-digest message)))))
 
 (defun verify-signature (public-key message signature)
   (cond ((stringp signature)
-	 (verify-signature public-key (sort message #'string<) (base64:base64-string-to-usb8-array signature)))
+	 (verify-signature public-key message (base64:base64-string-to-usb8-array signature)))
 	((stringp public-key)
 	 (verify-signature (decompress-key public-key :private? nil) message signature))
 	((byte-array? message)
