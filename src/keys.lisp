@@ -78,10 +78,10 @@
 
 (defun create-digest (input)
   (if (stringp input)
-      (ironclad:digest-sequence
-       :sha256 (babel:string-to-octets
-		(sort (string-downcase (copy-seq input))
-		      #'string<))) 
+      (let ((raw (sort (string-downcase (copy-seq input)) #'string<)))
+	(log:info raw)
+	(ironclad:digest-sequence
+	 :sha256 (babel:string-to-octets raw))) 
       (create-digest (jonathan:to-json input))))
 
 (defun key-distance (key-1 key-2)
