@@ -73,13 +73,13 @@
 (defun create-hash (input &key length)
   (trim-seq
    (base64:usb8-array-to-base64-string
-    (create-digest (sort input #'string>)))
+    (create-digest input))
    0 length))
 
 (defun create-digest (input)
   (if (stringp input)
       (ironclad:digest-sequence
-       :sha256 (babel:string-to-octets input)) 
+       :sha256 (babel:string-to-octets (sort input #'string<))) 
       (create-digest (jonathan:to-json input))))
 
 (defun key-distance (key-1 key-2)
