@@ -79,6 +79,7 @@
 (defun create-digest (input)
   (if (stringp input)
       (let ((raw (sort (string-downcase (copy-seq input)) #'string<)))
+	#+nil
 	(log:info raw)
 	(ironclad:digest-sequence
 	 :sha256 (babel:string-to-octets raw))) 
