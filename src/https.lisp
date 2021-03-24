@@ -24,9 +24,10 @@
 	    (babel:octets-to-string
 	     (coerce body '(vector (unsigned-byte 8))))))))
 
-(defun encode-http-body (body)
+(defun encode-http-body (body &key (msg t))
   (cond ((or (jsonp body) (htmlp body)) body) 
-	((stringp body) (format nil "{\"message\": \"~d\"}" body))
+	((and msg (stringp body)) (format nil "{\"message\": \"~d\"}" body))
+	((stringp body) (write-to-string body))
 	((listp body) (jonathan:to-json body :from :alist))
 	(t (jonathan:to-json body))))
 
