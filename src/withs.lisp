@@ -75,14 +75,15 @@
 	       ,@body)))
 
 (defmacro with-query (address (target payload
-			       &key params class-map multicast headers
+			       &key params class-map multicast headers 
 				 (version 1.1) (client :dexador) (protocol "http")
-				 (encoder :jonathan) (decoder :jonathan))
+				 (encoder :jonathan) (decoder :jonathan)
+				 form-data dex-cookie-jar drakma-cookie-jar)
 		      &body body)
   `(with-excepted-api nil
      (multiple-value-bind (http-body http-code*)
          (let ((content (cond ((null ,payload) nil)
-			      ((jsonp ,payload) ,payload)
+			      ((or (jsonp ,payload) (and ,form-data (alistp ,payload))) ,payload)
 			      ((and (eq ,encoder :jonathan) (alistp ,payload))
 			       (jonathan:to-json ,payload :from :alist))
 			      ((alistp ,payload) (cl-json:encode-json-to-string ,payload))
@@ -91,23 +92,29 @@
 	   (cond ((and (null content) (eq ,client :dexador))
 		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 				   ,protocol ,address ,target ,params ,params)
-			   :version ,version))
+			   :version ,version
+			   :cookie-jar ,dex-cookie-jar))
 		 ((and (null content) (eq ,client :drakma))
 		  (drakma:http-request (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
 					       ,protocol ,address ,target ,params ,params)
-				       :method :get)) 
+				       :method :get
+				       :cookie-jar ,drakma-cookie-jar)) 
 		 ((eq ,client :dexador)
 		  (dex:post (format nil "~d://~d/~:[~;~d~]"
 				    ,protocol ,address ,target ,target)
 			    :version ,version
-			    :headers (append ,headers '(("Content-Type" . "application/json")))
-			    :content content))
+			    :headers (unless ,form-data
+				       (append ,headers
+					       '(("Content-Type" . "application/json"))))
+			    :content content
+			    :cookie-jar ,dex-cookie-jar))
 		 ((eq ,client :drakma)
 		  (drakma:http-request (format nil "~d://~d/~:[~;~d~]"
 					       ,protocol ,address ,target ,target)
 				       :method :post
 				       :content-type "application/json"
-				       :content content))))
+				       :content content
+				       :cookie-jar ,drakma-cookie-jar))))
        (when (= 200 http-code*)
 	 (let* ((_http-body (decode-http-body http-body :decoder ,decoder))
 		(http-body* (cond (,multicast (cast-all _http-body ,class-map))
