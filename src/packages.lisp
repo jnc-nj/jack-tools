@@ -176,6 +176,7 @@
 (defpackage #:jack.tools.https
   (:use #:cl
 	#:cl-ppcre
+	#:inferior-shell
 	#:lack.response
 	#:lack.request
 	#:jack.tools.objects
@@ -188,7 +189,10 @@
 	   #:ENCODE-HTTP-BODY
 	   #:LOCAL-ADDRESS
 	   #:DEFHANDLER
-	   #:HTTP-CONTENT*))
+	   #:HTTP-CONTENT*
+	   #:STOP-PORT
+	   #:WRAP-OUT
+	   #:INVALID-PARAM))
 
 (defpackage #:jack.tools.keys
   (:use #:cl 
@@ -250,6 +254,25 @@
            #:TIMEOUT
            #:WAIT
            #:RELEASE))
+
+(defpackage #:jack.tools.mysql
+  (:use #:cl
+	#:alexandria
+	#:cl-mysql
+	#:jack.tools.time
+	#:jack.tools.misc
+	#:jack.tools.lists)
+  (:export #:*MYSQL-HOST*
+	   #:*MYSQL-PORT*
+	   #:*MYSQL-USER*
+	   #:*MYSQL-KEY*
+	   #:*MYSQL-MAIN-DB*
+	   #:RECONNECT
+	   #:INSERT
+	   #:UPDATE
+	   #:SELECT-BY-PARAMS
+	   #:SELECT-BY-COLUMNS
+	   #:QUERY-RESULT-TO-ALIST))
 
 (defpackage #:jack.tools.withs
   (:use #:cl

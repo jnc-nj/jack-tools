@@ -19,7 +19,8 @@
 	       (:file "src/time")
 	       (:file "src/cli")
 	       (:file "src/bootstraps")
-	       (:file "src/serialize"))
+	       (:file "src/serialize")
+	       (:file "src/mysql"))
   :depends-on (:alexandria
 	       :cl-ppcre
 	       :cl-json
@@ -46,4 +47,5 @@
 	       :lack
 	       :drakma
 	       :dexador
-	       :clouchdb))
+	       :clouchdb
+	       :cl-mysql))

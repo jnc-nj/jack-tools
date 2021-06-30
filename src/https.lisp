@@ -64,3 +64,14 @@
 	       (setf (response-headers ningle:*response*)
 		     (append (response-headers ningle:*response*) headers))
 	       "Success"))))
+
+(defun stop-port (port)
+  (run/nil `(pipe (lsof -ti ,(format nil ":~d" port)) (xargs kill -9))
+           :on-error nil))
+
+(defun wrap-out (payload &key (msg t))
+  (format nil "{\"rawStatus\":200,\"successful\":true,\"message\":\"success\",\"data\":~d}"
+	  (encode-http-body payload :msg msg)))
+
+(defun invalid-param ()
+  (format nil "{\"rawStatus\":400,\"successful\":false,\"message\":\"invalid_param\",\"data\":[]}"))

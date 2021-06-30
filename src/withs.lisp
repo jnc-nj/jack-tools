@@ -88,20 +88,24 @@
 			       (jonathan:to-json ,payload :from :alist))
 			      ((alistp ,payload) (cl-json:encode-json-to-string ,payload))
 			      ((eq ,encoder :jonathan) (jonathan:to-json ,payload))
-			      (t (cl-json:encode-json-to-string ,payload)))))
+			      (t (cl-json:encode-json-to-string ,payload))))
+	       (url (cond ((eq ,client :dexador)
+			   (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
+				   ,protocol ,address ,target ,params ,params))
+			  ((eq ,client :drakma)
+			   (format nil "~d://~d/~:[~;~d~]"
+				   ,protocol ,address ,target ,target)))))
+	   (log:info url)
 	   (cond ((and (null content) (eq ,client :dexador))
-		  (dex:get (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
-				   ,protocol ,address ,target ,params ,params)
+		  (dex:get url
 			   :version ,version
 			   :cookie-jar ,dex-cookie-jar))
 		 ((and (null content) (eq ,client :drakma))
-		  (drakma:http-request (format nil "~d://~d/~d~:[~;?~{~{~d=~d~}~^&~}~]"
-					       ,protocol ,address ,target ,params ,params)
+		  (drakma:http-request url
 				       :method :get
 				       :cookie-jar ,drakma-cookie-jar)) 
 		 ((eq ,client :dexador)
-		  (dex:post (format nil "~d://~d/~:[~;~d~]"
-				    ,protocol ,address ,target ,target)
+		  (dex:post url
 			    :version ,version
 			    :headers (unless ,form-data
 				       (append ,headers
@@ -109,8 +113,7 @@
 			    :content content
 			    :cookie-jar ,dex-cookie-jar))
 		 ((eq ,client :drakma)
-		  (drakma:http-request (format nil "~d://~d/~:[~;~d~]"
-					       ,protocol ,address ,target ,target)
+		  (drakma:http-request url
 				       :method :post
 				       :content-type "application/json"
 				       :content content
