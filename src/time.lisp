@@ -46,8 +46,11 @@
 (defun timed-index (timestamp interval objects &key return?)
   (let ((index (floor (mod (*/ (time-difference (create-time) timestamp)
 			       interval)
-			   (length objects)))))
-    (if return? (nth index objects) index)))
+			   (if (numberp objects)
+			       objects
+			       (length objects))))))
+    (cond ((and (not (numberp objects)) return?) (nth index objects))
+	  (t index))))
 
 (defun timeout (wheel timer interval)
   (tw:schedule-timer wheel timer :milliseconds interval))
