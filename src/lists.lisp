@@ -111,13 +111,8 @@
       (every #'listp obj))))
 
 (defun alist-to-plist (alist)
-  (let (collect)
-    (dolist (item alist)
-      (if (keywordp (car item))
-	  (push (car item) collect)
-	  (push (read-from-string (format nil ":~d" (car item))) collect))
-      (push (cdr item) collect))
-    (reverse collect)))
+  (alexandria:hash-table-plist
+   (alexandria:alist-hash-table alist)))
 
 (defun push-all (lst place)
   (dolist (item lst)
