@@ -107,12 +107,8 @@
 (defun every-list-p (obj &key not)
   (when (listp obj)
     (if not
-      (every #'(lambda (arg) (not (listp arg))) obj)
-      (every #'listp obj))))
-
-(defun alist-to-plist (alist)
-  (alexandria:hash-table-plist
-   (alexandria:alist-hash-table alist)))
+	(every #'(lambda (arg) (not (listp arg))) obj)
+	(every #'listp obj))))
 
 (defun push-all (lst place)
   (dolist (item lst)

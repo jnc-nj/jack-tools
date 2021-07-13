@@ -95,7 +95,6 @@
 			  ((eq ,client :drakma)
 			   (format nil "~d://~d/~:[~;~d~]"
 				   ,protocol ,address ,target ,target)))))
-	   (log:info url)
 	   (cond ((and (null content) (eq ,client :dexador))
 		  (dex:get url
 			   :version ,version

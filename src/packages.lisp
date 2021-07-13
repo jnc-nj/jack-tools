@@ -56,7 +56,6 @@
 	   #:SET-EQUALS
 	   #:DOTTED-PAIR-P
 	   #:EVERY-LIST-P
-	   #:ALIST-TO-PLIST
 	   #:PUSH-ALL))
 
 (defpackage #:jack.tools.misc
