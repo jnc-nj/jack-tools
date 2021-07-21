@@ -37,45 +37,46 @@
       (cl-ppcre:scan-to-strings "\\d+\\.\\d+\\.\\d+\\.\\d+\\:\\d+"
 				(bt:thread-name listener-thread)))))
 
-(defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
-				 (content-type "application/json") (cross-domain t)) &body body)
-  `(let ((headers (list :content-type ,content-type)))
-     (when ,cross-domain
-       (setf headers (append headers
-			     (list :vary "accept-encoding,origin,access-control-request-headers,access-control-request-method,accept-encoding-gzip")
-			     (list :access-control-allow-origin "*")
-			     (list :access-control-allow-headers "X-Requested-With,Authorization,Content-Type,Keep-Alive,User-Agent,Cache-Control,If-Modified-Since,DNT,X-Mx-ReqToken")
-			     (list :access-control-allow-methods "PUT,POST,GET,DELETE,OPTIONS"))))
-     (setf (ningle:route ,app ,uri :method ,method)
-	   #'(lambda (params)
-	       (declare (ignorable params))
-	       (setf (response-headers ningle:*response*)
-		     (append (response-headers ningle:*response*) headers))
-	       (let ((http-content*
-		       (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
-			     (,class-map (cast (request-parameters ningle:*request*) ,class-map))
-			     (,decode? (request-parameters ningle:*request*))
-			     (t (request-content ningle:*request*)))))
-		 (declare (ignorable http-content*)) 
-		 (encode-http-body (progn ,@body)))))
-     (setf (ningle:route ,app ,uri :method :options)
-	   #'(lambda (params)
-	       (declare (ignorable params))
-	       (setf (response-headers ningle:*response*)
-		     (append (response-headers ningle:*response*) headers))
-	       "Success"))))
-
 (defun stop-port (port)
   (run/nil `(pipe (lsof -ti ,(format nil ":~d" port)) (xargs kill -9))
            :on-error nil))
 
 (defun wrap-out (payload &key (message "success") (msg t))
   (format nil "{\"rawStatus\":200,\"successful\":true,\"message\":\"~d\",\"data\":~d}"
-	  (encode-http-body payload :msg msg)
-	  message))
+	  message
+	  (encode-http-body payload :msg msg)))
 
 (defun invalid-param (&key (message "invalid_param"))
   (format nil "{\"rawStatus\":400,\"successful\":false,\"message\":\"~d\",\"data\":[]}"
 	  message))
 
+(defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
+				 (content-type "application/json") (cross-domain t)) &body body)
+  `(handler-case
+       (let ((headers (list :content-type ,content-type)))
+	 (when ,cross-domain
+	   (setf headers (append headers
+				 (list :vary "accept-encoding,origin,access-control-request-headers,access-control-request-method,accept-encoding-gzip")
+				 (list :access-control-allow-origin "*")
+				 (list :access-control-allow-headers "X-Requested-With,Authorization,Content-Type,Keep-Alive,User-Agent,Cache-Control,If-Modified-Since,DNT,X-Mx-ReqToken")
+				 (list :access-control-allow-methods "PUT,POST,GET,DELETE,OPTIONS"))))
+	 (setf (ningle:route ,app ,uri :method ,method)
+	       #'(lambda (params)
+		   (declare (ignorable params))
+		   (setf (response-headers ningle:*response*)
+			 (append (response-headers ningle:*response*) headers))
+		   (let ((http-content*
+			   (cond (,multicast (cast-all (request-parameters ningle:*request*) ,class-map))
+				 (,class-map (cast (request-parameters ningle:*request*) ,class-map))
+				 (,decode? (request-parameters ningle:*request*))
+				 (t (request-content ningle:*request*)))))
+		     (declare (ignorable http-content*)) 
+		     (encode-http-body (progn ,@body)))))
+	 (setf (ningle:route ,app ,uri :method :options)
+	       #'(lambda (params)
+		   (declare (ignorable params))
+		   (setf (response-headers ningle:*response*)
+			 (append (response-headers ningle:*response*) headers))
+		   "Success")))
+     (error () (invalid-param))))
 
