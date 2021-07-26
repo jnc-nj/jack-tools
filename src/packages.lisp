@@ -190,8 +190,10 @@
 	   #:DEFHANDLER
 	   #:HTTP-CONTENT*
 	   #:STOP-PORT
-	   #:WRAP-OUT
-	   #:INVALID-PARAM))
+	   ;; HTTP CODES
+	   #:SUCCESS
+	   #:BAD-REQUEST
+	   #:GONE))
 
 (defpackage #:jack.tools.keys
   (:use #:cl 

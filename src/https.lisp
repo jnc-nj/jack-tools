@@ -41,15 +41,6 @@
   (run/nil `(pipe (lsof -ti ,(format nil ":~d" port)) (xargs kill -9))
            :on-error nil))
 
-(defun wrap-out (payload &key (message "success") (msg t))
-  (format nil "{\"rawStatus\":200,\"successful\":true,\"message\":\"~d\",\"data\":~d}"
-	  message
-	  (encode-http-body payload :msg msg)))
-
-(defun invalid-param (&key (message "invalid_param"))
-  (format nil "{\"rawStatus\":400,\"successful\":false,\"message\":\"~d\",\"data\":[]}"
-	  message))
-
 (defmacro defhandler ((app uri &key class-map multicast (decode? t) (method :get)
 				 (content-type "application/json") (cross-domain t)) &body body)
   `(handler-case
@@ -80,3 +71,16 @@
 		   "Success")))
      (error () (invalid-param))))
 
+;; HTTP CODES
+(defun success (payload &key (message "success") (status 200) (msg t))
+  (format nil "{\"rawStatus\":~d,\"successful\":~:[false~;true~],\"message\":\"~d\",\"data\":~d}"
+	  status
+	  (= status 200)
+	  message
+	  (encode-http-body payload :msg msg)))
+
+(defun bad-request (&key (message "bad request"))
+  (wrap-out nil :message message :status 400))
+
+(defun gone (&key (message "gone"))
+  (wrap-out nil :message message :status 410))
