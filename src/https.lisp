@@ -69,7 +69,7 @@
 		   (setf (response-headers ningle:*response*)
 			 (append (response-headers ningle:*response*) headers))
 		   "Success")))
-     (error () (invalid-param))))
+     (error () (bad-request))))
 
 ;; HTTP CODES
 (defun success (payload &key (message "success") (status 200) (msg t))

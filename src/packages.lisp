@@ -74,7 +74,8 @@
 	   #:LIST-PACKAGE-SYMBOLS
 	   #:LARGEST-KEY
 	   #:SYSTEM-VERSION
-	   #:QL-INSTALLED-SYSTEMS))
+	   #:QL-INSTALLED-SYSTEMS
+	   #:RETURN-VAR-NAME))
 
 (defpackage #:jack.tools.maths
   (:use #:cl

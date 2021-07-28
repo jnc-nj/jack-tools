@@ -68,3 +68,6 @@
 
 (defun ql-installed-systems ()
   (mapcar #'ql::name (ql::installed-systems (ql::find-dist "quicklisp"))))
+
+(defmacro return-var-name (var)
+  `(format nil "~d" ',var))
