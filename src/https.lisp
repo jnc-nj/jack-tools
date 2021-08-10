@@ -80,7 +80,7 @@
 	  (encode-http-body payload :msg msg)))
 
 (defun bad-request (&key (message "bad request"))
-  (wrap-out nil :message message :status 400))
+  (success nil :message message :status 400))
 
 (defun gone (&key (message "gone"))
-  (wrap-out nil :message message :status 410))
+  (success nil :message message :status 410))
