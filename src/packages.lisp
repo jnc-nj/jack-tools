@@ -278,6 +278,7 @@
 
 (defpackage #:jack.tools.withs
   (:use #:cl
+	#:sxql
 	#:jack.tools.lists
 	#:jack.tools.misc
 	#:jack.tools.keys
@@ -303,7 +304,10 @@
 	   #:HTTP-BODY*
 	   #:HTTP-CODE*
 	   #:CONNECTION-ALIVE-P
-	   #:WITH-LOG))
+	   #:WITH-LOG
+
+	   #:WITH-DB-QUERY
+	   #:_WITH-DB-QUERY))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl

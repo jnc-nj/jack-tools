@@ -48,4 +48,6 @@
 	       :drakma
 	       :dexador
 	       :clouchdb
-	       :cl-mysql))
+	       :cl-mysql
+	       :cl-dbi
+	       :sxql))
