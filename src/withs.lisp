@@ -157,18 +157,19 @@
 
 (defmacro with-db-query ((connection
 			  &key top-result-only first-element-only
-			    no-duplicates (no-index t))
+			    no-duplicates no-id (no-index t))
 			 &body statements)
   `(eval (_with-db-query ,connection
 			 ,@statements
 			 ,top-result-only
 			 ,first-element-only
 			 ,no-duplicates
+			 ,no-id
 			 ,no-index)))
 
 (defun _with-db-query (connection statements
 		       top-result-only first-element-only
-		       no-duplicates no-index)
+		       no-duplicates no-id no-index)
   `(dbi:with-connection (conn ,@connection)
      (multiple-value-bind (string params) (yield ,statements)
        (let* ((prep (dbi:prepare conn string))
@@ -176,8 +177,14 @@
 	      (fetch (loop for row = (dbi:fetch exec)
 			   while row
 			   collect (alexandria:plist-alist row))))
+	 (when ,no-id
+	   (setf fetch
+		 (loop for item in fetch
+		       collect (remove-if #'(lambda (arg) (string= (car arg) "id")) item))))
 	 (when ,no-index
-	   (setf fetch (loop for item in fetch collect (mapcar #'cdr item))))
+	   (setf fetch
+		 (loop for item in fetch
+		       collect (mapcar #'cdr item))))
 	 (when ,first-element-only
 	   (setf fetch (mapcar #'car fetch)))
 	 (when ,top-result-only
