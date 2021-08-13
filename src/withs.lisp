@@ -52,9 +52,7 @@
   `(when (and ,threshold (null (find-thread ,title)))
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title
-       (handler-case
-	   (with-timer ,threshold nil ,@body)
-	 (error () nil)))))
+       (with-timer ,threshold nil ,@body))))
 
 (defmacro with-suppressed-output (&body body)
   `(with-open-stream (*standard-output* (make-broadcast-stream))
