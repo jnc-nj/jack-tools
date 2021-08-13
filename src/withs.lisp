@@ -159,36 +159,63 @@
 			  &key top-result-only first-element-only
 			    no-duplicates no-id (no-index t))
 			 &body statements)
-  `(eval (_with-db-query ,connection
-			 ,@statements
-			 ,top-result-only
-			 ,first-element-only
-			 ,no-duplicates
-			 ,no-id
-			 ,no-index)))
+  `(let ((conn-params (cons 'conn ,connection)))
+     (eval `(dbi:with-connection ,conn-params
+	      (multiple-value-bind (string params) (yield ,,@statements)
+		(let* ((prep (dbi:prepare conn string))
+		       (exec (dbi:execute prep params))
+		       (fetch (loop for row = (dbi:fetch exec)
+				    while row
+				    collect (alexandria:plist-alist row))))
+		  (when ,,no-id
+		    (setf fetch
+			  (loop for item in fetch
+				collect (remove-if #'(lambda (arg) (string= (car arg) "id"))
+						   item))))
+		  (when ,,no-index
+		    (setf fetch
+			  (loop for item in fetch
+				collect (mapcar #'cdr item))))
+		  (when ,,first-element-only
+		    (setf fetch (mapcar #'car fetch)))
+		  (when ,,top-result-only
+		    (setf fetch (car fetch)))
+		  (when ,,no-duplicates
+		    (setf fetch (remove-duplicates fetch :test #'equal)))
+		  fetch))))))
 
-(defun _with-db-query (connection statements
-		       top-result-only first-element-only
-		       no-duplicates no-id no-index)
-  `(dbi:with-connection (conn ,@connection)
-     (multiple-value-bind (string params) (yield ,statements)
-       (let* ((prep (dbi:prepare conn string))
-	      (exec (dbi:execute prep params))
-	      (fetch (loop for row = (dbi:fetch exec)
-			   while row
-			   collect (alexandria:plist-alist row))))
-	 (when ,no-id
-	   (setf fetch
-		 (loop for item in fetch
-		       collect (remove-if #'(lambda (arg) (string= (car arg) "id")) item))))
-	 (when ,no-index
-	   (setf fetch
-		 (loop for item in fetch
-		       collect (mapcar #'cdr item))))
-	 (when ,first-element-only
-	   (setf fetch (mapcar #'car fetch)))
-	 (when ,top-result-only
-	   (setf fetch (car fetch)))
-	 (when ,no-duplicates
-	   (setf fetch (remove-duplicates fetch :test #'equal)))
-	 fetch))))
+(defun with-db-insert (conn db payload &key (default-time-columns t))
+  (let* ((payload (if (alistp payload) (list payload) payload))
+	 (keys (mapcar #'car (car payload)))
+	 (dump (make-hash-table :test #'equal))
+	 (time-now (create-time))
+	 collect)
+    (when default-time-columns
+      (push time-now (gethash "create_time" dump))
+      (push time-now (gethash "update_time" dump))
+      (push "create_time" keys)
+      (push "update_time" keys))
+    (dolist (instance payload)
+      (dolist (item instance)
+	(push (cdr item) (gethash (car item) dump))))
+    (dolist (key keys)
+      (when (gethash key dump)
+	(push `(,(keywordfy key) ,@(gethash key dump))
+	      collect)))
+    (eval `(with-db-query ((quote ,conn))
+	     (insert-into ,(keywordfy db)
+	       (set= ,@(alexandria:flatten collect))
+	       (on-duplicate-key-update :id :id))))))
+
+(defun with-db-update (conn db payload &key (update-key "id"))
+  (let* ((payload (if (alistp payload) (list payload) payload)))
+    (dolist (item payload)
+      (eval `(with-db-query ((quote ,conn))
+	       (update ,(keywordfy db)
+		 (set= :update_time ,(create-time)
+		       ,@(alexandria:alist-plist
+			  (remove-if #'(lambda (row) (string= (car row) update-key))
+				     (loop for row in item
+					   collect `(,(keywordfy (car row)) . ,(cdr row))))))
+		 (where (:= ,(keywordfy update-key)
+			    ,(agethash update-key item)))))))))

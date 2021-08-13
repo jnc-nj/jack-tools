@@ -307,7 +307,8 @@
 	   #:WITH-LOG
 
 	   #:WITH-DB-QUERY
-	   #:_WITH-DB-QUERY))
+	   #:WITH-DB-INSERT
+	   #:WITH-DB-UPDATE))
 
 (defpackage #:jack.tools.matrices
   (:use #:cl
