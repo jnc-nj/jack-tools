@@ -52,8 +52,9 @@
   `(when (and ,threshold (null (find-thread ,title)))
      (when ,delay (with-timer ,delay 1))
      (with-bt-thread ,title
-       (handler-case (with-timer ,threshold nil ,@body)
-         (error () nil)))))
+       (handler-case
+	   (with-timer ,threshold nil ,@body)
+	 (error () nil)))))
 
 (defmacro with-suppressed-output (&body body)
   `(with-open-stream (*standard-output* (make-broadcast-stream))
@@ -197,7 +198,8 @@
       (push "update_time" keys))
     (dolist (instance payload)
       (dolist (item instance)
-	(push (cdr item) (gethash (car item) dump))))
+	(push (if-exist-return (cdr item) "")
+	      (gethash (car item) dump))))
     (dolist (key keys)
       (when (gethash key dump)
 	(push `(,(keywordfy key) ,@(gethash key dump))
