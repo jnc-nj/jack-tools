@@ -20,7 +20,8 @@
 	       (:file "src/cli")
 	       (:file "src/bootstraps")
 	       (:file "src/serialize")
-	       (:file "src/mysql"))
+	       #+nil(:file "src/mysql")
+	       )
   :depends-on (:alexandria
 	       :cl-ppcre
 	       :cl-json
@@ -48,6 +49,6 @@
 	       :drakma
 	       :dexador
 	       :clouchdb
-	       :cl-mysql
+	       ;; :cl-mysql
 	       :cl-dbi
 	       :sxql))

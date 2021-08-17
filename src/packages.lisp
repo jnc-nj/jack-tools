@@ -257,6 +257,7 @@
            #:WAIT
            #:RELEASE))
 
+#+nil
 (defpackage #:jack.tools.mysql
   (:use #:cl
 	#:alexandria
