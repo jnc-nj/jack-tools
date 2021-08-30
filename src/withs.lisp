@@ -214,7 +214,7 @@
     (dolist (item payload)
       (eval `(with-db-query ((quote ,conn))
 	       (update ,(keywordfy db)
-		 (set= :update_time ,(create-time)
+		 (set= ;; :update_time ,(create-time)
 		       ,@(alexandria:alist-plist
 			  (remove-if #'(lambda (row) (string= (car row) update-key))
 				     (loop for row in item
