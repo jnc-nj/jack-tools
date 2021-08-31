@@ -185,7 +185,7 @@
 		    (setf fetch (remove-duplicates fetch :test #'equal)))
 		  fetch))))))
 
-(defun with-db-insert (conn db payload &key (default-time-columns t))
+(defun with-db-insert (conn db payload &key (default-time-columns t) (update-key "id"))
   (let* ((payload (if (alistp payload) (list payload) payload))
 	 (keys (mapcar #'car (car payload)))
 	 (dump (make-hash-table :test #'equal))
@@ -207,7 +207,9 @@
     (eval `(with-db-query ((quote ,conn))
 	     (insert-into ,(keywordfy db)
 	       (set= ,@(alexandria:flatten collect))
-	       (on-duplicate-key-update :id :id))))))
+	       (on-duplicate-key-update
+		,(keywordfy update-key)
+	        ,(keywordfy update-key)))))))
 
 (defun with-db-update (conn db payload &key (update-key "id"))
   (let* ((payload (if (alistp payload) (list payload) payload)))

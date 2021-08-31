@@ -255,7 +255,9 @@
            #:TIMED-INDEX
            #:TIMEOUT
            #:WAIT
-           #:RELEASE))
+           #:RELEASE
+	   #:SUBTRACT-TIME
+	   #:ADD-TIME))
 
 #+nil
 (defpackage #:jack.tools.mysql

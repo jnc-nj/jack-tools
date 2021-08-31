@@ -6,8 +6,13 @@
 (defun sec-now ()
   (local-time:timestamp-to-universal (local-time:now)))
 
-(defun create-time ()
-  (local-time:format-timestring nil (local-time:now)))
+(defun create-time (&key +time -time (unit :hour))
+  (let ((time (local-time:now)))
+    (when +time
+      (setf time (local-time:timestamp+ time +time unit)))
+    (when -time
+      (setf time (local-time:timestamp- time -time unit)))
+    (local-time:format-timestring nil time)))
 
 (defun time-difference (time-1 time-2)
   (cond ((stringp time-1)
@@ -62,3 +67,15 @@
 (defun release (lock condition-variable)
   (bt:with-lock-held (lock)
     (bt:condition-notify condition-variable)))
+
+(defun subtract-time (time amount unit)
+  (local-time:format-timestring
+   nil
+   (local-time:timestamp-
+    (local-time:parse-timestring time) amount unit)))
+
+(defun add-time (time amount unit)
+  (local-time:format-timestring
+   nil
+   (local-time:timestamp+
+    (local-time:parse-timestring time) amount unit)))
