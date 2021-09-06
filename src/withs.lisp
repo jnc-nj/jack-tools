@@ -185,12 +185,15 @@
 		    (setf fetch (remove-duplicates fetch :test #'equal)))
 		  fetch))))))
 
-(defun with-db-insert (conn db payload &key (default-time-columns t) (update-key "id"))
+(defun with-db-insert (conn db payload
+		       &key (default-time-columns t) (update-key "id")
+			 update-ids update-mode incf-mode decf-mode)
   (let* ((payload (if (alistp payload) (list payload) payload))
-	 (keys (mapcar #'car (car payload)))
-	 (dump (make-hash-table :test #'equal))
+	 (keys (remove-duplicates (mapcar #'(lambda (arg) (keywordfy (car arg))) (car payload))))
+	 (dump (make-hash-table))
 	 (time-now (create-time))
-	 collect)
+	 (keyword-update-key (keywordfy update-key))
+	 collect update-keys)
     (when default-time-columns
       (push time-now (gethash "create_time" dump))
       (push time-now (gethash "update_time" dump))
@@ -199,27 +202,20 @@
     (dolist (instance payload)
       (dolist (item instance)
 	(push (if-exist-return (cdr item) "")
-	      (gethash (car item) dump))))
+	      (gethash (keywordfy (car item)) dump))))
     (dolist (key keys)
       (when (gethash key dump)
-	(push `(,(keywordfy key) ,@(gethash key dump))
-	      collect)))
+	(when update-mode
+	  (unless (eq key keyword-update-key)
+	    (cond (incf-mode (push `(,key (:+ ,key (:values ,key))) update-keys))
+		  (decf-mode (push `(,key (:- ,key (:values ,key))) update-keys))
+		  (t (push `(,key (:values ,key)) update-keys)))))
+	(push `(,key ,@(gethash key dump)) collect)))
     (eval `(with-db-query ((quote ,conn))
 	     (insert-into ,(keywordfy db)
-	       (set= ,@(alexandria:flatten collect))
-	       (on-duplicate-key-update
-		,(keywordfy update-key)
-	        ,(keywordfy update-key)))))))
-
-(defun with-db-update (conn db payload &key (update-key "id"))
-  (let* ((payload (if (alistp payload) (list payload) payload)))
-    (dolist (item payload)
-      (eval `(with-db-query ((quote ,conn))
-	       (update ,(keywordfy db)
-		 (set= ;; :update_time ,(create-time)
-		       ,@(alexandria:alist-plist
-			  (remove-if #'(lambda (row) (string= (car row) update-key))
-				     (loop for row in item
-					   collect `(,(keywordfy (car row)) . ,(cdr row))))))
-		 (where (:= ,(keywordfy update-key)
-			    ,(agethash update-key item)))))))))
+	       (set= ,@(reduce #'append collect))
+	       ,@(when update-ids
+		   (list (where (:in keyword-update-key update-ids))))
+	       (if ,update-mode
+		   (on-duplicate-key-update ,@(reduce #'append update-keys))
+		   (on-duplicate-key-update ,keyword-update-key ,keyword-update-key)))))))
