@@ -166,7 +166,7 @@
 		(let* ((prep (dbi:prepare conn string))
 		       (exec (dbi:execute prep params))
 		       (fetch (loop for row = (dbi:fetch exec)
-				    while row
+ 				    while row
 				    collect (alexandria:plist-alist row))))
 		  (when ,,no-id
 		    (setf fetch
@@ -195,10 +195,10 @@
 	 (keyword-update-key (keywordfy update-key))
 	 collect update-keys)
     (when default-time-columns
-      (push time-now (gethash "create_time" dump))
-      (push time-now (gethash "update_time" dump))
-      (push "create_time" keys)
-      (push "update_time" keys))
+      (push time-now (gethash :create_time dump))
+      (push time-now (gethash :update_time dump))
+      (push :create_time keys)
+      (push :update_time keys))
     (dolist (instance payload)
       (dolist (item instance)
 	(push (if-exist-return (cdr item) "")

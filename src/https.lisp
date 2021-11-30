@@ -84,3 +84,6 @@
 
 (defun gone (&key (message "gone"))
   (success nil :message message :status 410))
+
+(defun reset-content (&key (message "reset content"))
+  (success nil :message message :status 205))

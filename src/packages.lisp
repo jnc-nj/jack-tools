@@ -194,7 +194,8 @@
 	   ;; HTTP CODES
 	   #:SUCCESS
 	   #:BAD-REQUEST
-	   #:GONE))
+	   #:GONE
+	   #:RESET-CONTENT))
 
 (defpackage #:jack.tools.keys
   (:use #:cl 
