@@ -51,7 +51,7 @@
 
 (defun read-encoded-key (aes root path)
   (if (pathnamep path)
-      (read-encoded-key (open-file path))
+      (read-encoded-key aes root (open-file path))
       (let ((trim-key (cl-ppcre:split "\\n" (pants-off aes root path))))
 	(pem/pkey::read-private-key
 	 (format nil "~{~d~}" (trim-seq trim-key 1 (- (length trim-key) 1)))))))
