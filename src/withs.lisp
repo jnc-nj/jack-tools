@@ -163,6 +163,7 @@
   `(let ((conn-params (cons 'conn ,connection)))
      (eval `(dbi:with-connection ,conn-params
 	      (multiple-value-bind (string params) (yield ,,@statements)
+		(dbi:execute (dbi:prepare conn "SET names 'utf8';"))
 		(let* ((prep (dbi:prepare conn string))
 		       (exec (dbi:execute prep params))
 		       (fetch (loop for row = (dbi:fetch exec)
